@@ -1,10 +1,14 @@
 pipeline {
-    agent any
+    // don't use 'agent any'
+    // 'agent none' allows the job to continue on the same node with the same files
+    agent none 
 
     stages() {
-        stage('front jenkins test') {
-            echo 'step final success'
+        stage('frontend jenkins test') {
+            steps {
+                echo 'step 2 frontend success'
 
+            }
         }
     }
 }

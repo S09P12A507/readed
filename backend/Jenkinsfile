@@ -1,10 +1,12 @@
 pipeline {
-    agent any
+    // don't use 'agent any'
+    // 'agent none' allows the job to continue on the same node with the same files
+    agent none 
 
     stages() {
         stage('backend jenkins test') {
             steps {
-                echo 'step 2 success'
+                echo 'step 2 backend success'
 
             }
         }
