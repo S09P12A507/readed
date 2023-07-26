@@ -3,8 +3,10 @@ pipeline {
 
     stages() {
         stage('backend jenkins test') {
-            echo 'step 2 success'
+            steps {
+                echo 'step 2 success'
 
+            }
         }
     }
 }
