@@ -1,8 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import kakaologo from './assets/kakaologo.png';
-import './login.css';
+import styled from 'styled-components';
+import kakaologo from '../../assets/img/kakaologo.png';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+`;
+
+const LoginBox = styled.input`
+  width: 280px;
+  height: 40px;
+  margin-bottom: 10px;
+`;
+
+const CircleContainer = styled.div`
+  display: flex;
+`;
+
+const GoogleCircle = styled.button`
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30px;
+  border: 1px solid gray;
+`;
+
+const KakaoCircle = styled.button`
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  margin-right: 10px;
+  border: 1px solid gray;
+`;
+
+const LoginButton = styled.button`
+  width: 280px;
+  height: 40px;
+  margin-top: 10px;
+  background: #606c5d;
+  color: white;
+`;
+
+const CenterText = styled.h3`
+  text-align: center;
+`;
 
 function Login() {
   const [username, setUsername] = useState<string>('');
@@ -59,13 +115,12 @@ function Login() {
   };
 
   return (
-    <div className="container">
+    <Container>
       <h1>리디드</h1>
 
       <form onSubmit={handleSubmit}>
         <div>
-          <input
-            className="loginbox"
+          <LoginBox
             type="text"
             id="username"
             value={username}
@@ -75,8 +130,7 @@ function Login() {
           />
         </div>
         <div>
-          <input
-            className="loginbox"
+          <LoginBox
             type="password"
             id="password"
             value={password}
@@ -94,25 +148,22 @@ function Login() {
             로그인 유지
           </div>
           <div>
-            <button type="submit" className="login-button">
-              로그인
-            </button>
+            <LoginButton type="submit">로그인</LoginButton>
           </div>
         </div>
       </form>
       <p>
         <a href="htpp://local:8080"> 아이디 찾기</a> |
         <a href="htpp://local:8080"> 비밀번호 찾기</a> |
-        <Link to="/signup">회원가입</Link>
+        <Link to="/signup"> 회원가입</Link>
       </p>
 
       <div>
-        <h3 className="center">간편 로그인</h3>
-        <div className="circle-container">
+        <CenterText>간편 로그인</CenterText>
+        <CircleContainer>
           <div>
-            <button
+            <GoogleCircle
               type="button"
-              className="googlecircle"
               onClick={() =>
                 handleLogin(
                   `https://accounts.google.com/o/oauth2/auth?client_id=${GoogleclientId}&redirect_uri=${GoogleredirectUri}&response_type=code&scope=openid%20email%20profile`,
@@ -123,13 +174,12 @@ function Login() {
                 alt="Google Logo"
                 style={{ width: '30px', height: '30px' }}
               />
-            </button>
+            </GoogleCircle>
             <p style={{ marginLeft: '9px' }}>구글</p>
           </div>
           <div>
-            <button
+            <KakaoCircle
               type="button"
-              className="kakaocircle"
               onClick={() =>
                 handleLogin(
                   `https://kauth.kakao.com/oauth/authorize?client_id=${KakaoRestApi}&redirect_uri=${KakaoRedirect}&response_type=code`,
@@ -140,12 +190,12 @@ function Login() {
                 alt="Kakao Logo"
                 style={{ width: '30px', height: '30px' }}
               />
-            </button>
+            </KakaoCircle>
             <p style={{ marginLeft: '2px' }}>카카오</p>
           </div>
-        </div>
+        </CircleContainer>
       </div>
-    </div>
+    </Container>
   );
 }
 

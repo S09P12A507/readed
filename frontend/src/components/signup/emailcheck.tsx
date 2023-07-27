@@ -1,9 +1,36 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton, TextField, Button, Grid } from '@mui/material';
+import styled from 'styled-components';
 // import axios from 'axios';
-import './emailcheck.css';
+
+const Container = styled.div`
+  border: black 1px solid;
+  padding: 40px;
+  max-width: 500px;
+  max-height: 800px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 80px);
+  box-sizing: border-box;
+`;
+
+const AuthForm = styled(TextField)`
+  width: 330px;
+`;
+
+const AuthButton = styled(Button)`
+  width: 20%;
+  height: 56px;
+`;
+
+const SignupButton = styled(Button)`
+  width: 100%;
+  height: 50px;
+`;
 
 interface SignUpData {
   email: string;
@@ -18,35 +45,35 @@ function Emailcheck() {
       };
   const [email] = useState<string>(signUpData.email || '');
 
-  // const location = useLocation();
   const navigate = useNavigate();
 
-  const [verificationCode, setVerificationCode] = useState('');
+  const [code, setCode] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleVerificationCodeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setVerificationCode(event.target.value);
+    setCode(event.target.value);
   };
 
   const handleVerify = () => {
     // axios
-    // 	.post('http://localhost:8080/Emailcheck', { verificationCode })
-    // 	.then(response => {
-    // 		const isVerified = response.data.isVerified;
-
-    // 		if (isVerified) {
-    // 			setIsAuthenticated(true);
-    // 			console.log('인증 성공');
-    // 		} else {
-    // 			setIsAuthenticated(false);
-    // 			console.log('인증 실패');
-    // 		}
-    // 	})
-    // 	.catch(error => {
-    // 		console.error('인증 요청 실패', error);
-    // 	});
+    //   .post('http://localhost:8080/api/auth/check-email', {
+    //     email,
+    //     code,
+    //   })
+    //   .then(response => {
+    //     if (response.status >= 200 && response.status <= 299) {
+    //       setIsAuthenticated(true);
+    //       console.log('인증 성공');
+    //     } else {
+    //       setIsAuthenticated(false);
+    //       console.log('인증 실패');
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error('인증 요청 실패', error);
+    //   });
 
     const isVerified = true; // 임의로 인증이 그냥 된다고 가정
     if (isVerified) {
@@ -67,7 +94,7 @@ function Emailcheck() {
   };
 
   return (
-    <div className="container">
+    <Container>
       <Link to="/signup">
         <IconButton
           color="primary"
@@ -83,11 +110,10 @@ function Emailcheck() {
       </h3>
       <Grid container alignItems="center">
         <Grid item xs={9.5}>
-          <TextField
-            className="authform"
+          <AuthForm
             label="*인증코드 입력"
             variant="outlined"
-            value={verificationCode}
+            value={code}
             onChange={handleVerificationCodeChange}
             margin="dense"
             InputProps={{
@@ -98,27 +124,25 @@ function Emailcheck() {
           />
         </Grid>
         <Grid item xs={2.5}>
-          <Button
+          <AuthButton
             variant="contained"
             color="primary"
             onClick={handleVerify}
-            className="auth-button"
             style={{ marginLeft: '10px', background: '#606C5D' }}
             disabled={isAuthenticated}>
             인증
-          </Button>
+          </AuthButton>
         </Grid>
       </Grid>
-      <Button
+      <SignupButton
         variant="contained"
         color="primary"
         onClick={handleSignUp}
-        className="button-auth"
         style={{ marginTop: '300px', background: '#606C5D' }}
         disabled={!isAuthenticated}>
         회원가입
-      </Button>
-    </div>
+      </SignupButton>
+    </Container>
   );
 }
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './accounts/login';
-import Signup from './accounts/signup';
-import Emailcheck from './accounts/emailcheck';
-import Addprofile from './accounts/addprofile';
+import Login from './components/login/login';
+import Signup from './components/signup/signup';
+import Emailcheck from './components/signup/emailcheck';
+import Addprofile from './components/signup/addprofile';
 
 function App() {
   return (

@@ -1,7 +1,52 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
-import './addprofile.css';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  border: black 1px solid;
+  max-width: 500px;
+  max-height: 800px;
+  position: fixed;
+  height: 100vh;
+  padding: 40px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 80px);
+  box-sizing: border-box;
+`;
+
+const ImageContainer = styled.div`
+  text-align: center;
+  max-width: 500px;
+  max-height: 200px;
+  overflow: hidden;
+`;
+
+const ProfileImg = styled.img`
+  max-width: 300px;
+  margin: 0 auto;
+  object-fit: cover;
+`;
+
+const AuthForm = styled(TextField)`
+  width: 100%;
+`;
+
+const IntroduceForm = styled(TextField)`
+  width: 400px;
+`;
+
+const AuthButton = styled(Button)`
+  width: 20%;
+  height: 56px;
+`;
+
+const SignupButton = styled(Button)`
+  width: 100%;
+  height: 50px;
+`;
 
 interface SignUpData {
   MemberName: string;
@@ -73,23 +118,16 @@ function Addprofile() {
       alert('중복 여부를 체크해주세요');
       return;
     }
-    const formData = new FormData();
-    if (ProfileImage) {
-      formData.append('file', ProfileImage);
-    }
-    formData.append('member_name', MemberName);
-    formData.append('email', email);
-    formData.append('password1', password1);
-    formData.append('password2', password2);
-    formData.append('nickname', nickname);
-    formData.append('ProfileBio', ProfileBio);
-    console.log('사진', ProfileImage);
-    console.log('이메일', email);
-    console.log('이름', MemberName);
-    console.log('비번', password1);
-    console.log('비번확인', password2);
-    console.log('닉네임', nickname);
-    console.log('한줄소개', ProfileBio);
+    const formData = {
+      member_name: MemberName,
+      email,
+      password1,
+      password2,
+      nickname,
+      profile_bio: ProfileBio,
+      profile_image: ProfileImage,
+    };
+    console.log(formData);
     axios
       .post('http://local:8080/signup', formData)
       .then(response => {
@@ -101,27 +139,19 @@ function Addprofile() {
   };
 
   return (
-    <div className="container">
+    <Container>
       <h1>거의 다 되었어요</h1>
       <h3>
         {MemberName} 님에 대해 <br /> 더 알려주세요
       </h3>
 
       <p>프로필 사진(선택)</p>
-      <div className="image-container">
+      <ImageContainer>
         <label htmlFor="fileInput">
           {previewUrl ? (
-            <img
-              src={previewUrl}
-              alt="프로필 미리보기"
-              className="profile-image"
-            />
+            <ProfileImg src={previewUrl} alt="프로필 미리보기" />
           ) : (
-            <img
-              src="/assets/non.jpg"
-              alt="기본 이미지"
-              className="profile-image"
-            />
+            <ProfileImg src="/assets/non.jpg" alt="기본 이미지" />
           )}
         </label>
         <input
@@ -130,13 +160,12 @@ function Addprofile() {
           onChange={handleFileChange}
           style={{ display: 'none' }}
         />
-      </div>
+      </ImageContainer>
 
       <p>닉네임 입력(필수)</p>
       <Grid container alignItems="center">
         <Grid item xs={9.5}>
-          <TextField
-            className="authform"
+          <AuthForm
             label="다른사람에게 보일 이름이에요"
             variant="outlined"
             value={nickname}
@@ -150,21 +179,19 @@ function Addprofile() {
           />
         </Grid>
         <Grid item xs={2.5}>
-          <Button
+          <AuthButton
             variant="contained"
             color="primary"
             onClick={handleVerify}
-            className="auth-button"
             style={{ marginLeft: '10px', background: '#606C5D' }}>
             중복 확인
-          </Button>
+          </AuthButton>
         </Grid>
       </Grid>
 
       <div>
         <p>한 줄 소개(선택)</p>
-        <TextField
-          className="introduceform"
+        <IntroduceForm
           label="책에 관한 당신의 이야기를 들려주세요."
           variant="outlined"
           value={ProfileBio}
@@ -180,15 +207,14 @@ function Addprofile() {
         />
       </div>
 
-      <Button
+      <SignupButton
         variant="contained"
         color="primary"
         onClick={handleSignUp}
-        className="button-auth"
         style={{ marginTop: '20px', background: '#606C5D' }}>
         회원가입
-      </Button>
-    </div>
+      </SignupButton>
+    </Container>
   );
 }
 
