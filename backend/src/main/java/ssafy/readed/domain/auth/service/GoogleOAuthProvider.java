@@ -22,6 +22,7 @@ public class GoogleOAuthProvider implements OAuthProvider {
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String GOOGLE_REDIRECT_URI;
     private final String GOOGLE_BASE_URL = "https://oauth2.googleapis.com";
+    private final String GOOGLE_USER_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
 
     @Override
     public String getToken(String code) {
@@ -63,7 +64,28 @@ public class GoogleOAuthProvider implements OAuthProvider {
     @Override
     public OAuthDetailDto getOAuthDetail(String token) {
 
-        return null;
+        WebClient googleWebClient = WebClient.builder()
+                .baseUrl(GOOGLE_USER_URL)
+                .build();
+
+        Map user_info = googleWebClient.get()
+                .header("Authorization", "Bearer " + token)
+                .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
+
+        if (user_info == null) {
+            throw new GlobalRuntimeException("구글 사용자 정보를 받아오지 못함", HttpStatus.BAD_REQUEST);
+        }
+
+        String id = (String) user_info.get("id");
+        String name = (String) user_info.get("name");
+        String email = (String) user_info.get("email");
+
+        OAuthDetailDto detailDto = new OAuthDetailDto(id, email, name);
+
+        return detailDto;
     }
 
 

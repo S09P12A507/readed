@@ -15,7 +15,7 @@ import lombok.ToString;
 @Builder
 public class OAuthDetailDto {
 
-    private Long id;
+    private String id;
     private String email;
     private String name;
 

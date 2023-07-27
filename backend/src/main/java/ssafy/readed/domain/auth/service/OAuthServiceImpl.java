@@ -36,6 +36,7 @@ public class OAuthServiceImpl implements OAuthService {
                 .access_token(access_token)
                 .build();
 
+        googleOAuthProvider.getOAuthDetail(access_token);
         return responseDto;
     }
 
