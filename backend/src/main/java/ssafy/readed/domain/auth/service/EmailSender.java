@@ -19,7 +19,6 @@ public class EmailSender {
     void sendEmail(String code, String email) {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        System.out.println("mimeMessage = " + mimeMessage);
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false,
                     "UTF-8");

@@ -102,7 +102,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void checkNameRegexp(String name) {
-        if (!Pattern.matches("^[ㄱ-ㅎ가-힣]+$", name)) {
+        if (!Pattern.matches("^[ㄱ-ㅎ가-힣]{2,8}$", name)) {
             throw new GlobalRuntimeException("이름은 한글로만 입력 가능합니다.", HttpStatus.BAD_REQUEST);
         }
     }

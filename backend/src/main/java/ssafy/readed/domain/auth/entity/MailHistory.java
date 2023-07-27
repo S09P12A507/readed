@@ -6,18 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class MailHistory {
 
     @Id
@@ -28,6 +23,16 @@ public class MailHistory {
     private String code;
     private boolean isAuthed;
     private LocalDateTime sendDate;
+
+    @Builder
+    public MailHistory(Long id, String email, String code, boolean isAuthed,
+            LocalDateTime sendDate) {
+        this.id = id;
+        this.email = email;
+        this.code = code;
+        this.isAuthed = isAuthed;
+        this.sendDate = sendDate;
+    }
 
     public static MailHistory defaultMailHistory(String email, String code) {
         return MailHistory.builder()
@@ -46,7 +51,7 @@ public class MailHistory {
     }
 
     public boolean isOverTimeLimit(LocalDateTime curDate) {
-        final int TIME_LIMIT = 5;
+        final int TIME_LIMIT = 10;
         LocalDateTime timeLimit = sendDate.plusMinutes(TIME_LIMIT);
         return curDate.isAfter(timeLimit);
     }
