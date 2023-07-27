@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import kakaologo from './assets/kakaologo.png';
 import './login.css';
 
@@ -102,7 +103,7 @@ function Login() {
       <p>
         <a href="htpp://local:8080"> 아이디 찾기</a> |
         <a href="htpp://local:8080"> 비밀번호 찾기</a> |
-        <a href="/signup"> 회원가입</a>
+        <Link to="/signup">회원가입</Link>
       </p>
 
       <div>

@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 40px;
+}
+
+.image-container {
+  text-align: center;
+}
+
+.profile-image {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.authform {
+  width: 100%;
+}
+
+.introduceform {
+  width: 400px;
+}

@@ -1,16 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'; // 'Switch' 대신 'Routes'를 사용
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './accounts/login';
+import Signup from './accounts/signup';
+import Emailcheck from './accounts/emailcheck';
+import Addprofile from './accounts/addprofile';
 
 function App() {
   return (
     <Router>
-      <div>
-        <Link to="/login">로그인</Link>
-      </div>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/signup/" element={<Signup />} />
+        <Route path="/signup/emailcheck" element={<Emailcheck />} />
+        <Route path="/signup/addprofile" element={<Addprofile />} />
       </Routes>
     </Router>
   );
