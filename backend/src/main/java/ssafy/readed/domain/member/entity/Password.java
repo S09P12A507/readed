@@ -20,12 +20,12 @@ public class Password {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "password_id")
     private Long id;
-    private String password;
+    private String passwordValue;
     @OneToOne(mappedBy = "password")
     private Member member;
 
     @Builder
-    public Password(String password) {
-        this.password = password;
+    public Password(String passwordValue) {
+        this.passwordValue = passwordValue;
     }
 }

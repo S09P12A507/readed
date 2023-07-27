@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ssafy.readed.domain.auth.controller.dto.CheckEmailRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SendEmailRequestDto;
+import ssafy.readed.domain.auth.controller.dto.SignInRequestDto;
 import ssafy.readed.domain.auth.service.AuthService;
 import ssafy.readed.global.response.JsonResponse;
 
@@ -17,6 +18,11 @@ import ssafy.readed.global.response.JsonResponse;
 public class AuthController {
 
     private final AuthService service;
+
+    @PostMapping("/api/auth/sign-in")
+    public ResponseEntity<?> defaultSignIn(@RequestBody SignInRequestDto requestDto) {
+        return service.defaultSignIn(requestDto);
+    }
 
     @PostMapping("/api/auth/send-email")
     public ResponseEntity<?> sendEmail(@RequestBody SendEmailRequestDto requestDto) {
