@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 
 public class JsonResponse {
+
     public static ResponseEntity<BaseResponse<Nullable>> fail(HttpStatus status, String message) {
         BaseResponse<Nullable> failureResponse = new BaseResponse<>(false, message, null);
         return ResponseEntity.status(status).body(failureResponse);
