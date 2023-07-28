@@ -22,14 +22,15 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
 
-    private final PasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void signUp(SignUpRequestDto requestDto) {
+
         checkValidation(requestDto);
 
         Password password = Password.builder()
-                .passwordValue(encoder.encode(requestDto.getPassword()))
+                .passwordValue(passwordEncoder.encode(requestDto.getPassword()))
                 .build();
 
         Member member = Member.builder()

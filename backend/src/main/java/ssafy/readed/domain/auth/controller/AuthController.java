@@ -35,4 +35,9 @@ public class AuthController {
         service.checkEmail(requestDto);
         return JsonResponse.ok("Email 체크 성공!!");
     }
+
+    @PostMapping("/api/auth/test")
+    public ResponseEntity<?> test(@RequestBody SendEmailRequestDto requestDto) {
+        return JsonResponse.ok("권한 테스트 !!");
+    }
 }

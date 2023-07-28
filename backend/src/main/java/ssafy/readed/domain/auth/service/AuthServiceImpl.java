@@ -14,9 +14,12 @@ import ssafy.readed.domain.auth.controller.dto.SendEmailRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SignInRequestDto;
 import ssafy.readed.domain.auth.entity.MailHistory;
 import ssafy.readed.domain.auth.repository.MailHistoryRepository;
+import ssafy.readed.domain.auth.service.dto.SignInResponseDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
+import ssafy.readed.global.response.JsonResponse;
+import ssafy.readed.global.security.JwtTokenProvider;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +32,9 @@ public class AuthServiceImpl implements AuthService {
 
     private final MemberRepository memberRepository;
 
-    private final PasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     @Transactional
@@ -68,6 +73,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> defaultSignIn(SignInRequestDto requestDto) {
 
         Member member = memberRepository.findByEmail(requestDto.getEmail());
@@ -78,11 +84,20 @@ public class AuthServiceImpl implements AuthService {
             throw new GlobalRuntimeException("가입되지 않은 Email 입니다.", HttpStatus.NOT_FOUND);
         }
 
-        if (!password.equals(encoder.encode(requestDto.getPassword()))) {
+        if (!passwordEncoder.matches(requestDto.getPassword(), password)) {
+            log.info("원래 비번 : " + password);
+            log.info("친 비번 : " + requestDto.getPassword());
             throw new GlobalRuntimeException("비밀번호가 틀립니다.", HttpStatus.NOT_FOUND);
         }
 
-        return null; //미구현
+        String access_token = jwtTokenProvider.createToken(requestDto.getEmail());
+
+        log.info("access_token : " + access_token);
+
+        SignInResponseDto responseDto = SignInResponseDto.builder()
+                .access_token(access_token).build();
+
+        return JsonResponse.ok("로그인 성공!", responseDto);
     }
 
     private String generateAuthCode() {

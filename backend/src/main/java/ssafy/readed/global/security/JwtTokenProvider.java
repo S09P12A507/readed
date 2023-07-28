@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +33,15 @@ public class JwtTokenProvider {
 
     private final MemberRepository memberRepository;
 
-    public String createToken(String email, List<String> roles) {
+    public String createToken(String email) {
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put("roles", roles);
+        //claims.put("roles", roles);
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + exp))
+
                 .signWith(SignatureAlgorithm.ES256, salt)
                 .compact();
     }
