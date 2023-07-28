@@ -9,4 +9,6 @@ public interface OAuthService {
     OAuthLoginResponseDto login(SocialLoginType socialLoginType, String code);
 
     OAuthDetailDto getUserDetail(SocialLoginType socialLoginType, String token);
+
+    boolean emailDuplicationCheck(String email);
 }

@@ -27,13 +27,11 @@ public class GoogleOAuthProvider implements OAuthProvider {
     @Override
     public String getToken(String code) {
 
-        WebClient googleWebClient = WebClient.builder()
-                .baseUrl(GOOGLE_BASE_URL)
-                .build();
+        WebClient googleOAuthWebClient = getGoogleClient(GOOGLE_BASE_URL);
 
         String uri = oauthAccessTokenUri(code); //토큰 가져오는 uri
 
-        Map result = googleWebClient.post()
+        Map result = googleOAuthWebClient.post()
                 .uri(uri)
                 .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
                 .retrieve()
@@ -64,11 +62,9 @@ public class GoogleOAuthProvider implements OAuthProvider {
     @Override
     public OAuthDetailDto getOAuthDetail(String token) {
 
-        WebClient googleWebClient = WebClient.builder()
-                .baseUrl(GOOGLE_USER_URL)
-                .build();
+        WebClient googleUserDetailClient = getGoogleClient(GOOGLE_USER_URL);
 
-        Map user_info = googleWebClient.get()
+        Map user_info = googleUserDetailClient.get()
                 .header("Authorization", "Bearer " + token)
                 .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
                 .retrieve()
@@ -88,5 +84,9 @@ public class GoogleOAuthProvider implements OAuthProvider {
         return detailDto;
     }
 
-
+    private WebClient getGoogleClient(String googleURL) {
+        return WebClient.builder()
+                .baseUrl(googleURL)
+                .build();
+    }
 }

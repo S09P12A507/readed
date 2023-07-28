@@ -47,4 +47,13 @@ public class Member {
         this.profile_image = profile_image;
         this.password = password;
     }
+
+    @Builder
+    public Member(String email, String name, Provider provider, String nickname) {
+        this.email = email;
+        this.name = name;
+        this.provider = provider;
+        this.nickname = nickname;
+        this.password = password;
+    }
 }

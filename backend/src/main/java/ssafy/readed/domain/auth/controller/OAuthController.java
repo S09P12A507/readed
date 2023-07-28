@@ -32,10 +32,8 @@ public class OAuthController {
 
         StringBuilder sb = new StringBuilder();
         sb.append(socialLoginType.toString())
-                .append("로그인 성공! ^_^ ");
+                .append("로그인 성공!");
 
         return JsonResponse.ok(sb.toString(), responseDto);
     }
-
-
 }

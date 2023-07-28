@@ -25,12 +25,11 @@ public class KakaoOAuthProvider implements OAuthProvider {
 
     @Override
     public String getToken(String code) {
-        WebClient kakaoAuthWebClient = WebClient.builder()
-                .baseUrl(KAKAO_BASE_URL)
-                .build();
+        WebClient kakaoOAuthWebClient = getKakaoClient(KAKAO_BASE_URL);
+
         String uri = oauthAccessTokenUri(code); //토큰 가져오는 uri
 
-        Map result = kakaoAuthWebClient.post()
+        Map result = kakaoOAuthWebClient.post()
                 .uri(uri)
                 .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
                 .retrieve()
@@ -59,11 +58,9 @@ public class KakaoOAuthProvider implements OAuthProvider {
     @Override
     public OAuthDetailDto getOAuthDetail(String token) {
 
-        WebClient kakaoWebClient = WebClient.builder()
-                .baseUrl(KAKAO_USER_URL)
-                .build();
+        WebClient kakaoUserDetailClient = getKakaoClient(KAKAO_USER_URL);
 
-        Map user_info = kakaoWebClient.get()
+        Map user_info = kakaoUserDetailClient.get()
                 .header("Authorization", "Bearer " + token)
                 .header("Content-type", "application/x-www-form-urlencoded;charset=utf-8")
                 .retrieve()
@@ -85,5 +82,11 @@ public class KakaoOAuthProvider implements OAuthProvider {
         OAuthDetailDto detailDto = new OAuthDetailDto(id, email, nickname);
 
         return detailDto;
+    }
+
+    private static WebClient getKakaoClient(String kakaoUrl) {
+        return WebClient.builder()
+                .baseUrl(kakaoUrl)
+                .build();
     }
 }
