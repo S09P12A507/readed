@@ -34,6 +34,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.1.2'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 
 }
 

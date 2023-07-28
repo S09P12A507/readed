@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
         checkValidation(requestDto);
 
         Password password = Password.builder()
-                .password(encoder.encode(requestDto.getPassword()))
+                .passwordValue(encoder.encode(requestDto.getPassword()))
                 .build();
 
         Member member = Member.builder()

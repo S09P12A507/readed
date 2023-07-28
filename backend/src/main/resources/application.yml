@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: oauth, mail, db
+    include: oauth, mail, db, jwt
 
 
   jpa:
