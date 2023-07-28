@@ -4,17 +4,13 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  border: black 1px solid;
-  max-width: 500px;
-  max-height: 800px;
-  position: fixed;
-  height: 100vh;
-  padding: 40px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: calc(100% - 80px);
+  justify-content: center;
+  align-content: center;
+  position: flex;
+  padding: 20px;
   box-sizing: border-box;
+  overflow-y: scroll;
+  height: 130vh;
 `;
 
 const ImageContainer = styled.div`
@@ -35,7 +31,7 @@ const AuthForm = styled(TextField)`
 `;
 
 const IntroduceForm = styled(TextField)`
-  width: 400px;
+  width: 100%;
 `;
 
 const AuthButton = styled(Button)`
@@ -46,6 +42,54 @@ const AuthButton = styled(Button)`
 const SignupButton = styled(Button)`
   width: 100%;
   height: 50px;
+`;
+
+const NowContainer = styled.div`
+  width: 18px;
+  height: 18px;
+  background-color: #4b8346;
+  font-family: 'Pretendard';
+  font-style: normal;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+const IconContainer = styled.div`
+  width: 18px;
+  height: 18px;
+  background-color: gray;
+  font-family: 'Pretendard';
+  font-style: normal;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+const Announce = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const AnnounceText = styled.div`
+  display: flex;
+  font-size: 12px;
+  margin: 0;
+`;
+
+const NowText = styled.div`
+  display: flex;
+  margin: 0;
+  font-weight: bold;
+  font-size: 12px;
 `;
 
 interface SignUpData {
@@ -128,6 +172,9 @@ function Addprofile() {
       profile_image: ProfileImage,
     };
     console.log(formData);
+    window.location.href = '/select';
+    // 테스트 용으로 여기에 삽입 > 이후에 axios로 true 여부 체크
+
     axios
       .post('http://local:8080/signup', formData)
       .then(response => {
@@ -140,12 +187,24 @@ function Addprofile() {
 
   return (
     <Container>
-      <h1>거의 다 되었어요</h1>
+      <h1>거의 다 왔어요</h1>
       <h3>
-        {MemberName} 님에 대해 <br /> 더 알려주세요
+        {MemberName} 님에 대해 <br /> 더 알려주세요!
       </h3>
 
-      <p>프로필 사진(선택)</p>
+      <br />
+      <Announce>
+        <IconContainer>1</IconContainer>&nbsp;
+        <AnnounceText> 기본 정보 입력 &nbsp;─&nbsp;</AnnounceText>
+        <IconContainer>2</IconContainer>&nbsp;
+        <AnnounceText> 이메일 인증 &nbsp;─&nbsp;</AnnounceText>
+        <NowContainer>3</NowContainer>&nbsp;
+        <NowText> 프로필 입력</NowText>
+      </Announce>
+      <br />
+      <br />
+
+      <p>* 프로필 사진(선택)</p>
       <ImageContainer>
         <label htmlFor="fileInput">
           {previewUrl ? (
@@ -162,7 +221,7 @@ function Addprofile() {
         />
       </ImageContainer>
 
-      <p>닉네임 입력(필수)</p>
+      <p>* 닉네임 입력(필수)</p>
       <Grid container alignItems="center">
         <Grid item xs={9.5}>
           <AuthForm
@@ -183,14 +242,14 @@ function Addprofile() {
             variant="contained"
             color="primary"
             onClick={handleVerify}
-            style={{ marginLeft: '10px', background: '#606C5D' }}>
+            style={{ marginLeft: '10px', background: '#4B8346' }}>
             중복 확인
           </AuthButton>
         </Grid>
       </Grid>
 
       <div>
-        <p>한 줄 소개(선택)</p>
+        <p>* 한 줄 소개(선택)</p>
         <IntroduceForm
           label="책에 관한 당신의 이야기를 들려주세요."
           variant="outlined"
@@ -211,7 +270,14 @@ function Addprofile() {
         variant="contained"
         color="primary"
         onClick={handleSignUp}
-        style={{ marginTop: '20px', background: '#606C5D' }}>
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          marginTop: '300px',
+          width: '100%',
+          background: '#4B8346',
+        }}>
         회원가입
       </SignupButton>
     </Container>

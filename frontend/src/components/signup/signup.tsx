@@ -7,27 +7,73 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  border: black 1px solid;
-  padding: 40px;
-  max-width: 500px;
-  position: fixed;
+  max-width: 600px;
+  padding: 20px;
+  /* position: fixed;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: calc(100% - 80px);
+  left: 50%; */
+  /* transform: translate(-50%, -50%); */
+  /* width: calc(100% - 80px); */
   box-sizing: border-box;
 `;
 
 const FormButtonContainer = styled.div`
   width: 100%;
-  padding: 10px 0;
   display: flex;
-  justify-content: center;
+  bottom: 0;
   height: 50px;
 `;
 
 const SignupForm = styled(TextField)`
   width: 100%;
+`;
+
+const NowContainer = styled.div`
+  width: 18px;
+  height: 18px;
+  background-color: #4b8346;
+  font-family: 'Pretendard';
+  font-style: normal;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+const IconContainer = styled.div`
+  width: 18px;
+  height: 18px;
+  background-color: gray;
+  font-family: 'Pretendard';
+  font-style: normal;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+const Announce = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const AnnounceText = styled.div`
+  display: flex;
+  font-size: 12px;
+  margin: 0;
+`;
+
+const NowText = styled.div`
+  display: flex;
+  margin: 0;
+  font-weight: bold;
+  font-size: 12px;
 `;
 
 type FormData = {
@@ -58,13 +104,12 @@ const isNameValid = (name: string) => {
 
 function BackButton({ onGoBack }: BackButtonProps) {
   return (
-    <div>
+    <div style={{ marginTop: '10px', marginLeft: '5px' }}>
       <Link to="/">
         <IconButton
-          color="primary"
           aria-label="back"
           onClick={onGoBack}
-          style={{ fontSize: '14px' }}>
+          style={{ color: 'gray', fontSize: '14px' }}>
           <ArrowBackIcon /> 돌아가기
         </IconButton>
       </Link>
@@ -158,8 +203,8 @@ function Signup() {
         password2,
       };
       localStorage.setItem('signupData', JSON.stringify(formData));
-      window.location.href =
-        '/signup/emailcheck'; /* 백엔드 테스트 시 axios의 then 부분으로 옮겨주면 엔드포인트로 이메일이 가는지 체크 가능 */
+      /* 백엔드 테스트 시 axios의 then 부분으로 옮겨주면 엔드포인트로 이메일이 가는지 체크 가능 */
+      window.location.href = '/signup/emailcheck';
       axios
         .post('http://localhost:8080/api/auth/send-email', { email })
         .then(response => {
@@ -180,150 +225,168 @@ function Signup() {
   };
 
   return (
-    <Container>
+    <div>
       <BackButton onGoBack={handleGoBack} />
-      <h1>회원가입</h1>
-      <h3>리디드에 오신 것을 환영합니다.</h3>
-
-      <div>
-        <SignupForm
-          label="*이름"
-          variant="outlined"
-          value={MemberName}
-          onChange={handleNameChange}
-          margin="dense"
-          helperText={(() => {
-            if (InvalidName) {
-              return '유효한 이름을 입력해주세요';
-            }
-            if (isNameValid(MemberName)) {
-              return ' ';
-            }
-            return '2글자 이상의 한글 이름을 입력해주세요.';
-          })()}
-          InputProps={{
-            style: {
-              backgroundColor: '#f5f5f5',
-            },
-            endAdornment: isNameValid(MemberName) && (
-              <CheckIcon style={{ color: 'green' }} />
-            ),
-          }}
-          error={InvalidName}
-        />
-      </div>
-
-      <div>
-        <SignupForm
-          label="*이메일"
-          variant="outlined"
-          value={email}
-          onChange={handleEmailChange}
-          margin="dense"
-          InputProps={{
-            style: {
-              backgroundColor: '#f5f5f5',
-            },
-            endAdornment: isEmailValid(email) && (
-              <CheckIcon style={{ color: 'green' }} />
-            ),
-          }}
-          helperText={(() => {
-            if (invalidEmail) {
-              return '유효한 이메일을 입력해주세요';
-            }
-            if (isEmailValid(email)) {
-              return ' ';
-            }
-            return '이메일을 입력해주세요';
-          })()}
-          error={invalidEmail}
-        />
-      </div>
-
-      <div>
-        <SignupForm
-          label="*비밀번호"
-          type="password"
-          variant="outlined"
-          value={password1}
-          onChange={handlePasswordChange}
-          margin="dense"
-          helperText={(() => {
-            if (invalidPassword) {
-              if (password1.length < 8) {
-                return '비밀번호가 너무 짧습니다.';
+      <Container>
+        <h1>회원가입</h1>
+        <h3>리디드에 오신 것을 환영합니다.</h3>
+        <br />
+        <br />
+        <Announce>
+          <NowContainer>1</NowContainer>&nbsp;
+          <NowText> 기본 정보 입력 &nbsp;─&nbsp;</NowText>
+          <IconContainer>2</IconContainer>&nbsp;
+          <AnnounceText> 이메일 인증 &nbsp;─&nbsp;</AnnounceText>
+          <IconContainer>3</IconContainer>&nbsp;
+          <AnnounceText> 프로필 입력</AnnounceText>
+        </Announce>
+        <br />
+        <br />
+        <div>
+          <SignupForm
+            label="*이름"
+            variant="outlined"
+            value={MemberName}
+            onChange={handleNameChange}
+            margin="dense"
+            helperText={(() => {
+              if (InvalidName) {
+                return '유효한 이름을 입력해주세요';
               }
-              if (password1.length > 15) {
-                return '비밀번호가 너무 깁니다.';
+              if (isNameValid(MemberName)) {
+                return ' ';
               }
-              return '숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
-            }
-            if (isPasswordValid(password1)) {
-              return ' ';
-            }
-            return '알파벳, 숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
-          })()}
-          InputProps={{
-            style: {
-              backgroundColor: '#f5f5f5',
-            },
-            endAdornment: isPasswordValid(password1) && (
-              <CheckIcon style={{ color: 'green' }} />
-            ),
-          }}
-          error={invalidPassword}
-        />
-      </div>
+              return '2글자 이상의 한글 이름을 입력해주세요.';
+            })()}
+            InputProps={{
+              style: {
+                backgroundColor: '#f5f5f5',
+              },
+              endAdornment: isNameValid(MemberName) && (
+                <CheckIcon style={{ color: 'green' }} />
+              ),
+            }}
+            error={InvalidName}
+          />
+        </div>
 
-      <div>
-        <SignupForm
-          label="*비밀번호 확인"
-          type="password"
-          variant="outlined"
-          value={password2}
-          onChange={handlePassword2Change}
-          margin="dense"
-          helperText={(() => {
-            if (invalidPassword2) {
-              return '비밀번호가 일치하지 않습니다';
-            }
-            if (password2 && !invalidPassword2) {
-              return ' ';
-            }
-            return '동일한 비밀번호를 입력해주세요';
-          })()}
-          InputProps={{
-            style: {
-              backgroundColor: '#f5f5f5',
-            },
-            endAdornment: !invalidPassword2 && password2.length > 1 && (
-              <CheckIcon style={{ color: 'green' }} />
-            ),
-          }}
-          error={invalidPassword2}
-        />
-      </div>
+        <div>
+          <SignupForm
+            label="*이메일"
+            variant="outlined"
+            value={email}
+            onChange={handleEmailChange}
+            margin="dense"
+            InputProps={{
+              style: {
+                backgroundColor: '#f5f5f5',
+              },
+              endAdornment: isEmailValid(email) && (
+                <CheckIcon style={{ color: 'green' }} />
+              ),
+            }}
+            helperText={(() => {
+              if (invalidEmail) {
+                return '유효한 이메일을 입력해주세요';
+              }
+              if (isEmailValid(email)) {
+                return ' ';
+              }
+              return '이메일을 입력해주세요';
+            })()}
+            error={invalidEmail}
+          />
+        </div>
 
+        <div>
+          <SignupForm
+            label="*비밀번호"
+            type="password"
+            variant="outlined"
+            value={password1}
+            onChange={handlePasswordChange}
+            margin="dense"
+            helperText={(() => {
+              if (invalidPassword) {
+                if (password1.length < 8) {
+                  return '비밀번호가 너무 짧습니다.';
+                }
+                if (password1.length > 15) {
+                  return '비밀번호가 너무 깁니다.';
+                }
+                return '숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
+              }
+              if (isPasswordValid(password1)) {
+                return ' ';
+              }
+              return '알파벳, 숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
+            })()}
+            InputProps={{
+              style: {
+                backgroundColor: '#f5f5f5',
+              },
+              endAdornment: isPasswordValid(password1) && (
+                <CheckIcon style={{ color: 'green' }} />
+              ),
+            }}
+            error={invalidPassword}
+          />
+        </div>
+
+        <div>
+          <SignupForm
+            label="*비밀번호 확인"
+            type="password"
+            variant="outlined"
+            value={password2}
+            onChange={handlePassword2Change}
+            margin="dense"
+            helperText={(() => {
+              if (invalidPassword2) {
+                return '비밀번호가 일치하지 않습니다';
+              }
+              if (password2 && !invalidPassword2) {
+                return ' ';
+              }
+              return '동일한 비밀번호를 입력해주세요';
+            })()}
+            InputProps={{
+              style: {
+                backgroundColor: '#f5f5f5',
+              },
+              endAdornment: !invalidPassword2 && password2.length > 1 && (
+                <CheckIcon style={{ color: 'green' }} />
+              ),
+            }}
+            error={invalidPassword2}
+          />
+        </div>
+      </Container>
       {isWebApp ? (
         <FormButtonContainer
           style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>
           <Button
             variant="contained"
-            color="primary"
-            onClick={handleSubmit}
-            style={{ width: '100%' }}>
+            style={{
+              backgroundColor: '#4b8346',
+              color: '#ffffff',
+              width: '100%',
+            }}
+            onClick={handleSubmit}>
             이메일 인증하기
           </Button>
         </FormButtonContainer>
       ) : (
         <FormButtonContainer>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            style={{ backgroundColor: '#4b8346', color: '#ffffff' }}
+            onClick={handleSubmit}>
             이메일 인증하기
           </Button>
         </FormButtonContainer>
       )}
-    </Container>
+    </div>
   );
 }
 

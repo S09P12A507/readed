@@ -49,10 +49,11 @@ const KakaoCircle = styled.button`
 `;
 
 const LoginButton = styled.button`
-  width: 280px;
+  width: 290px;
   height: 40px;
   margin-top: 10px;
-  background: #606c5d;
+  background: #7aa874;
+  border-color: white;
   color: white;
 `;
 

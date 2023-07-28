@@ -3,18 +3,11 @@ import { useNavigate, Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton, TextField, Button, Grid } from '@mui/material';
 import styled from 'styled-components';
-// import axios from 'axios';
+import axios from 'axios';
 
 const Container = styled.div`
-  border: black 1px solid;
-  padding: 40px;
-  max-width: 500px;
-  max-height: 800px;
+  padding: 20px;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: calc(100% - 80px);
   box-sizing: border-box;
 `;
 
@@ -29,11 +22,80 @@ const AuthButton = styled(Button)`
 
 const SignupButton = styled(Button)`
   width: 100%;
+  display: flex;
+  bottom: 0;
   height: 50px;
+`;
+
+const NowContainer = styled.div`
+  width: 18px;
+  height: 18px;
+  background-color: #4b8346;
+  font-family: 'Pretendard';
+  font-style: normal;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+const IconContainer = styled.div`
+  width: 18px;
+  height: 18px;
+  background-color: gray;
+  font-family: 'Pretendard';
+  font-style: normal;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+const Announce = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const AnnounceText = styled.div`
+  display: flex;
+  font-size: 12px;
+  margin: 0;
+`;
+
+const NowText = styled.div`
+  display: flex;
+  margin: 0;
+  font-weight: bold;
+  font-size: 12px;
 `;
 
 interface SignUpData {
   email: string;
+}
+
+interface BackButtonProps {
+  onGoBack: () => void;
+}
+
+function BackButton({ onGoBack }: BackButtonProps) {
+  return (
+    <div style={{ marginTop: '10px', marginLeft: '5px' }}>
+      <Link to="/signup">
+        <IconButton
+          aria-label="back"
+          onClick={onGoBack}
+          style={{ color: 'gray', fontSize: '14px' }}>
+          <ArrowBackIcon /> 돌아가기
+        </IconButton>
+      </Link>
+    </div>
+  );
 }
 
 function Emailcheck() {
@@ -93,56 +155,94 @@ function Emailcheck() {
     }
   };
 
+  const handleGoBack = () => {
+    console.log('뒤로');
+  };
+
+  const handleSubmit = () => {
+    axios
+      .post('http://localhost:8080/api/auth/send-email', { email })
+      .then(response => {
+        console.log('이메일이 성공적으로 보내졌습니다.');
+        /* 테스트 할때는 위 winodw.location.href 부분 여기로 옮겨주세요 */
+        console.log(response);
+      })
+      .catch(error => {
+        console.error('이메일 전송에 실패했습니다.', error);
+      });
+  };
+
   return (
-    <Container>
-      <Link to="/signup">
-        <IconButton
-          color="primary"
-          aria-label="back"
-          style={{ fontSize: '14px' }}>
-          <ArrowBackIcon /> 이전으로
-        </IconButton>
-      </Link>
-      <h1>이메일 인증</h1>
-      <h3>
-        {email}으로
-        <br /> 전송한 인증코드를 확인해주세요.
-      </h3>
-      <Grid container alignItems="center">
-        <Grid item xs={9.5}>
-          <AuthForm
-            label="*인증코드 입력"
-            variant="outlined"
-            value={code}
-            onChange={handleVerificationCodeChange}
-            margin="dense"
-            InputProps={{
-              style: {
-                backgroundColor: '#f5f5f5',
-              },
-            }}
-          />
+    <div>
+      <BackButton onGoBack={handleGoBack} />
+      <Container>
+        <h1>이메일 인증</h1>
+        <h3>
+          {email}으로
+          <br /> 전송한 인증코드를 확인해주세요.
+          <br />
+          <br />
+          <Announce>
+            <IconContainer>1</IconContainer>&nbsp;
+            <AnnounceText> 기본 정보 입력 &nbsp;─&nbsp;</AnnounceText>
+            <NowContainer>2</NowContainer>&nbsp;
+            <NowText> 이메일 인증 &nbsp;─&nbsp;</NowText>
+            <IconContainer>3</IconContainer>&nbsp;
+            <AnnounceText> 프로필 입력</AnnounceText>
+          </Announce>
+          <br />
+        </h3>
+        <Grid container alignItems="center">
+          <Grid item xs={9.5}>
+            <AuthForm
+              label="*인증코드 입력"
+              variant="outlined"
+              value={code}
+              onChange={handleVerificationCodeChange}
+              margin="dense"
+              InputProps={{
+                style: {
+                  backgroundColor: '#f5f5f5',
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={2.5}>
+            <AuthButton
+              variant="contained"
+              onClick={handleVerify}
+              style={{ marginLeft: '10px', background: '#4B8346' }}
+              disabled={isAuthenticated}>
+              인증
+            </AuthButton>
+          </Grid>
         </Grid>
-        <Grid item xs={2.5}>
-          <AuthButton
-            variant="contained"
-            color="primary"
-            onClick={handleVerify}
-            style={{ marginLeft: '10px', background: '#606C5D' }}
-            disabled={isAuthenticated}>
-            인증
-          </AuthButton>
-        </Grid>
-      </Grid>
-      <SignupButton
-        variant="contained"
-        color="primary"
-        onClick={handleSignUp}
-        style={{ marginTop: '300px', background: '#606C5D' }}
-        disabled={!isAuthenticated}>
-        회원가입
-      </SignupButton>
-    </Container>
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: 'white',
+            color: 'gray',
+            width: '100%',
+          }}
+          onClick={handleSubmit}>
+          재전송
+        </Button>
+        <SignupButton
+          variant="contained"
+          onClick={handleSignUp}
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            marginTop: '300px',
+            width: '100%',
+            background: '#4B8346',
+          }}
+          disabled={!isAuthenticated}>
+          다읍단계로
+        </SignupButton>
+      </Container>
+    </div>
   );
 }
 
