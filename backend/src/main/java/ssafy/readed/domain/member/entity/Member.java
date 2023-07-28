@@ -1,18 +1,23 @@
 package ssafy.readed.domain.member.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ssafy.readed.domain.report.entity.Report;
 
 @Entity
 @Getter
@@ -31,9 +36,12 @@ public class Member {
     private String nickname;
     private String profile_bio;
     private String profile_image;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "password_id")
     private Password password;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Report> reports = new ArrayList<>();
 
     @Builder
     public Member(Long id, String email, String name, Provider provider, String nickname,
@@ -50,6 +58,7 @@ public class Member {
 
     @Builder
     public Member(String email, String name, Provider provider, String nickname) {
+        //필수값
         this.email = email;
         this.name = name;
         this.provider = provider;

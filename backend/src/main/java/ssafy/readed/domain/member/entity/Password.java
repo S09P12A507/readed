@@ -3,6 +3,7 @@ package ssafy.readed.domain.member.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ public class Password {
     @Column(name = "password_id")
     private Long id;
     private String passwordValue;
-    @OneToOne(mappedBy = "password")
+    @OneToOne(mappedBy = "password", fetch = FetchType.LAZY)
     private Member member;
 
     @Builder
