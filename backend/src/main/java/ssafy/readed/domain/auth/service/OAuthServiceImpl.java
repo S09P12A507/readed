@@ -6,10 +6,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ssafy.readed.domain.auth.service.dto.OAuthDetailDto;
 import ssafy.readed.domain.auth.service.dto.OAuthLoginResponseDto;
+import ssafy.readed.domain.auth.service.dto.SignInResponseDto;
 import ssafy.readed.domain.auth.utility.SocialLoginType;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
+import ssafy.readed.global.response.JsonResponse;
+import ssafy.readed.global.security.JwtTokenProvider;
 
 @Service
 @Repository
@@ -18,7 +21,9 @@ public class OAuthServiceImpl implements OAuthService {
 
     private final GoogleOAuthProvider googleOAuthProvider;
     private final KakaoOAuthProvider kakaoOAuthProvider;
-    MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+
+
 
     @Override
     public OAuthLoginResponseDto login(SocialLoginType socialLoginType, String code) {
@@ -38,10 +43,22 @@ public class OAuthServiceImpl implements OAuthService {
             }
         }
 
-        responseDto = OAuthLoginResponseDto.builder()
-                .access_token(access_token)
-                .build();
+        OAuthDetailDto detailDto= getUserDetail(socialLoginType, access_token);
 
+        boolean isDuplicated = emailDuplicationCheck(detailDto.getEmail());
+
+        if (!isDuplicated) {
+            responseDto= OAuthLoginResponseDto.builder()
+                    .isNewMember(true)
+                    .detailDto(detailDto)
+                    .build();
+        }
+        else{
+            responseDto= OAuthLoginResponseDto.builder()
+                    .isNewMember(false)
+                    .detailDto(detailDto)
+                    .build();
+        }
         return responseDto;
     }
 
@@ -62,15 +79,6 @@ public class OAuthServiceImpl implements OAuthService {
             }
         }
 
-        boolean isDuplicated = emailDuplicationCheck(detailDto.getEmail());
-        if (isDuplicated == false) {
-            Member member = Member.builder()
-                    .email(detailDto.getEmail())
-                    .name(detailDto.getName())
-                    .nickname("닉네임")
-                    .build();
-        }
-
         return detailDto;
     }
 
@@ -80,8 +88,7 @@ public class OAuthServiceImpl implements OAuthService {
         Member member = memberRepository.findByEmail(email);
 
         if (member != null) {
-            //로그인
-            throw new GlobalRuntimeException("이미 회원가입된 이용자", HttpStatus.CONFLICT);
+            return true;
         }
         return false;
     }

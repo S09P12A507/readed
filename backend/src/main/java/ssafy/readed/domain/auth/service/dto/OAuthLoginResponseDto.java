@@ -15,5 +15,6 @@ import lombok.ToString;
 @Builder
 public class OAuthLoginResponseDto {
 
-    private String access_token;
+    private boolean isNewMember;
+    private OAuthDetailDto detailDto;
 }
