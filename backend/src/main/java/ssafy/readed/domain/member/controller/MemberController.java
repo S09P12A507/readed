@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ssafy.readed.domain.member.controller.dto.MemberProfileModifyRequestDto;
+import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.service.MemberService;
 import ssafy.readed.global.response.JsonResponse;
@@ -29,6 +29,12 @@ public class MemberController {
         return JsonResponse.ok("회원가입 성공!");
     }
 
+    @GetMapping("/check-email-duplicate")
+    public ResponseEntity<?> checkEmailDuplicate(String email) {
+        memberService.emailDuplicationCheck(email);
+        return JsonResponse.ok("중복 체크 완료");
+    }
+
     @GetMapping("/profile/{member-id}")
     private ResponseEntity<?> selectProfile(@PathVariable("member-id") Long id) {
         return JsonResponse.ok("멤버 프로필 조회 성공!", memberService.selectProfile(id));
@@ -36,7 +42,19 @@ public class MemberController {
 
     @PatchMapping("/profile/{member-id}")
     private ResponseEntity<?> modifyProfile(@PathVariable("member-id") Long id,
-            @RequestBody MemberProfileModifyRequestDto requestDto) {
+            @RequestBody ModifyMemberProfileRequestDto requestDto) {
+        memberService.modifyProfile(id, requestDto);
+        return JsonResponse.ok("멤버 프로필 변경 성공!");
+    }
+
+    @GetMapping("/{member-id}")
+    private ResponseEntity<?> selectMember(@PathVariable("member-id") Long id) {
+        return JsonResponse.ok("멤버 회원정보 조회 성공!", memberService.selectMember(id));
+    }
+
+    @PatchMapping("/{member-id}")
+    private ResponseEntity<?> modifyMember(@PathVariable("member-id") Long id,
+            @RequestBody ModifyMemberProfileRequestDto requestDto) {
         memberService.modifyProfile(id, requestDto);
         return JsonResponse.ok("멤버 프로필 변경 성공!");
     }

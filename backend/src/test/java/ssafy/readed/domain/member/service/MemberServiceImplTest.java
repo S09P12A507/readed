@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ssafy.readed.domain.member.controller.dto.MemberProfileModifyRequestDto;
+import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
@@ -57,7 +57,7 @@ class MemberServiceImplTest {
         signUp();
 
         Long id = 1L;
-        MemberProfileModifyRequestDto dto = MemberProfileModifyRequestDto.builder()
+        ModifyMemberProfileRequestDto dto = ModifyMemberProfileRequestDto.builder()
                 .nickname("modnick")
                 .profile_bio("modbio")
                 .profile_image("modimage")

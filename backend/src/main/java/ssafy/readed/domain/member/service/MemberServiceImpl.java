@@ -7,13 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ssafy.readed.domain.member.controller.dto.MemberProfileModifyRequestDto;
+import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.entity.Password;
 import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
+import ssafy.readed.domain.member.service.dto.SelectProfileResponseDto;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 
 @Service
@@ -52,21 +53,26 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public SelectMemberResponseDto selectProfile(Long id) {
+    public SelectProfileResponseDto selectProfile(Long id) {
         Member member = getMember(id);
-        return SelectMemberResponseDto.from(member);
+        return SelectProfileResponseDto.from(member);
     }
-
 
     @Override
     @Transactional
-    public void modifyProfile(Long id, MemberProfileModifyRequestDto requestDto) {
+    public void modifyProfile(Long id, ModifyMemberProfileRequestDto requestDto) {
         checkNicknameRegexp(requestDto.getNickname());
         Member member = getMember(id);
         log.info("변경 전 : " + member.getNickname());
         member.modify(requestDto.getNickname(), requestDto.getProfile_image(),
                 requestDto.getProfile_bio());
         log.info("변경 후 : " + member.getNickname());
+    }
+
+    @Override
+    public SelectMemberResponseDto selectMember(Long id) {
+        Member member = getMember(id);
+        return SelectMemberResponseDto.from(member);
     }
 
     @Transactional

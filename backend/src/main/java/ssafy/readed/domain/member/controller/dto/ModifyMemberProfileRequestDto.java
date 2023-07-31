@@ -8,14 +8,14 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-public class MemberProfileModifyRequestDto {
+public class ModifyMemberProfileRequestDto {
 
     private String nickname;
     private String profile_image;
     private String profile_bio;
 
     @Builder
-    public MemberProfileModifyRequestDto(String nickname, String profile_image,
+    public ModifyMemberProfileRequestDto(String nickname, String profile_image,
             String profile_bio) {
         this.nickname = nickname;
         this.profile_image = profile_image;
