@@ -1,7 +1,21 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
 import styled from 'styled-components';
+
+const WebContainer = styled.div<{ isWebApp: boolean }>`
+  width: ${props => (props.isWebApp ? '' : '600px')};
+  justify-content: ${props => (props.isWebApp ? '' : 'center')};
+  align-items: ${props => (props.isWebApp ? '' : 'center')};
+  border: ${props => (props.isWebApp ? '' : '1px solid black')};
+  flex-direction: ${props => (props.isWebApp ? '' : 'column')};
+  justify-content: ${props => (props.isWebApp ? '' : 'space-between')};
+  min-height: 99vh;
+  position: ${props => (props.isWebApp ? '' : 'absolute')};
+  top: ${props => (props.isWebApp ? '' : '50%')};
+  left: ${props => (props.isWebApp ? '' : '50%')};
+  transform: ${props => (props.isWebApp ? '' : 'translate(-50%, -50%)')};
+`;
 
 const Container = styled.div`
   justify-content: center;
@@ -10,7 +24,7 @@ const Container = styled.div`
   padding: 20px;
   box-sizing: border-box;
   overflow-y: scroll;
-  height: 130vh;
+  height: 100vh;
 `;
 
 const ImageContainer = styled.div`
@@ -100,6 +114,7 @@ interface SignUpData {
 }
 
 function Addprofile() {
+  const [isWebApp, setIsWebApp] = useState(false);
   const storedData = localStorage.getItem('signupData');
   const signUpData: SignUpData = storedData
     ? (JSON.parse(storedData) as SignUpData)
@@ -119,6 +134,21 @@ function Addprofile() {
   const [nickname, setNickname] = useState<string>('');
   const [ProfileBio, setprofilebio] = useState<string>('');
   const [nicknameExists, setNicknameExists] = useState<boolean>(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(display-mode: standalone)');
+    setIsWebApp(mediaQuery.matches);
+
+    const handleMediaChange = (event: MediaQueryListEvent) => {
+      setIsWebApp(event.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleMediaChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaChange);
+    };
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -172,7 +202,7 @@ function Addprofile() {
       profile_image: ProfileImage,
     };
     console.log(formData);
-    window.location.href = '/select';
+    window.location.href = '/genre';
     // 테스트 용으로 여기에 삽입 > 이후에 axios로 true 여부 체크
 
     axios
@@ -186,101 +216,103 @@ function Addprofile() {
   };
 
   return (
-    <Container>
-      <h1>거의 다 왔어요</h1>
-      <h3>
-        {MemberName} 님에 대해 <br /> 더 알려주세요!
-      </h3>
+    <WebContainer isWebApp={isWebApp}>
+      <Container>
+        <h1>거의 다 왔어요</h1>
+        <h3>
+          {MemberName} 님에 대해 <br /> 더 알려주세요!
+        </h3>
 
-      <br />
-      <Announce>
-        <IconContainer>1</IconContainer>&nbsp;
-        <AnnounceText> 기본 정보 입력 &nbsp;─&nbsp;</AnnounceText>
-        <IconContainer>2</IconContainer>&nbsp;
-        <AnnounceText> 이메일 인증 &nbsp;─&nbsp;</AnnounceText>
-        <NowContainer>3</NowContainer>&nbsp;
-        <NowText> 프로필 입력</NowText>
-      </Announce>
-      <br />
-      <br />
+        <br />
+        <Announce>
+          <IconContainer>1</IconContainer>&nbsp;
+          <AnnounceText> 기본 정보 입력 &nbsp;─&nbsp;</AnnounceText>
+          <IconContainer>2</IconContainer>&nbsp;
+          <AnnounceText> 이메일 인증 &nbsp;─&nbsp;</AnnounceText>
+          <NowContainer>3</NowContainer>&nbsp;
+          <NowText> 프로필 입력</NowText>
+        </Announce>
+        <br />
+        <br />
 
-      <p>* 프로필 사진(선택)</p>
-      <ImageContainer>
-        <label htmlFor="fileInput">
-          {previewUrl ? (
-            <ProfileImg src={previewUrl} alt="프로필 미리보기" />
-          ) : (
-            <ProfileImg src="/assets/non.jpg" alt="기본 이미지" />
-          )}
-        </label>
-        <input
-          type="file"
-          id="fileInput"
-          onChange={handleFileChange}
-          style={{ display: 'none' }}
-        />
-      </ImageContainer>
+        <p>* 프로필 사진(선택)</p>
+        <ImageContainer>
+          <label htmlFor="fileInput">
+            {previewUrl ? (
+              <ProfileImg src={previewUrl} alt="프로필 미리보기" />
+            ) : (
+              <ProfileImg src="/assets/non.jpg" alt="기본 이미지" />
+            )}
+          </label>
+          <input
+            type="file"
+            id="fileInput"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+          />
+        </ImageContainer>
 
-      <p>* 닉네임 입력(필수)</p>
-      <Grid container alignItems="center">
-        <Grid item xs={9.5}>
-          <AuthForm
-            label="다른사람에게 보일 이름이에요"
+        <p>* 닉네임 입력(필수)</p>
+        <Grid container alignItems="center">
+          <Grid item xs={10.2}>
+            <AuthForm
+              label="다른사람에게 보일 이름이에요"
+              variant="outlined"
+              value={nickname}
+              onChange={handleNicknameChange}
+              margin="dense"
+              InputProps={{
+                style: {
+                  backgroundColor: '#f5f5f5',
+                },
+              }}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <AuthButton
+              variant="contained"
+              color="primary"
+              onClick={handleVerify}
+              style={{ marginLeft: '10px', background: '#4B8346' }}>
+              중복 확인
+            </AuthButton>
+          </Grid>
+        </Grid>
+
+        <div>
+          <p>* 한 줄 소개(선택)</p>
+          <IntroduceForm
+            label="책에 관한 당신의 이야기를 들려주세요."
             variant="outlined"
-            value={nickname}
-            onChange={handleNicknameChange}
+            value={ProfileBio}
+            onChange={handleIntroChange}
             margin="dense"
+            multiline
+            rows={4}
             InputProps={{
               style: {
                 backgroundColor: '#f5f5f5',
               },
             }}
           />
-        </Grid>
-        <Grid item xs={2.5}>
-          <AuthButton
-            variant="contained"
-            color="primary"
-            onClick={handleVerify}
-            style={{ marginLeft: '10px', background: '#4B8346' }}>
-            중복 확인
-          </AuthButton>
-        </Grid>
-      </Grid>
+        </div>
 
-      <div>
-        <p>* 한 줄 소개(선택)</p>
-        <IntroduceForm
-          label="책에 관한 당신의 이야기를 들려주세요."
-          variant="outlined"
-          value={ProfileBio}
-          onChange={handleIntroChange}
-          margin="dense"
-          multiline
-          rows={4}
-          InputProps={{
-            style: {
-              backgroundColor: '#f5f5f5',
-            },
-          }}
-        />
-      </div>
-
-      <SignupButton
-        variant="contained"
-        color="primary"
-        onClick={handleSignUp}
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          marginTop: '300px',
-          width: '100%',
-          background: '#4B8346',
-        }}>
-        회원가입
-      </SignupButton>
-    </Container>
+        <SignupButton
+          variant="contained"
+          color="primary"
+          onClick={handleSignUp}
+          style={{
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            marginTop: '300px',
+            width: '100%',
+            background: '#4B8346',
+          }}>
+          회원가입
+        </SignupButton>
+      </Container>
+    </WebContainer>
   );
 }
 

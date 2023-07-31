@@ -1,18 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton, TextField, Button, Grid } from '@mui/material';
 import styled from 'styled-components';
 import axios from 'axios';
 
+const WebContainer = styled.div<{ isWebApp: boolean }>`
+  width: ${props => (props.isWebApp ? '' : '600px')};
+  justify-content: ${props => (props.isWebApp ? '' : 'center')};
+  align-items: ${props => (props.isWebApp ? '' : 'center')};
+  border: ${props => (props.isWebApp ? '' : '1px solid black')};
+  flex-direction: ${props => (props.isWebApp ? '' : 'column')};
+  justify-content: ${props => (props.isWebApp ? '' : 'space-between')};
+  min-height: 99vh;
+  position: ${props => (props.isWebApp ? '' : 'absolute')};
+  top: ${props => (props.isWebApp ? '' : '50%')};
+  left: ${props => (props.isWebApp ? '' : '50%')};
+  transform: ${props => (props.isWebApp ? '' : 'translate(-50%, -50%)')};
+`;
+
 const Container = styled.div`
-  padding: 20px;
-  position: fixed;
-  box-sizing: border-box;
+  padding: 5%;
 `;
 
 const AuthForm = styled(TextField)`
-  width: 330px;
+  width: 100%;
 `;
 
 const AuthButton = styled(Button)`
@@ -106,11 +118,26 @@ function Emailcheck() {
         email: '',
       };
   const [email] = useState<string>(signUpData.email || '');
+  const [code, setCode] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isWebApp, setIsWebApp] = useState(false);
 
   const navigate = useNavigate();
 
-  const [code, setCode] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(display-mode: standalone)');
+    setIsWebApp(mediaQuery.matches);
+
+    const handleMediaChange = (event: MediaQueryListEvent) => {
+      setIsWebApp(event.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleMediaChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMediaChange);
+    };
+  }, []);
 
   const handleVerificationCodeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -172,10 +199,14 @@ function Emailcheck() {
       });
   };
 
+  const handleResend = () => {
+    handleSubmit();
+  };
+
   return (
-    <div>
-      <BackButton onGoBack={handleGoBack} />
+    <WebContainer isWebApp={isWebApp}>
       <Container>
+        <BackButton onGoBack={handleGoBack} />
         <h1>이메일 인증</h1>
         <h3>
           {email}으로
@@ -193,7 +224,7 @@ function Emailcheck() {
           <br />
         </h3>
         <Grid container alignItems="center">
-          <Grid item xs={9.5}>
+          <Grid item xs={10.5}>
             <AuthForm
               label="*인증코드 입력"
               variant="outlined"
@@ -203,11 +234,23 @@ function Emailcheck() {
               InputProps={{
                 style: {
                   backgroundColor: '#f5f5f5',
+                  display: 'flex',
+                  justifyContent: 'space-between',
                 },
+                endAdornment: (
+                  <Button
+                    style={{
+                      backgroundColor: 'transparent',
+                      color: 'gray',
+                    }}
+                    onClick={handleResend}>
+                    재전송
+                  </Button>
+                ),
               }}
             />
           </Grid>
-          <Grid item xs={2.5}>
+          <Grid item xs={1}>
             <AuthButton
               variant="contained"
               onClick={handleVerify}
@@ -217,16 +260,6 @@ function Emailcheck() {
             </AuthButton>
           </Grid>
         </Grid>
-        <Button
-          variant="contained"
-          style={{
-            backgroundColor: 'white',
-            color: 'gray',
-            width: '100%',
-          }}
-          onClick={handleSubmit}>
-          재전송
-        </Button>
         <SignupButton
           variant="contained"
           onClick={handleSignUp}
@@ -234,7 +267,6 @@ function Emailcheck() {
             position: 'fixed',
             bottom: 0,
             left: 0,
-            marginTop: '300px',
             width: '100%',
             background: '#4B8346',
           }}
@@ -242,7 +274,7 @@ function Emailcheck() {
           다읍단계로
         </SignupButton>
       </Container>
-    </div>
+    </WebContainer>
   );
 }
 

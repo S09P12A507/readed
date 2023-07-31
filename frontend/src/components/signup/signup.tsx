@@ -1,27 +1,34 @@
 import { useState, useEffect } from 'react';
-import { IconButton, TextField, Button } from '@mui/material';
+import { IconButton, TextField, Button, Grid } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckIcon from '@mui/icons-material/Check';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
-const Container = styled.div`
-  max-width: 600px;
-  padding: 20px;
-  /* position: fixed;
-  top: 50%;
-  left: 50%; */
-  /* transform: translate(-50%, -50%); */
-  /* width: calc(100% - 80px); */
-  box-sizing: border-box;
+const WebContainer = styled.div<{ isWebApp: boolean }>`
+  display: ${props => (props.isWebApp ? '' : 'flex')};
+  width: ${props => (props.isWebApp ? '' : '600px')};
+  border: ${props => (props.isWebApp ? '' : '1px solid black')};
+  flex-direction: ${props => (props.isWebApp ? '' : 'column')};
+  min-height: 99vh;
+  position: ${props => (props.isWebApp ? '' : 'absolute')};
+  top: ${props => (props.isWebApp ? '' : '50%')};
+  left: ${props => (props.isWebApp ? '' : '50%')};
+  transform: ${props => (props.isWebApp ? '' : 'translate(-50%, -50%)')};
 `;
 
-const FormButtonContainer = styled.div`
-  width: 100%;
+const Container = styled.div`
+  padding: 3%;
+  flex: 1;
+`;
+
+const FormButtonContainer = styled(Button)`
   display: flex;
   bottom: 0;
   height: 50px;
+  left: 0;
+  width: 100%;
 `;
 
 const SignupForm = styled(TextField)`
@@ -83,6 +90,11 @@ type FormData = {
   password2: string;
 };
 
+const AuthButton = styled(Button)`
+  width: 20%;
+  height: 56px;
+`;
+
 interface BackButtonProps {
   onGoBack: () => void;
 }
@@ -122,13 +134,12 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password1, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
-
   const [isWebApp, setIsWebApp] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [invalidPassword, setInvalidPassword] = useState(false);
   const [invalidPassword2, setInvalidPassword2] = useState(false);
   const [InvalidName, setInvalidName] = useState(false);
-
+  const [emailExists, setEmailExists] = useState<boolean>(false);
   useEffect(() => {
     const mediaQuery = window.matchMedia('(display-mode: standalone)');
     setIsWebApp(mediaQuery.matches);
@@ -190,6 +201,11 @@ function Signup() {
   };
 
   const handleSubmit = () => {
+    if (emailExists) {
+      // 중복 확인을 하지 않은 경우 알람을 띄우기
+      alert('중복 여부를 체크해주세요');
+      return;
+    }
     if (
       isNameValid(MemberName) &&
       isEmailValid(email) &&
@@ -204,11 +220,11 @@ function Signup() {
       };
       localStorage.setItem('signupData', JSON.stringify(formData));
       /* 백엔드 테스트 시 axios의 then 부분으로 옮겨주면 엔드포인트로 이메일이 가는지 체크 가능 */
-      window.location.href = '/signup/emailcheck';
       axios
         .post('http://localhost:8080/api/auth/send-email', { email })
         .then(response => {
           console.log('이메일이 성공적으로 보내졌습니다.');
+          window.location.href = '/signup/emailcheck';
           /* 테스트 할때는 위 winodw.location.href 부분 여기로 옮겨주세요 */
           console.log(response);
         })
@@ -224,8 +240,22 @@ function Signup() {
     console.log('뒤로');
   };
 
+  const handleVerify = () => {
+    setEmailExists(true);
+    alert('중복확인 성공');
+    // axios
+    // 	.get(`http://local:8080/user?nickname=${nickname}`)
+    // 	.then(response => {
+    // 		const exists = response.data.exists;
+    // 		setNicknameExists(exists);
+    // 	})
+    // 	.catch(error => {
+    // 		console.error('중복 확인 실패:', error);
+    // 	});
+  };
+
   return (
-    <div>
+    <WebContainer isWebApp={isWebApp}>
       <BackButton onGoBack={handleGoBack} />
       <Container>
         <h1>회원가입</h1>
@@ -270,33 +300,48 @@ function Signup() {
           />
         </div>
 
-        <div>
-          <SignupForm
-            label="*이메일"
-            variant="outlined"
-            value={email}
-            onChange={handleEmailChange}
-            margin="dense"
-            InputProps={{
-              style: {
-                backgroundColor: '#f5f5f5',
-              },
-              endAdornment: isEmailValid(email) && (
-                <CheckIcon style={{ color: 'green' }} />
-              ),
-            }}
-            helperText={(() => {
-              if (invalidEmail) {
-                return '유효한 이메일을 입력해주세요';
-              }
-              if (isEmailValid(email)) {
-                return ' ';
-              }
-              return '이메일을 입력해주세요';
-            })()}
-            error={invalidEmail}
-          />
-        </div>
+        <Grid container alignItems="center">
+          <Grid item xs={10.2}>
+            <SignupForm
+              label="*이메일"
+              variant="outlined"
+              value={email}
+              onChange={handleEmailChange}
+              margin="dense"
+              InputProps={{
+                style: {
+                  backgroundColor: '#f5f5f5',
+                },
+                endAdornment: isEmailValid(email) && (
+                  <CheckIcon style={{ color: 'green' }} />
+                ),
+              }}
+              helperText={(() => {
+                if (invalidEmail) {
+                  return '유효한 이메일을 입력해주세요';
+                }
+                if (isEmailValid(email)) {
+                  return ' ';
+                }
+                return '이메일을 입력해주세요';
+              })()}
+              error={invalidEmail}
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <AuthButton
+              variant="contained"
+              color="primary"
+              onClick={handleVerify}
+              style={{
+                marginLeft: '10px',
+                marginBottom: '18px',
+                background: '#4B8346',
+              }}>
+              중복 확인
+            </AuthButton>
+          </Grid>
+        </Grid>
 
         <div>
           <SignupForm
@@ -364,29 +409,27 @@ function Signup() {
       </Container>
       {isWebApp ? (
         <FormButtonContainer
-          style={{ position: 'fixed', bottom: 0, left: 0, width: '100%' }}>
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: '#4b8346',
-              color: '#ffffff',
-              width: '100%',
-            }}
-            onClick={handleSubmit}>
-            이메일 인증하기
-          </Button>
+          variant="contained"
+          style={{
+            backgroundColor: '#4b8346',
+            color: '#ffffff',
+            position: 'fixed',
+          }}
+          onClick={handleSubmit}>
+          이메일 인증하기
         </FormButtonContainer>
       ) : (
-        <FormButtonContainer>
-          <Button
-            variant="contained"
-            style={{ backgroundColor: '#4b8346', color: '#ffffff' }}
-            onClick={handleSubmit}>
-            이메일 인증하기
-          </Button>
+        <FormButtonContainer
+          variant="contained"
+          style={{
+            backgroundColor: '#4b8346',
+            color: '#ffffff',
+          }}
+          onClick={handleSubmit}>
+          이메일 인증하기
         </FormButtonContainer>
       )}
-    </div>
+    </WebContainer>
   );
 }
 

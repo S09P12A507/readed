@@ -11,6 +11,8 @@ import Login from './components/login/login';
 import Signup from './components/signup/signup';
 import Emailcheck from './components/signup/emailcheck';
 import Addprofile from './components/signup/addprofile';
+import Genre from './components/signup/genre';
+import Genrebook from './components/signup/genrebook';
 import Select from './components/signup/select';
 import Home from './pages/Home';
 import Search from './pages/Search';
@@ -55,7 +57,8 @@ function App() {
               <Route path="/signup/emailcheck" element={<Emailcheck />} />
               <Route path="/signup/addprofile" element={<Addprofile />} />
               <Route path="/select" element={<Select />} />
-
+              <Route path="/genre" element={<Genre />} />
+              <Route path="/genre/:genre" element={<Genrebook />} />
               <Route path="/" element={<Home />} />
               <Route path="/search" element={<Search />} />
               <Route path="/profile" element={<Profile />} />
