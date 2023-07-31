@@ -38,8 +38,14 @@ const GlobalStyle = createGlobalStyle`
   }
 
   html {
-    /* HTML font-size를 10px로 설정 (10px == 1rem) */
-    font-size: 62.5%
+    /* HTML font-size는 16px (16px == 1rem) */
+    font-size: 100%
+  }
+
+  body {
+    font-family: 'Pretendard';
+    line-height: 1.5;
+    font-size: 1rem
   }
 
   * {

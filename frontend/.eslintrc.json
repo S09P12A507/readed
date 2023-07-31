@@ -33,6 +33,8 @@
   "rules": {
     "no-console": "off",
     "react/react-in-jsx-scope": "off",
+    "import/prefer-default-export": "off",
+    "no-underscore-dangle": "off",
     "prettier/prettier": ["error", { "endOfLine": "auto" }]
   }
 }

@@ -1,13 +1,14 @@
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
 // 기본적인 구조입니다.
-const Container = styled.div``;
+// const Container = styled.div``;
 
 function BookTab() {
   return (
-    <Container>
+    <>
       <div />
-    </Container>
+      <div />
+    </>
   );
 }
 
