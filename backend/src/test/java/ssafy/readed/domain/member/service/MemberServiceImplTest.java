@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import ssafy.readed.domain.member.controller.dto.MemberProfileModifyRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.repository.MemberRepository;
+import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -24,7 +26,7 @@ class MemberServiceImplTest {
 
     @Test
     void signUp() {
-        SignUpRequestDto requestDto, requestDto1;
+        SignUpRequestDto requestDto;
 
         requestDto = SignUpRequestDto.builder()
                 .name("김승규")
@@ -36,32 +38,31 @@ class MemberServiceImplTest {
                 .profile_image("profile_image")
                 .build();
 
-        requestDto1 = SignUpRequestDto.builder()
-                .name("박소민")
-                .email("yygs321@naver.com")
-                .password("testpass1!")
-                .password2("testpass1!")
-                .nickname("somin")
-                .profile_bio("안녕하세요 박소민입니다")
-                .profile_image("profile_image")
-                .build();
         memberService.signUp(requestDto);
-        memberService.signUp(requestDto1);
     }
 
     @Test
-    void sendEmail() {
+    void selectMemberTest() {
+        signUp();
+
+        Long id = 1L;
+        SelectMemberResponseDto dto = memberService.selectProfile(id);
+
+        System.out.println(dto.toString());
+
     }
 
     @Test
-    void checkEmail() {
+    void modifyMemberTest() {
+        signUp();
+
+        Long id = 1L;
+        MemberProfileModifyRequestDto dto = MemberProfileModifyRequestDto.builder()
+                .nickname("modnick")
+                .profile_bio("modbio")
+                .profile_image("modimage")
+                .build();
+        memberService.modifyProfile(1L, dto);
     }
 
-    @Test
-    void emailDuplicationCheck() {
-    }
-
-    @Test
-    void checkValidation() {
-    }
 }

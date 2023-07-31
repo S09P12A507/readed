@@ -1,12 +1,14 @@
 package ssafy.readed.domain.member.service;
 
+import ssafy.readed.domain.member.controller.dto.MemberProfileModifyRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
+import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 
 public interface MemberService {
 
     void signUp(SignUpRequestDto requestDto);
 
-    void sendEmail(String email);
+    SelectMemberResponseDto selectProfile(Long id);
 
-    void checkEmail(String email, String code);
+    void modifyProfile(Long id, MemberProfileModifyRequestDto requestDto);
 }

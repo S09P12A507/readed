@@ -7,11 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ssafy.readed.domain.member.controller.dto.MemberProfileModifyRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.entity.Password;
 import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
+import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 
 @Service
@@ -25,6 +27,7 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public void signUp(SignUpRequestDto requestDto) {
 
         checkValidation(requestDto);
@@ -48,13 +51,22 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void sendEmail(String email) {
-
+    @Transactional
+    public SelectMemberResponseDto selectProfile(Long id) {
+        Member member = getMember(id);
+        return SelectMemberResponseDto.from(member);
     }
 
-    @Override
-    public void checkEmail(String email, String code) {
 
+    @Override
+    @Transactional
+    public void modifyProfile(Long id, MemberProfileModifyRequestDto requestDto) {
+        checkNicknameRegexp(requestDto.getNickname());
+        Member member = getMember(id);
+        log.info("변경 전 : " + member.getNickname());
+        member.modify(requestDto.getNickname(), requestDto.getProfile_image(),
+                requestDto.getProfile_bio());
+        log.info("변경 후 : " + member.getNickname());
     }
 
     @Transactional
@@ -113,5 +125,10 @@ public class MemberServiceImpl implements MemberService {
             throw new GlobalRuntimeException("닉네임은 한글 또는 영어 또는 숫자의 2~16자리로 구성되어야 합니다.",
                     HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private Member getMember(Long id) {
+        return memberRepository.findById(id).orElseThrow(
+                () -> new GlobalRuntimeException("해당 ID의 유저가 없습니다", HttpStatus.BAD_REQUEST));
     }
 }
