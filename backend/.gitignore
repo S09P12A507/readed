@@ -293,5 +293,5 @@ gradle-app.setting
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,visualstudiocode,macos,windows,java,react,gradle
 
 # social login
-/src/main/resources/application-oauth.yml
-/src/main/resources/application-mail.yml
+application-*.yml
+!application.yml
