@@ -5,7 +5,11 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 // import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const WebContainer = styled.div<{ isWebApp: boolean }>`
+interface WebContainerProps {
+  isWebApp: boolean;
+}
+
+const WebContainer = styled.div<WebContainerProps>`
   display: ${props => (props.isWebApp ? '' : 'flex')};
   width: ${props => (props.isWebApp ? '' : '600px')};
   justify-content: ${props => (props.isWebApp ? '' : 'center')};

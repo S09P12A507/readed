@@ -5,7 +5,11 @@ import { Grid, Button, Modal, TextField } from '@mui/material';
 import axios from 'axios';
 import Rating from '@mui/material/Rating';
 
-const WebContainer = styled.div<{ isWebApp: boolean }>`
+interface WebContainerProps {
+  isWebApp: boolean;
+}
+
+const WebContainer = styled.div<WebContainerProps>`
   display: ${props => (props.isWebApp ? '' : 'flex')};
   width: ${props => (props.isWebApp ? '' : '600px')};
   border: ${props => (props.isWebApp ? '' : '1px solid black')};

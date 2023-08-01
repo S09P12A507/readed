@@ -126,7 +126,9 @@ function Login() {
             id="username"
             value={username}
             placeholder="이메일"
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setUsername(e.target.value)
+            }
             required
           />
         </div>
@@ -136,7 +138,9 @@ function Login() {
             id="password"
             value={password}
             placeholder="비밀번호"
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
             required
           />
           <div>

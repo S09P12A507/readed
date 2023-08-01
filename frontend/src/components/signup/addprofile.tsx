@@ -3,7 +3,11 @@ import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
 import styled from 'styled-components';
 
-const WebContainer = styled.div<{ isWebApp: boolean }>`
+interface WebContainerProps {
+  isWebApp: boolean;
+}
+
+const WebContainer = styled.div<WebContainerProps>`
   width: ${props => (props.isWebApp ? '' : '600px')};
   justify-content: ${props => (props.isWebApp ? '' : 'center')};
   align-items: ${props => (props.isWebApp ? '' : 'center')};
