@@ -16,4 +16,6 @@ public interface MemberService {
     SelectMemberResponseDto selectMember(Long id);
 
     void emailDuplicationCheck(String email);
+
+    void nicknameDuplicationCheck(String nickname);
 }

@@ -1,12 +1,8 @@
 package ssafy.readed.domain.auth.service;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ssafy.readed.domain.auth.controller.dto.CheckEmailRequestDto;
@@ -16,10 +12,14 @@ import ssafy.readed.domain.auth.entity.MailHistory;
 import ssafy.readed.domain.auth.repository.MailHistoryRepository;
 import ssafy.readed.domain.auth.service.dto.SignInResponseDto;
 import ssafy.readed.domain.member.entity.Member;
+import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
-import ssafy.readed.global.response.JsonResponse;
 import ssafy.readed.global.security.JwtTokenProvider;
+
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -74,30 +74,24 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> defaultSignIn(SignInRequestDto requestDto) {
+    public SignInResponseDto defaultSignIn(SignInRequestDto requestDto) {
 
-        Member member = memberRepository.findByEmail(requestDto.getEmail());
-
-        String password = member.getPassword().getPasswordValue();
+        Member member = memberRepository.findByEmailAndProvider(requestDto.getEmail(), Provider.DEFAULT);
 
         if (member == null) {
             throw new GlobalRuntimeException("가입되지 않은 Email 입니다.", HttpStatus.NOT_FOUND);
         }
 
+        String password = member.getPassword().getPasswordValue();
+
         if (!passwordEncoder.matches(requestDto.getPassword(), password)) {
-            log.info("원래 비번 : " + password);
-            log.info("친 비번 : " + requestDto.getPassword());
-            throw new GlobalRuntimeException("비밀번호가 틀립니다.", HttpStatus.NOT_FOUND);
+            throw new GlobalRuntimeException("비밀번호가 틀립니다.", HttpStatus.BAD_REQUEST);
         }
 
         String access_token = jwtTokenProvider.createToken(requestDto.getEmail());
 
-        log.info("access_token : " + access_token);
-
-        SignInResponseDto responseDto = SignInResponseDto.builder()
+        return SignInResponseDto.builder()
                 .access_token(access_token).build();
-
-        return JsonResponse.ok("로그인 성공!", responseDto);
     }
 
     private String generateAuthCode() {

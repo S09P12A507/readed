@@ -1,9 +1,9 @@
 package ssafy.readed.domain.auth.service;
 
-import org.springframework.http.ResponseEntity;
 import ssafy.readed.domain.auth.controller.dto.CheckEmailRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SendEmailRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SignInRequestDto;
+import ssafy.readed.domain.auth.service.dto.SignInResponseDto;
 
 public interface AuthService {
 
@@ -11,5 +11,5 @@ public interface AuthService {
 
     void checkEmail(CheckEmailRequestDto requestDto);
 
-    ResponseEntity<?> defaultSignIn(SignInRequestDto requestDto);
+    SignInResponseDto defaultSignIn(SignInRequestDto requestDto);
 }

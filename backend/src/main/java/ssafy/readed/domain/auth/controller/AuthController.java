@@ -21,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/api/auth/sign-in")
     public ResponseEntity<?> defaultSignIn(@RequestBody SignInRequestDto requestDto) {
-        return service.defaultSignIn(requestDto);
+        return JsonResponse.ok("로그인 성공!", service.defaultSignIn(requestDto));
     }
 
     @PostMapping("/api/auth/send-email")

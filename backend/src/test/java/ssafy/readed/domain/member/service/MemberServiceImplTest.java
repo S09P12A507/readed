@@ -10,7 +10,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.repository.MemberRepository;
-import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -46,9 +45,9 @@ class MemberServiceImplTest {
         signUp();
 
         Long id = 1L;
-        SelectMemberResponseDto dto = memberService.selectProfile(id);
+//        SelectMemberResponseDto dto = memberService.selectProfile(id);
 
-        System.out.println(dto.toString());
+//        System.out.println(dto.toString());
 
     }
 

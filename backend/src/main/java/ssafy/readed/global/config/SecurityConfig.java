@@ -9,7 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsUtils;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import ssafy.readed.global.filter.JwtAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -17,20 +18,7 @@ import org.springframework.web.cors.CorsUtils;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    //private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return web -> {
-//            web.ignoring()
-//                    .antMatchers(
-//                            "/images/**",
-//                            "/js/**",
-//                            "/css/**",
-//                            "/api/members/sign-up"
-//                    );
-//        };
-//    }
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,10 +33,13 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .anyRequest().permitAll();
+                .antMatchers("/api/members/sign-up", "/api/auth/**").permitAll()
+                .anyRequest().authenticated();
+
         http.formLogin()
                 .disable();
+
+        http.addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
         return http.build();
     }
 }

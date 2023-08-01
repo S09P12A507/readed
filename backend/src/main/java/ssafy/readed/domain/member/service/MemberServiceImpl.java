@@ -1,7 +1,5 @@
 package ssafy.readed.domain.member.service;
 
-import java.util.regex.Pattern;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +14,9 @@ import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 import ssafy.readed.domain.member.service.dto.SelectProfileResponseDto;
 import ssafy.readed.global.exception.GlobalRuntimeException;
+
+import javax.transaction.Transactional;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -80,7 +81,16 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByEmail(email);
 
         if (member != null) {
-            throw new GlobalRuntimeException("이미 존재하는 유저입니다.", HttpStatus.BAD_REQUEST);
+            throw new GlobalRuntimeException("이미 존재하는 이메일입니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Transactional
+    public void nicknameDuplicationCheck(String nickname) {
+        Member member = memberRepository.findByNickname(nickname);
+
+        if (member != null) {
+            throw new GlobalRuntimeException("이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
     }
 
