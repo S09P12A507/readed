@@ -2,27 +2,21 @@ package ssafy.readed.domain.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ssafy.readed.domain.auth.service.dto.OAuthDetailDto;
 import ssafy.readed.domain.auth.service.dto.OAuthLoginResponseDto;
-import ssafy.readed.domain.auth.service.dto.SignInResponseDto;
 import ssafy.readed.domain.auth.utility.SocialLoginType;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
-import ssafy.readed.global.response.JsonResponse;
-import ssafy.readed.global.security.JwtTokenProvider;
 
 @Service
-@Repository
 @RequiredArgsConstructor
 public class OAuthServiceImpl implements OAuthService {
 
     private final GoogleOAuthProvider googleOAuthProvider;
     private final KakaoOAuthProvider kakaoOAuthProvider;
     private final MemberRepository memberRepository;
-
 
 
     @Override
@@ -43,18 +37,17 @@ public class OAuthServiceImpl implements OAuthService {
             }
         }
 
-        OAuthDetailDto detailDto= getUserDetail(socialLoginType, access_token);
+        OAuthDetailDto detailDto = getUserDetail(socialLoginType, access_token);
 
         boolean isDuplicated = emailDuplicationCheck(detailDto.getEmail());
 
         if (!isDuplicated) {
-            responseDto= OAuthLoginResponseDto.builder()
+            responseDto = OAuthLoginResponseDto.builder()
                     .isNewMember(true)
                     .detailDto(detailDto)
                     .build();
-        }
-        else{
-            responseDto= OAuthLoginResponseDto.builder()
+        } else {
+            responseDto = OAuthLoginResponseDto.builder()
                     .isNewMember(false)
                     .detailDto(detailDto)
                     .build();

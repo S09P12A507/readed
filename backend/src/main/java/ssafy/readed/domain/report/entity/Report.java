@@ -13,11 +13,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.member.entity.Member;
+import ssafy.readed.global.entity.BaseEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Report {
+public class Report extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,20 +33,22 @@ public class Report {
     @JoinColumn(name = "book_id")
     private Book book;
 
+    @Column(name = "report_title")
     private String reportTitle;
+
+    @Column(name = "report_content", columnDefinition = "TEXT")
     private String reportContent;
+
     private Boolean isPublic;
-    private Boolean isValid;
 
     @Builder
     public Report(Long id, Member member, Book book, String reportTitle, String reportContent,
-            Boolean isPublic, Boolean isValid) {
+            Boolean isPublic) {
         this.id = id;
         this.member = member;
         this.book = book;
         this.reportTitle = reportTitle;
         this.reportContent = reportContent;
         this.isPublic = isPublic;
-        this.isValid = isValid;
     }
 }

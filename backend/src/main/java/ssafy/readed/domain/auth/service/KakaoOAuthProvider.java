@@ -4,14 +4,12 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import ssafy.readed.domain.auth.service.dto.OAuthDetailDto;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 
 @Service
-@Repository
 @RequiredArgsConstructor
 public class KakaoOAuthProvider implements OAuthProvider {
 
