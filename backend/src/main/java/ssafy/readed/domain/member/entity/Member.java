@@ -66,7 +66,7 @@ public class Member {
         this.profile_bio = profile_bio;
         this.profile_image = profile_image;
     }
-
+    
     @Builder
     public Member(String email, String name, Provider provider, String nickname, String profile_bio,
             String profile_image, Password password) {

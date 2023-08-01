@@ -21,7 +21,7 @@ import ssafy.readed.global.response.JsonResponse;
 public class ReportController {
 
     private final ReportService reportService;
-
+    
     @PostMapping(value = "/{book-id}")
     public ResponseEntity<?> save(@PathVariable(name = "book-id") Long bookId,
             @AuthenticationPrincipal Member member,

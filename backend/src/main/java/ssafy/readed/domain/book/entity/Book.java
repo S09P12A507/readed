@@ -82,6 +82,7 @@ public class Book extends BaseEntity {
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<Report> reports = new ArrayList<>();
 
+
     @Builder
     public Book(String title, String originalTitle, String subtitle, String description, String toc,
             LocalDateTime publishedDate, Long pages, Boolean isAdult, String cover,
