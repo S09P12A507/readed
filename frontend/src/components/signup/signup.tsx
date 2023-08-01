@@ -6,11 +6,15 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
+<<<<<<< HEAD
+const WebContainer = styled.div<{ isWebApp: boolean }>`
+=======
 interface WebContainerProps {
   isWebApp: boolean;
 }
 
 const WebContainer = styled.div<WebContainerProps>`
+>>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
   display: ${props => (props.isWebApp ? '' : 'flex')};
   width: ${props => (props.isWebApp ? '' : '600px')};
   border: ${props => (props.isWebApp ? '' : '1px solid black')};
@@ -205,7 +209,11 @@ function Signup() {
   };
 
   const handleSubmit = () => {
+<<<<<<< HEAD
+    if (!emailExists) {
+=======
     if (emailExists) {
+>>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
       // 중복 확인을 하지 않은 경우 알람을 띄우기
       alert('중복 여부를 체크해주세요');
       return;
@@ -419,7 +427,12 @@ function Signup() {
             color: '#ffffff',
             position: 'fixed',
           }}
+<<<<<<< HEAD
+          onClick={handleSubmit}
+          disabled={!emailExists}>
+=======
           onClick={handleSubmit}>
+>>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
           이메일 인증하기
         </FormButtonContainer>
       ) : (
@@ -429,7 +442,12 @@ function Signup() {
             backgroundColor: '#4b8346',
             color: '#ffffff',
           }}
+<<<<<<< HEAD
+          onClick={handleSubmit}
+          disabled={!emailExists}>
+=======
           onClick={handleSubmit}>
+>>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
           이메일 인증하기
         </FormButtonContainer>
       )}

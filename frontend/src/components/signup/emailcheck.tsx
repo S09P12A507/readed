@@ -5,11 +5,15 @@ import { IconButton, TextField, Button, Grid } from '@mui/material';
 import styled from 'styled-components';
 import axios from 'axios';
 
+<<<<<<< HEAD
+const WebContainer = styled.div<{ isWebApp: boolean }>`
+=======
 interface WebContainerProps {
   isWebApp: boolean;
 }
 
 const WebContainer = styled.div<WebContainerProps>`
+>>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
   width: ${props => (props.isWebApp ? '' : '600px')};
   justify-content: ${props => (props.isWebApp ? '' : 'center')};
   align-items: ${props => (props.isWebApp ? '' : 'center')};
@@ -195,7 +199,7 @@ function Emailcheck() {
       .post('http://localhost:8080/api/auth/send-email', { email })
       .then(response => {
         console.log('이메일이 성공적으로 보내졌습니다.');
-        /* 테스트 할때는 위 winodw.location.href 부분 여기로 옮겨주세요 */
+
         console.log(response);
       })
       .catch(error => {

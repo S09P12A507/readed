@@ -19,6 +19,11 @@
     "eslint-plugin-jest": "^27.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
+    "react-icons": "^4.10.1",
+    "react-redux": "^8.1.1",
+=======
+>>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
     "react-router-dom": "^6.14.2",
     "react-scripts": "^5.0.1",
     "styled-components": "^5.0.0",

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store/store';
 import kakaologo from '../../assets/img/kakaologo.png';
 
 const Container = styled.div`
@@ -65,11 +67,14 @@ function Login() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [remember, setRememberStatus] = useState<boolean>(false);
+  const dispatch = useDispatch();
   const KakaoRestApi = 'e1496c3a1b0232c4d6f84d511cf90255';
   const KakaoRedirect = 'http://localhost:3000/oauth/kakao/callback';
   const GoogleclientId =
     '59438726779-mukgldfttu2qm0oikt8jeirkra7bliji.apps.googleusercontent.com';
   const GoogleredirectUri = 'http://localhost:3000/oauth/google/callback';
+
+  const token = useSelector((state: RootState) => state.auth.token);
 
   const handleLogin = (url: string) => {
     window.location.href = url;
@@ -109,6 +114,19 @@ function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (username === 'user' && password === 'pass') {
+      const receivedToken = 'asdasdsaczc';
+      dispatch({ type: 'SET_TOKEN', payload: receivedToken });
+
+      // axios
+      //   .post('http://local:8080/api/auth/sign-in', { username, password })
+      //   .then(response => {
+      //     const receivedToken = (response.data as { token: string }).token;
+      //     dispatch({ type: 'SET_TOKEN', payload: receivedToken });
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   });
+      console.log(token); // 여기 수정
       console.log('로그인 성공');
     } else {
       console.log('로그인 실패');

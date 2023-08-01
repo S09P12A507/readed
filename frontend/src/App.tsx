@@ -11,6 +11,12 @@ import Login from './components/login/login';
 import Signup from './components/signup/signup';
 import Emailcheck from './components/signup/emailcheck';
 import Addprofile from './components/signup/addprofile';
+<<<<<<< HEAD
+import Genre from './components/signup/genre';
+import Genrebook from './components/signup/genrebook';
+import Select from './components/signup/select';
+=======
+>>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
 import Home from './pages/Home';
 import Search from './pages/Search';
 import Profile from './pages/Profile';
@@ -53,7 +59,13 @@ function App() {
               <Route path="/signup/" element={<Signup />} />
               <Route path="/signup/emailcheck" element={<Emailcheck />} />
               <Route path="/signup/addprofile" element={<Addprofile />} />
+<<<<<<< HEAD
+              <Route path="/select" element={<Select />} />
+              <Route path="/genre" element={<Genre />} />
+              <Route path="/genre/:genre" element={<Genrebook />} />
+=======
 
+>>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
               <Route path="/" element={<Home />} />
               <Route path="/search" element={<Search />} />
               <Route path="/profile" element={<Profile />} />
