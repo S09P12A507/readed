@@ -23,13 +23,20 @@ public class ReportServiceImpl implements ReportService {
 
 
     @Override
-    public List<Report> getReportList() {
-        return null;
+    public List<ReportResponseDto> getReportList(Long memberId) {
+        return reportRepository.findByMemberId(memberId).stream()
+                .map(ReportResponseDto::from).toList();
     }
 
     @Override
-    public Report getReport(Long id) {
-        return null;
+    public ReportResponseDto getReport(Long id) {
+
+        Report report = reportRepository.findById(id).orElseThrow(
+                () -> new GlobalRuntimeException("해당 id의 독후감이 존재하지 않습니다", HttpStatus.BAD_REQUEST)
+        );
+
+        return ReportResponseDto.from(report);
+
     }
 
     @Override
@@ -65,5 +72,4 @@ public class ReportServiceImpl implements ReportService {
                 () -> new GlobalRuntimeException("해당 id의 책이 존재하지 않습니다", HttpStatus.BAD_REQUEST));
 
     }
-
 }

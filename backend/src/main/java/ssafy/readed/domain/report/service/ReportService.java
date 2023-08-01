@@ -4,13 +4,12 @@ import java.util.List;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.report.controller.dto.ReportRequestDto;
-import ssafy.readed.domain.report.entity.Report;
 
 public interface ReportService {
 
-    List<Report> getReportList();
+    List<ReportResponseDto> getReportList(Long memberId);
 
-    Report getReport(Long id);
+    ReportResponseDto getReport(Long reportId);
 
     void saveReport(Long bookId, Member member, ReportRequestDto reportRequestDto);
 

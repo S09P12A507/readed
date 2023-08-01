@@ -42,9 +42,8 @@ public class Report extends BaseEntity {
     private Boolean isPublic;
 
     @Builder
-    public Report(Long id, Member member, Book book, String reportTitle, String reportContent,
+    public Report(Member member, Book book, String reportTitle, String reportContent,
             Boolean isPublic) {
-        this.id = id;
         this.member = member;
         this.book = book;
         this.reportTitle = reportTitle;

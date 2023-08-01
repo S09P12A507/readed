@@ -4,50 +4,40 @@ package ssafy.readed.domain.report.service;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ssafy.readed.domain.book.entity.Book;
-import ssafy.readed.domain.member.entity.Member;
-import ssafy.readed.domain.member.entity.Provider;
+import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.domain.report.controller.dto.ReportRequestDto;
-import ssafy.readed.domain.report.entity.Report;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
+@AutoConfigureMockMvc
 class ReportServiceImplTest {
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @Autowired
     ReportService reportService;
 
-
     @Test
     void getReportList() {
+        reportService.getReportList(3L);
     }
 
     @Test
     void getReport() {
+        reportService.getReport(3L);
     }
 
     @Test
     void saveReport() {
-        ReportRequestDto requestDto = ReportRequestDto.builder()
-                .title("테스트 제목")
-                .content("테스트 내용")
-                .isPublic(true)
-                .build();
+        ReportRequestDto requestDto = new ReportRequestDto("독후감 테스트 제목", "독후감 테스트 내용", true);
 
-        Member member = new Member("ssafy@gmail.com", "김싸피", Provider.DEFAULT, "싸피교육생");
-        Book book = new Book(3L, "책 제목");
+        reportService.saveReport(2L, memberRepository.findById(1L).orElseThrow(),
+                requestDto);
 
-        Report report = Report.builder()
-                .reportTitle(requestDto.getTitle())
-                .reportContent(requestDto.getContent())
-                .isPublic(requestDto.getIsPublic())
-                .member(member)
-                .book(book)
-                .build();
-
-        reportService.saveReport(book.getId(), member, requestDto);
     }
 
     @Test
