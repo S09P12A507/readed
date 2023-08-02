@@ -1,10 +1,11 @@
 // import styled from 'styled-components';
 
-// 기본적인 구조입니다.
+// import ReadedH2 from '../components/common/heading/ReadedH2';
 
 function Profile() {
   return (
     <>
+      {/* <ReadedH2>{"d"}</ReadedH2> */}
       <span>프로필임</span>
       <span>프로필임</span>
     </>

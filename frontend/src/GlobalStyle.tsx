@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
 import { normalize } from 'styled-normalize';
+import { createGlobalStyle } from 'styled-components';
 
 /**
  * 모든 파일에 전역으로 적용할 CSS, 디자인 시스템을 설정합니다.
@@ -32,26 +32,39 @@ const GlobalStyle = createGlobalStyle`
     => opacity: 0.12
     */
     --main-white: #FFFFFF;
-    --main-black: #000000
+    --main-black: #000000;
+    --text-primary: rgba(0, 0, 0, 0.87);
+    --text-secondary: rgba(0, 0, 0, 0.38);
+    --text-disabled: rgba(0, 0, 0, 0.38);
+    --divider: rgba(0, 0, 0, 0.12);
 
     // grey 및 다른 색상이 필요한 경우 추가합니다.
   }
 
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /* overflow-x: hidden; */
+  }
+
   html {
+    display: block;
     /* HTML font-size는 16px (16px == 1rem) */
     font-size: 100%
   }
 
   body {
     font-family: 'Pretendard';
-    line-height: 1.5;
-    font-size: 1rem
+    font-size: 1rem;
   }
-
+  
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    line-height: 1.5;
   }
 
   hr {
