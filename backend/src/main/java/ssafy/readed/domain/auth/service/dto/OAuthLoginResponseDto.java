@@ -13,6 +13,6 @@ import lombok.Setter;
 @Builder
 public class OAuthLoginResponseDto {
 
-    private boolean isNewMember;
     private OAuthDetailDto detailDto;
+    private SignInResponseDto token;
 }

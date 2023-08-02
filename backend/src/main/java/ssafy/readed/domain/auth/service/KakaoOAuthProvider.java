@@ -70,7 +70,7 @@ public class KakaoOAuthProvider implements OAuthProvider {
             throw new GlobalRuntimeException("카카오 사용자 정보를 받아오지 못함", HttpStatus.BAD_REQUEST);
         }
 
-        String id = (String) user_info.get("id");
+        String id = user_info.get("id").toString();
         Map<String, Object> properties = (Map<String, Object>) user_info.get("properties");
         Map<String, Object> kakao_account = (Map<String, Object>) user_info.get(
                 "kakao_account");

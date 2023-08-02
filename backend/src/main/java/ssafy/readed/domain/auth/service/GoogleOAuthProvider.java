@@ -73,7 +73,7 @@ public class GoogleOAuthProvider implements OAuthProvider {
             throw new GlobalRuntimeException("구글 사용자 정보를 받아오지 못함", HttpStatus.BAD_REQUEST);
         }
 
-        String id = (String) user_info.get("id");
+        String id = user_info.get("id").toString();
         String name = (String) user_info.get("name");
         String email = (String) user_info.get("email");
 
