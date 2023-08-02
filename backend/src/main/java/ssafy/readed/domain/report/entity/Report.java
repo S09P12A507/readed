@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.member.entity.Member;
+import ssafy.readed.domain.report.controller.dto.ReportRequestDto;
 import ssafy.readed.global.entity.BaseEntity;
 
 @Entity
@@ -49,5 +50,11 @@ public class Report extends BaseEntity {
         this.reportTitle = reportTitle;
         this.reportContent = reportContent;
         this.isPublic = isPublic;
+    }
+
+    public void update(ReportRequestDto requestDto) {
+        this.reportTitle = requestDto.getTitle();
+        this.reportContent = requestDto.getContent();
+        this.isPublic = requestDto.getIsPublic();
     }
 }

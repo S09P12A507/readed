@@ -2,11 +2,14 @@ package ssafy.readed.domain.report.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +26,7 @@ import ssafy.readed.global.response.JsonResponse;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/reports")
 @CrossOrigin("*")
+@Slf4j
 public class ReportController {
 
     private final ReportService reportService;
@@ -38,7 +42,7 @@ public class ReportController {
     @GetMapping(value = "/{report-id}")
     public ResponseEntity<?> getReport(@PathVariable(name = "report-id") Long reportId,
             @AuthenticationPrincipal Member member) {
-        ReportResponseDto reportResponseDto = reportService.getReport(reportId);
+        ReportResponseDto reportResponseDto = reportService.selectReport(reportId);
 
         return JsonResponse.ok("독후감 1개를 불러왔습니다.", reportResponseDto);
     }
@@ -53,5 +57,21 @@ public class ReportController {
         }
         return JsonResponse.ok("독후감 리스트를 불러왔습니다.", reportList);
     }
+
+    @PatchMapping(value = "/{report-id}")
+    public ResponseEntity<?> updateReport(@PathVariable(name = "report-id") Long reportId,
+            @AuthenticationPrincipal Member member,
+            @RequestBody ReportRequestDto requestDto) {
+        reportService.updateReport(reportId, member, requestDto);
+        return JsonResponse.ok("독후감이 수정되었습니다.");
+    }
+
+    @DeleteMapping(value = "{report-id}")
+    public ResponseEntity<?> deleteReport(@PathVariable(name = "report-id") Long reportId,
+            @AuthenticationPrincipal Member member) {
+        reportService.deleteReport(reportId);
+        return JsonResponse.ok("독후감이 삭제되었습니다.");
+    }
+
 
 }

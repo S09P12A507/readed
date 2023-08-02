@@ -1,6 +1,7 @@
 package ssafy.readed.domain.report.service;
 
 import java.util.List;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,23 +24,20 @@ public class ReportServiceImpl implements ReportService {
 
 
     @Override
+    @Transactional
     public List<ReportResponseDto> getReportList(Long memberId) {
         return reportRepository.findByMemberId(memberId).stream()
                 .map(ReportResponseDto::from).toList();
     }
 
     @Override
-    public ReportResponseDto getReport(Long id) {
-
-        Report report = reportRepository.findById(id).orElseThrow(
-                () -> new GlobalRuntimeException("해당 id의 독후감이 존재하지 않습니다", HttpStatus.BAD_REQUEST)
-        );
-
-        return ReportResponseDto.from(report);
-
+    @Transactional
+    public ReportResponseDto selectReport(Long reportId) {
+        return ReportResponseDto.from(getReport(reportId));
     }
 
     @Override
+    @Transactional
     public void saveReport(Long bookId, Member member, ReportRequestDto reportRequestDto) {
 
         Book book = getBook(bookId);
@@ -57,19 +55,36 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void deleteReport(Long id) {
-
+    @Transactional
+    public void deleteReport(Long reportId) {
+        reportRepository.delete(getReport(reportId));
     }
 
     @Override
-    public void updateReport(Long id, ReportRequestDto reportRequestDto) {
+    @Transactional
+    public void updateReport(Long reportId, Member member, ReportRequestDto reportRequestDto) {
+        Report report = getReport(reportId);
 
+        authCheck(member, report);
+        report.update(reportRequestDto);
     }
 
-    @Override
-    public Book getBook(Long bookId) {
+    private static void authCheck(Member member, Report report) {
+        if (!report.getMember().getId().equals(member.getId())) {
+            throw new GlobalRuntimeException("수정 권한이 없습니다.", HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    private Book getBook(Long bookId) {
         return bookRepository.findById(bookId).orElseThrow(
                 () -> new GlobalRuntimeException("해당 id의 책이 존재하지 않습니다", HttpStatus.BAD_REQUEST));
-
     }
+
+    private Report getReport(Long reportId) {
+        return reportRepository.findById(reportId).orElseThrow(
+                () -> new GlobalRuntimeException("해당 id의 독후감이 존재하지 않습니다", HttpStatus.BAD_REQUEST)
+        );
+    }
+
+
 }
