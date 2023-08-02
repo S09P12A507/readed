@@ -4,11 +4,11 @@ import { Provider } from 'react-redux';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import store from './store/store';
+import { store } from './store/store';
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />,
+    <App />
   </Provider>,
   document.getElementById('root'),
 );

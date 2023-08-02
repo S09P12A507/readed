@@ -16,7 +16,9 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import Bookclub from './pages/Bookclub';
 import Profile from './pages/Profile';
-import PageNotFound from './pages/PageNotFound';
+import KaKao from './components/login/KakaoLogin';
+import Google from './components/login/GoogleLogin';
+// import PageNotFound from './pages/PageNotFound';
 // components
 import BottomNav from './components/common/nav/BottomNav';
 
@@ -85,9 +87,11 @@ function App() {
                 <Route path="/search" element={<Search />} />
                 <Route path="/bookclub" element={<Bookclub />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/oauth/google/callback" element={<Google />} />
+                <Route path="/oauth/kakao/callback" element={<KaKao />} />
               </Route>
 
-              <Route path="*" element={<PageNotFound />} />
+              {/* <Route path="*" element={<PageNotFound />} /> */}
             </Routes>
           </Router>
         </MobileContainer>

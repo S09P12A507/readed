@@ -121,7 +121,7 @@ const isNameValid = (name: string) => {
 function BackButton({ onGoBack }: BackButtonProps) {
   return (
     <div style={{ marginTop: '10px', marginLeft: '5px' }}>
-      <Link to="/">
+      <Link to="/login">
         <IconButton
           aria-label="back"
           onClick={onGoBack}
@@ -223,13 +223,12 @@ function Signup() {
         password2,
       };
       localStorage.setItem('signupData', JSON.stringify(formData));
-      /* 백엔드 테스트 시 axios의 then 부분으로 옮겨주면 엔드포인트로 이메일이 가는지 체크 가능 */
+
       axios
         .post('http://localhost:8080/api/auth/send-email', { email })
         .then(response => {
           console.log('이메일이 성공적으로 보내졌습니다.');
           window.location.href = '/signup/emailcheck';
-          /* 테스트 할때는 위 winodw.location.href 부분 여기로 옮겨주세요 */
           console.log(response);
         })
         .catch(error => {
@@ -247,15 +246,20 @@ function Signup() {
   const handleVerify = () => {
     setEmailExists(true);
     alert('중복확인 성공');
-    // axios
-    // 	.get(`http://local:8080/user?nickname=${nickname}`)
-    // 	.then(response => {
-    // 		const exists = response.data.exists;
-    // 		setNicknameExists(exists);
-    // 	})
-    // 	.catch(error => {
-    // 		console.error('중복 확인 실패:', error);
-    // 	});
+    //   axios
+    //   	.get(`http://local:8080/user?nickname=${email}`)
+    //   	.then(response => {
+    //       if (response.status >= 200 && response.status <= 299) {
+    //         setEmailExists(true);
+    //         console.log('인증 성공');
+    //       } else {
+    //         setEmailExists(false);
+    //         console.log('인증 실패');
+    //       }
+    //     })
+    //   	.catch(error => {
+    //   		console.error('중복 확인 실패:', error);
+    //   	});
   };
 
   return (
@@ -431,8 +435,9 @@ function Signup() {
             color: '#ffffff',
           }}
           onClick={handleSubmit}
-          disabled={!emailExists}
-        />
+          disabled={!emailExists}>
+          이메일 인증하기
+        </FormButtonContainer>
       )}
     </WebContainer>
   );

@@ -180,14 +180,19 @@ function Addprofile() {
     setNicknameExists(true);
     alert('중복확인 성공');
     // axios
-    // 	.get(`http://local:8080/user?nickname=${nickname}`)
-    // 	.then(response => {
-    // 		const exists = response.data.exists;
-    // 		setNicknameExists(exists);
-    // 	})
-    // 	.catch(error => {
-    // 		console.error('중복 확인 실패:', error);
-    // 	});
+    //   .get(`http://local:8080/user?nickname=${nickname}`)
+    //   .then(response => {
+    //     if (response.status >= 200 && response.status <= 299) {
+    //       setNicknameExists(true);
+    //       console.log('인증 성공');
+    //     } else {
+    //       setNicknameExists(false);
+    //       console.log('인증 실패');
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.error('중복 확인 실패:', error);
+    //   });
   };
 
   const handleSignUp = () => {
@@ -206,7 +211,7 @@ function Addprofile() {
       profile_image: ProfileImage,
     };
     console.log(formData);
-    window.location.href = '/genre';
+    // window.location.href = '/genre';
     // 테스트 용으로 여기에 삽입 > 이후에 axios로 true 여부 체크
 
     axios

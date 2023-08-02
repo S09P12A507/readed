@@ -150,32 +150,33 @@ function Emailcheck() {
   };
 
   const handleVerify = () => {
-    // axios
-    //   .post('http://localhost:8080/api/auth/check-email', {
-    //     email,
-    //     code,
-    //   })
-    //   .then(response => {
-    //     if (response.status >= 200 && response.status <= 299) {
-    //       setIsAuthenticated(true);
-    //       console.log('인증 성공');
-    //     } else {
-    //       setIsAuthenticated(false);
-    //       console.log('인증 실패');
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('인증 요청 실패', error);
-    //   });
+    axios
+      .post('http://localhost:8080/api/auth/check-email', {
+        email,
+        code,
+      })
+      .then(response => {
+        if (response.status >= 200 && response.status <= 299) {
+          setIsAuthenticated(true);
+          console.log('인증 성공');
+        } else {
+          setIsAuthenticated(false);
+          console.log('인증 실패');
+        }
+      })
+      .catch(error => {
+        console.error('인증 요청 실패', error);
+        alert('인증 번호 다시 확인해주세요');
+      });
 
-    const isVerified = true; // 임의로 인증이 그냥 된다고 가정
-    if (isVerified) {
-      setIsAuthenticated(true);
-      console.log('인증 성공');
-    } else {
-      setIsAuthenticated(false);
-      console.log('인증 실패');
-    }
+    //   const isVerified = true; // 임의로 인증이 그냥 된다고 가정
+    //   if (isVerified) {
+    //     setIsAuthenticated(true);
+    //     console.log('인증 성공');
+    //   } else {
+    //     setIsAuthenticated(false);
+    //     console.log('인증 실패');
+    //   }
   };
 
   const handleSignUp = () => {
