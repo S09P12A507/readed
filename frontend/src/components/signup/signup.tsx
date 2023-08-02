@@ -431,9 +431,8 @@ function Signup() {
             color: '#ffffff',
           }}
           onClick={handleSubmit}
-          disabled={!emailExists}>
-
-        </FormButtonContainer>
+          disabled={!emailExists}
+        />
       )}
     </WebContainer>
   );
