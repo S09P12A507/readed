@@ -32,15 +32,57 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         String requestURI = ((HttpServletRequest) request).getRequestURI();
 
-        if (requestURI.equals("/api/members/sign-up")) {
-            chain.doFilter(request, response);
-            return;
-        }
+        String[] permitURI = new String[]{
+                "/api/members/sign-up",
+                "/api/auth/sign-in",
+                "/api/auth/send-email",
+                "/api/auth/check-email",
+                "/api/auth/kakao",
+                "/api/auth/google",
+                "/error"
+        };
 
-        if (requestURI.equals("/api/auth/sign-in")) {
-            chain.doFilter(request, response);
-            return;
+        for (String uri : permitURI) {
+            if (requestURI.equals(uri)) {
+                chain.doFilter(request, response);
+                return;
+            }
         }
+//
+//        if (requestURI.equals("/api/members/sign-up")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+//
+//        if (requestURI.equals("/api/auth/sign-in")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+//
+//        if (requestURI.equals("/api/auth/send-email")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+//
+//        if (requestURI.equals("/api/auth/check-email")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+//
+//        if (requestURI.equals("/api/auth/kakao")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+//
+//        if (requestURI.equals("/api/auth/google")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+//
+//        if (requestURI.equals("/error")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
 
         if (token == null) {
             //토큰 정보 없음
@@ -55,7 +97,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         Authentication authentication = jwtTokenProvider.getAuthentication(token);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        
+
         chain.doFilter(request, response);
 
     }
