@@ -1,6 +1,6 @@
 import React from 'react';
 // import { useSelector } from 'react-redux';
-import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 // import { RootState } from '../store/store';
 
 function Home() {
@@ -17,7 +17,8 @@ function Home() {
   return (
     <>
       <span>홈임</span>
-      <Button color="primary">ㅇㅇ</Button>
+      <br />
+      <Link to="/login">불편하다고 하셔서 만든 로그인으로 가는 링크</Link>
     </>
   );
 }

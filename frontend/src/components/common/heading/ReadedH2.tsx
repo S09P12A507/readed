@@ -1,17 +1,15 @@
-// eslint-disable-next-line react/prop-types
-// function ReadedH2({ text }) {
-//   return <h2>{text}</h2>;
-// }
+import styled from 'styled-components';
 
-// export default ReadedH2;
+interface H2Prop {
+  text: string;
+}
 
-function ReadedH2() {
-  return (
-    <>
-      <span>ddd</span>
-      <span>dd</span>
-    </>
-  );
+const ReadedH2Tag = styled.h2`
+  font-size: 1.5rem;
+`;
+
+function ReadedH2({ text }: H2Prop) {
+  return <ReadedH2Tag>{text}</ReadedH2Tag>;
 }
 
 export default ReadedH2;
