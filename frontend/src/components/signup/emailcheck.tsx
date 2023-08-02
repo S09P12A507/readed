@@ -5,15 +5,11 @@ import { IconButton, TextField, Button, Grid } from '@mui/material';
 import styled from 'styled-components';
 import axios from 'axios';
 
-<<<<<<< HEAD
-const WebContainer = styled.div<{ isWebApp: boolean }>`
-=======
 interface WebContainerProps {
   isWebApp: boolean;
 }
 
 const WebContainer = styled.div<WebContainerProps>`
->>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
   width: ${props => (props.isWebApp ? '' : '600px')};
   justify-content: ${props => (props.isWebApp ? '' : 'center')};
   align-items: ${props => (props.isWebApp ? '' : 'center')};

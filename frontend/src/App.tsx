@@ -60,12 +60,15 @@ function App() {
               <Route path="/signup/emailcheck" element={<Emailcheck />} />
               <Route path="/signup/addprofile" element={<Addprofile />} />
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
               <Route path="/select" element={<Select />} />
               <Route path="/genre" element={<Genre />} />
               <Route path="/genre/:genre" element={<Genrebook />} />
 =======
 
 >>>>>>> 28325b4dad2f71261d3c587dab4e565843d0bc7d
+>>>>>>> 8b4b78a39207e409b5a8fa2f3f4ecaeddacacd57
               <Route path="/" element={<Home />} />
               <Route path="/search" element={<Search />} />
               <Route path="/profile" element={<Profile />} />
