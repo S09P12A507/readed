@@ -26,7 +26,6 @@ import ssafy.readed.global.response.JsonResponse;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/reports")
 @CrossOrigin("*")
-@Slf4j
 public class ReportController {
 
     private final ReportService reportService;

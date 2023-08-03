@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ssafy.readed.domain.bookclub.entity.Bookclub;
+import ssafy.readed.domain.bookclub.entity.Participant;
 import ssafy.readed.domain.report.entity.Report;
 
 @Entity
@@ -39,12 +41,20 @@ public class Member {
     private String nickname;
     private String profile_bio;
     private String profile_image;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "password_id")
     private Password password;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Report> reports = new ArrayList<>();
+    private List<Report> reportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "host", fetch = FetchType.LAZY)
+    private List<Bookclub> bookclubList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Participant> participantList = new ArrayList<>();
+
 
     private Integer readCount = 0; // 코멘트 수
     private Integer reportCount = 0; // 독후감 수
@@ -66,7 +76,7 @@ public class Member {
         this.profile_bio = profile_bio;
         this.profile_image = profile_image;
     }
-    
+
     @Builder
     public Member(String email, String name, Provider provider, String nickname, String profile_bio,
             String profile_image, Password password) {
