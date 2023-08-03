@@ -144,7 +144,7 @@ function Addprofile() {
 
   const handleVerify = () => {
     setNicknameExists(true);
-    // 중복확인 성공 알람
+    alert('중복확인 성공');
     // axios
     //   .get(`http://local:8080/user?nickname=${nickname}`)
     //   .then(response => {
@@ -164,7 +164,7 @@ function Addprofile() {
   const handleSignUp = () => {
     if (!nicknameExists) {
       // 중복 확인을 하지 않은 경우 알람을 띄우기
-      // 중복 여부를 체크해주세요 경고
+      alert('중복 여부를 체크해주세요');
       return;
     }
     const formData = {
