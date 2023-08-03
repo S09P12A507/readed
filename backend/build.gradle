@@ -50,6 +50,7 @@ tasks.named('test') {
 
 sonarqube {
     properties {
+        property 'sonar.projectName', 'S09P12A507-backend'
         property 'sonar.projectKey', 'S09P12A507'
         property "sonar.java.binaries", "${buildDir}/classes"
         property "sonar.sourceEncoding", "UTF-8"
