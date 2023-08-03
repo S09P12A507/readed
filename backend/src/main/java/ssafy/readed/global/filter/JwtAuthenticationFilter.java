@@ -1,6 +1,7 @@
 package ssafy.readed.global.filter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -16,11 +17,9 @@ import ssafy.readed.global.exception.GlobalRuntimeException;
 import ssafy.readed.global.security.JwtTokenProvider;
 
 @RequiredArgsConstructor
-@Component
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final JwtTokenProvider jwtTokenProvider;
-
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -31,58 +30,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         logger.info("Req URI : " + ((HttpServletRequest) request).getRequestURI());
 
         String requestURI = ((HttpServletRequest) request).getRequestURI();
-
-        String[] permitURI = new String[]{
-                "/api/members/sign-up",
-                "/api/auth/sign-in",
-                "/api/auth/send-email",
-                "/api/auth/check-email",
-                "/api/auth/kakao",
-                "/api/auth/google",
-                "/error"
-        };
-
-        for (String uri : permitURI) {
-            if (requestURI.equals(uri)) {
-                chain.doFilter(request, response);
-                return;
-            }
-        }
-//
-//        if (requestURI.equals("/api/members/sign-up")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//        if (requestURI.equals("/api/auth/sign-in")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//        if (requestURI.equals("/api/auth/send-email")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//        if (requestURI.equals("/api/auth/check-email")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//        if (requestURI.equals("/api/auth/kakao")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//        if (requestURI.equals("/api/auth/google")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//        if (requestURI.equals("/error")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
 
         if (token == null) {
             //토큰 정보 없음

@@ -35,24 +35,24 @@ public class MemberController {
     }
 
     @GetMapping("/profile/{member-id}")
-    private ResponseEntity<?> selectProfile(@PathVariable("member-id") Long id) {
+    public ResponseEntity<?> selectProfile(@PathVariable("member-id") Long id) {
         return JsonResponse.ok("멤버 프로필 조회 성공!", memberService.selectProfile(id));
     }
 
     @PatchMapping("/profile/{member-id}")
-    private ResponseEntity<?> modifyProfile(@PathVariable("member-id") Long id,
+    public ResponseEntity<?> modifyProfile(@PathVariable("member-id") Long id,
                                             @RequestBody ModifyMemberProfileRequestDto requestDto) {
         memberService.modifyProfile(id, requestDto);
         return JsonResponse.ok("멤버 프로필 변경 성공!");
     }
 
     @GetMapping("/{member-id}")
-    private ResponseEntity<?> selectMember(@PathVariable("member-id") Long id) {
+    public ResponseEntity<?> selectMember(@PathVariable("member-id") Long id) {
         return JsonResponse.ok("멤버 회원정보 조회 성공!", memberService.selectMember(id));
     }
 
     @PatchMapping("/{member-id}")
-    private ResponseEntity<?> modifyMember(@PathVariable("member-id") Long id,
+    public ResponseEntity<?> modifyMember(@PathVariable("member-id") Long id,
                                            @RequestBody ModifyMemberProfileRequestDto requestDto) {
         memberService.modifyProfile(id, requestDto);
         return JsonResponse.ok("멤버 프로필 변경 성공!");
