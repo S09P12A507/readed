@@ -24,7 +24,6 @@ const Info = styled.div`
 `;
 
 const Start = styled(Button)`
-  width: 100%;
   height: 50px;
 `;
 
@@ -161,10 +160,11 @@ function Genre() {
         variant="contained"
         onClick={handleSignUp}
         style={{
-          backgroundColor: '#4b8346',
-          color: '#ffffff',
+          position: 'fixed',
+          width: '480px',
           bottom: '0',
-          left: '0',
+          background: '#4B8346',
+          color: 'white',
         }}
         endIcon={<ArrowForwardIosIcon />}>
         바로 시작하기

@@ -1,17 +1,14 @@
 import { useState } from 'react';
-import { Alert, IconButton, TextField, Button, Grid } from '@mui/material';
+import { IconButton, TextField, Button, Grid } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckIcon from '@mui/icons-material/Check';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import Alerts from '../../components/common/alert/Alert';
 
 const FormButtonContainer = styled(Button)`
-  display: flex;
-  bottom: 0;
   height: 50px;
-  left: 0;
-  width: 100%;
 `;
 
 const SignupForm = styled(TextField)`
@@ -78,10 +75,6 @@ const AuthButton = styled(Button)`
   height: 56px;
 `;
 
-interface BackButtonProps {
-  onGoBack: () => void;
-}
-
 const isEmailValid = (email: string) => {
   const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
   return emailRegex.test(email);
@@ -97,14 +90,11 @@ const isNameValid = (name: string) => {
   return nameRegex.test(name);
 };
 
-function BackButton({ onGoBack }: BackButtonProps) {
+function BackButton() {
   return (
     <div style={{ marginTop: '10px', marginLeft: '5px' }}>
       <Link to="/login">
-        <IconButton
-          aria-label="back"
-          onClick={onGoBack}
-          style={{ color: 'gray', fontSize: '14px' }}>
+        <IconButton style={{ color: 'gray', fontSize: '14px' }}>
           <ArrowBackIcon /> 돌아가기
         </IconButton>
       </Link>
@@ -122,6 +112,8 @@ function Signup() {
   const [invalidPassword2, setInvalidPassword2] = useState(false);
   const [InvalidName, setInvalidName] = useState(false);
   const [emailExists, setEmailExists] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nameValue = event.target.value;
@@ -170,7 +162,8 @@ function Signup() {
 
   const handleSubmit = () => {
     if (!emailExists) {
-      // 중복 확인을 하지 않은 경우 알람을 띄우기
+      setMessage('이메일 중복 확인을 해주세요.');
+      setShowAlert(true);
       return;
     }
     if (
@@ -198,17 +191,15 @@ function Signup() {
           console.error('이메일 전송에 실패했습니다.', error);
         });
     } else {
-      //  여기에 경고
-      <Alert severity="info">유효하지 않은 입력이 있습니다.</Alert>;
+      setMessage('유효하지 않은 입력이 있습니다.');
+      setShowAlert(true);
     }
-  };
-
-  const handleGoBack = () => {
-    console.log('뒤로');
   };
 
   const handleVerify = () => {
     setEmailExists(true);
+    setMessage('중복 확인되었습니다.');
+    setShowAlert(true);
     //   axios
     //   	.get(`http://local:8080/user?nickname=${email}`)
     //   	.then(response => {
@@ -227,7 +218,7 @@ function Signup() {
 
   return (
     <>
-      <BackButton onGoBack={handleGoBack} />
+      <BackButton />
       <h1>회원가입</h1>
       <h3>리디드에 오신 것을 환영합니다.</h3>
       <br />
@@ -269,7 +260,6 @@ function Signup() {
           error={InvalidName}
         />
       </div>
-
       <Grid container alignItems="center">
         <Grid item xs={10.2}>
           <SignupForm
@@ -312,7 +302,6 @@ function Signup() {
           </AuthButton>
         </Grid>
       </Grid>
-
       <div>
         <SignupForm
           label="*비밀번호"
@@ -347,7 +336,6 @@ function Signup() {
           error={invalidPassword}
         />
       </div>
-
       <div>
         <SignupForm
           label="*비밀번호 확인"
@@ -379,13 +367,21 @@ function Signup() {
       <FormButtonContainer
         variant="contained"
         style={{
-          backgroundColor: '#4b8346',
-          color: '#ffffff',
+          position: 'fixed',
+          width: '480px',
+          bottom: '0',
+          background: '#4B8346',
+          color: 'white',
         }}
         onClick={handleSubmit}
         disabled={!emailExists}>
         이메일 인증하기
       </FormButtonContainer>
+      <Alerts
+        open={showAlert}
+        onClose={() => setShowAlert(false)}
+        message={message}
+      />
     </>
   );
 }

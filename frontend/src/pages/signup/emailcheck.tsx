@@ -4,6 +4,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton, TextField, Button, Grid } from '@mui/material';
 import styled from 'styled-components';
 import axios from 'axios';
+import Alerts from '../../components/common/alert/Alert';
 
 const AuthForm = styled(TextField)`
   width: 100%;
@@ -15,9 +16,6 @@ const AuthButton = styled(Button)`
 `;
 
 const SignupButton = styled(Button)`
-  width: 100%;
-  display: flex;
-  bottom: 0;
   height: 50px;
 `;
 
@@ -73,18 +71,11 @@ interface SignUpData {
   email: string;
 }
 
-interface BackButtonProps {
-  onGoBack: () => void;
-}
-
-function BackButton({ onGoBack }: BackButtonProps) {
+function BackButton() {
   return (
     <div style={{ marginTop: '10px', marginLeft: '5px' }}>
       <Link to="/signup">
-        <IconButton
-          aria-label="back"
-          onClick={onGoBack}
-          style={{ color: 'gray', fontSize: '14px' }}>
+        <IconButton style={{ color: 'gray', fontSize: '14px' }}>
           <ArrowBackIcon /> 돌아가기
         </IconButton>
       </Link>
@@ -102,6 +93,8 @@ function Emailcheck() {
   const [email] = useState<string>(signUpData.email || '');
   const [code, setCode] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -128,7 +121,8 @@ function Emailcheck() {
       })
       .catch(error => {
         console.error('인증 요청 실패', error);
-        // 인증 번호를 다시 확인해주세요 경고
+        setMessage('인증 번호를 다시 확인해주세요.');
+        setShowAlert(true);
       });
 
     //   const isVerified = true; // 임의로 인증이 그냥 된다고 가정
@@ -145,12 +139,9 @@ function Emailcheck() {
     if (isAuthenticated) {
       navigate('/signup/addprofile');
     } else {
-      // 이메일 인증을 해주세요 경고
+      setMessage('이메일 인증을 해주세요.');
+      setShowAlert(true);
     }
-  };
-
-  const handleGoBack = () => {
-    console.log('뒤로');
   };
 
   const handleSubmit = () => {
@@ -172,7 +163,7 @@ function Emailcheck() {
 
   return (
     <>
-      <BackButton onGoBack={handleGoBack} />
+      <BackButton />
       <h1>이메일 인증</h1>
       <h3>
         {email}으로
@@ -230,14 +221,20 @@ function Emailcheck() {
         variant="contained"
         onClick={handleSignUp}
         style={{
-          bottom: 0,
-          left: 0,
-          width: '100%',
+          position: 'fixed',
+          width: '480px',
+          bottom: '0',
           background: '#4B8346',
         }}
         disabled={!isAuthenticated}>
-        다읍단계로
+        다음단계로
       </SignupButton>
+
+      <Alerts
+        open={showAlert}
+        onClose={() => setShowAlert(false)}
+        message={message}
+      />
     </>
   );
 }

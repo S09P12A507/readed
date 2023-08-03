@@ -2,28 +2,24 @@ import { useState } from 'react';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
 import styled from 'styled-components';
-
-// const Container = styled.div`
-//   justify-content: center;
-//   align-content: center;
-//   position: flex;
-//   padding: 20px;
-//   box-sizing: border-box;
-//   overflow-y: scroll;
-//   height: 100vh;
-// `;
+import Alerts from '../../components/common/alert/Alert';
+import basic from '../../assets/img/non.png';
 
 const ImageContainer = styled.div`
   text-align: center;
   max-width: 500px;
   max-height: 200px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ProfileImg = styled.img`
-  max-width: 300px;
-  margin: 0 auto;
-  object-fit: cover;
+  max-width: 500px;
+  max-height: 200px;
+  display: table-cell;
+  vertical-align: middle;
 `;
 
 const AuthForm = styled(TextField)`
@@ -40,7 +36,6 @@ const AuthButton = styled(Button)`
 `;
 
 const SignupButton = styled(Button)`
-  width: 100%;
   height: 50px;
 `;
 
@@ -119,6 +114,8 @@ function Addprofile() {
   const [nickname, setNickname] = useState<string>('');
   const [ProfileBio, setprofilebio] = useState<string>('');
   const [nicknameExists, setNicknameExists] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -144,7 +141,8 @@ function Addprofile() {
 
   const handleVerify = () => {
     setNicknameExists(true);
-    // 중복확인 성공 알람
+    setMessage('중복 확인되었습니다.');
+    setShowAlert(true);
     // axios
     //   .get(`http://local:8080/user?nickname=${nickname}`)
     //   .then(response => {
@@ -163,8 +161,8 @@ function Addprofile() {
 
   const handleSignUp = () => {
     if (!nicknameExists) {
-      // 중복 확인을 하지 않은 경우 알람을 띄우기
-      // 중복 여부를 체크해주세요 경고
+      setMessage('중복 여부를 체크해주세요.');
+      setShowAlert(true);
       return;
     }
     const formData = {
@@ -191,7 +189,6 @@ function Addprofile() {
   };
 
   return (
-    // <Container>
     <>
       <h1>거의 다 왔어요</h1>
       <h3>
@@ -216,7 +213,7 @@ function Addprofile() {
           {previewUrl ? (
             <ProfileImg src={previewUrl} alt="프로필 미리보기" />
           ) : (
-            <ProfileImg src="/assets/non.jpg" alt="기본 이미지" />
+            <ProfileImg src={basic} alt="기본 이미지" />
           )}
         </label>
         <input
@@ -277,16 +274,20 @@ function Addprofile() {
         color="primary"
         onClick={handleSignUp}
         style={{
-          bottom: 0,
-          left: 0,
-          marginTop: '300px',
-          width: '100%',
+          position: 'fixed',
+          width: '480px',
+          bottom: '0',
           background: '#4B8346',
+          color: 'white',
         }}>
         회원가입
       </SignupButton>
+      <Alerts
+        open={showAlert}
+        onClose={() => setShowAlert(false)}
+        message={message}
+      />
     </>
-    // </Container>
   );
 }
 

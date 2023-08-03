@@ -7,7 +7,6 @@ import Rating from '@mui/material/Rating';
 
 const Container = styled.div`
   flex: 1;
-  padding-left: 20px;
   overflow-y: auto;
 `;
 
@@ -33,11 +32,7 @@ const BookCoverTest = styled.div`
 `;
 
 const Start = styled(Button)`
-  width: 100%;
   height: 50px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
 `;
 
 const ModalCloseButton = styled(Button)`
@@ -166,7 +161,7 @@ function Genrebook() {
       <BookCoverContainer>
         <Grid container alignItems="center">
           {Array.from({ length: 100 }).map(() => (
-            <Grid item xs={3.5} key={Math.random()}>
+            <Grid item xs={4} key={Math.random()}>
               <BookCoverTest onClick={() => handleOpenModal()}>
                 책표지
               </BookCoverTest>
@@ -246,7 +241,13 @@ function Genrebook() {
       <Start
         variant="contained"
         onClick={handleSignUp}
-        style={{ backgroundColor: '#4b8346', color: '#ffffff' }}>
+        style={{
+          position: 'fixed',
+          width: '480px',
+          bottom: '0',
+          background: '#4B8346',
+          color: 'white',
+        }}>
         바로 시작하기
       </Start>
     </Container>

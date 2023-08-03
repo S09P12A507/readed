@@ -6,18 +6,19 @@ import styled from '@emotion/styled';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import GlobalStyle from './GlobalStyle';
 // pages
-import Login from './components/login/login';
-import Signup from './components/signup/signup';
-import Emailcheck from './components/signup/emailcheck';
-import Addprofile from './components/signup/addprofile';
-import Genre from './components/signup/genre';
-import Genrebook from './components/signup/genrebook';
+import Login from './pages/login/login';
+import Signup from './pages/signup/signup';
+import Emailcheck from './pages/signup/emailcheck';
+import Addprofile from './pages/signup/addprofile';
+import Genre from './pages/signup/genre';
+import Genrebook from './pages/signup/genrebook';
 import Home from './pages/Home';
 import Search from './pages/Search';
 import Bookclub from './pages/Bookclub';
+import BookclubCreate from './pages/bookclub/BookclubCreate';
 import Profile from './pages/Profile';
-import KaKao from './components/login/KakaoLogin';
-import Google from './components/login/GoogleLogin';
+import KaKao from './pages/login/KakaoLogin';
+import Google from './pages/login/GoogleLogin';
 // import PageNotFound from './pages/PageNotFound';
 // components
 import BottomNav from './components/common/nav/BottomNav';
@@ -31,6 +32,7 @@ import BottomNav from './components/common/nav/BottomNav';
  */
 
 const MobileContainer = styled(Container)`
+  position: relative;
   max-width: var(--screen-size-mobile);
   min-height: 100vh;
   padding-top: 2.5rem;
@@ -80,7 +82,7 @@ function App() {
               <Route path="/signup/addprofile" element={<Addprofile />} />
               <Route path="/genre" element={<Genre />} />
               <Route path="/genre/:genre" element={<Genrebook />} />
-
+              <Route path="/bookclub/create" element={<BookclubCreate />} />
               <Route element={<BottomNav />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/search" element={<Search />} />

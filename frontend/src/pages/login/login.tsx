@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 40%;
 `;
 
 const LoginBox = styled.input`
@@ -80,23 +81,17 @@ function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === 'user' && password === 'pass') {
-      const newtoken = 'asdasdsaczc';
-      dispatch(setToken(newtoken));
-
-      // axios
-      //   .post('http://local:8080/api/auth/sign-in', { username, password })
-      //   .then(response => {
-      //     const receivedToken = (response.data as { token: string }).token;
-      //     dispatch({ type: 'SET_TOKEN', payload: receivedToken });
-      //   })
-      //   .catch(error => {
-      //     console.log(error);
-      //   });
-      console.log('로그인 성공');
-    } else {
-      console.log('로그인 실패');
-    }
+    axios
+      .post('http://local:8080/api/auth/sign-in', { username, password })
+      .then(response => {
+        const receivedToken = (response.data as { token: string }).token;
+        dispatch(setToken(receivedToken));
+        console.log(receivedToken);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    console.log('로그인 성공');
   };
   return (
     <Container>
