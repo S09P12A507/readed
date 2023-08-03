@@ -26,30 +26,26 @@ import BottomNav from './components/common/nav/BottomNav';
  * bottom navigation
  *
  * @author 김보석, 박성준
+ * @breif 메인 app 컴포넌트
  * @see
- * @todo container 양옆 테두리/그림자 추가
- * @todo container에 들어가지 않는 페이지 리팩토링
  */
 
-// 모든 페이지를 해당 container에 가둡니다.
-// 우선 앱만을 위해 디자인하며 반응형 웹이 아닙니다.
-// 임시로 min-height와 테두리(border)를 지정하였습니다.
 const MobileContainer = styled(Container)`
-  max-width: 480px;
+  max-width: var(--screen-size-mobile);
   min-height: 100vh;
-  /* outline: solid red; */
   padding-top: 2.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
   box-shadow:
     1px 0 16px #888,
     -1px 0 16px #888;
+  /* 조건문에 var 적용이 안되므로, screen-size-mobile 수정시 min-width 부분도 수정해주세요 */
   @media screen and (min-width: 480px) {
-    width: 480px;
+    width: var(--screen-size-mobile);
   }
 `;
 
-// mui를 위한 custom theme입니다.
+// mui를 위한 custom theme
 const theme = createTheme({
   typography: {
     fontFamily: 'Pretendard',

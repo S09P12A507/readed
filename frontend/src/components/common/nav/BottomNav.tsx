@@ -23,7 +23,7 @@ const ReadedBottomNavigation = styled(BottomNavigation)`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 0;
-  max-width: 480px;
+  max-width: var(--screen-size-mobile);
   width: 100vw;
   height: 5rem;
   border-top: solid 1px var(--divider);

@@ -39,6 +39,9 @@ const GlobalStyle = createGlobalStyle`
     --divider: rgba(0, 0, 0, 0.12);
 
     // grey 및 다른 색상이 필요한 경우 추가합니다.
+
+    // 모바일 480px을 기준으로 합니다.
+    --screen-size-mobile: 480px;
   }
 
   html, body {

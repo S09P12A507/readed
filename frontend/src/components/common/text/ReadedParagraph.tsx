@@ -1,34 +1,31 @@
 import styled from 'styled-components';
+import { TextStyle } from '../../../interfaces/common/TextStyle';
 
-interface TextProp {
-  text: string;
-  // fontWeight: string;
-}
+/**
+ * p 컴포넌트, 기본값 1rem, 500
+ *
+ * @author 박성준
+ * @see
+ */
 
-type FontWeightValue =
-  | '100'
-  | '200'
-  | '300'
-  | '400'
-  | '500'
-  | '600'
-  | '700'
-  | '800'
-  | '900';
-
-type FontSizeValue = number;
-
-interface ParagraphTagProps {
-  fontWeight?: FontWeightValue;
-  fontSize?: FontSizeValue;
-}
-
-const ReadedParagraphTag = styled.p<ParagraphTagProps>`
+const ReadedParagraphWrapper = styled.p<TextStyle>`
   font-size: ${props => props.fontSize};
   font-weight: ${props => props.fontWeight};
 `;
-function ReadedParagraph({ text }: TextProp) {
-  return <ReadedParagraphTag>{text}</ReadedParagraphTag>;
+function ReadedParagraph({
+  text,
+  fontSize,
+  fontWeight,
+}: {
+  text: string;
+  fontSize: TextStyle['fontSize'];
+  fontWeight: TextStyle['fontWeight'];
+}) {
+  return (
+    <ReadedParagraphWrapper fontSize={fontSize} fontWeight={fontWeight}>
+      {text}
+    </ReadedParagraphWrapper>
+  );
 }
 
 export default ReadedParagraph;
