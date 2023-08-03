@@ -36,11 +36,14 @@ import BottomNav from './components/common/nav/BottomNav';
 // 임시로 min-height와 테두리(border)를 지정하였습니다.
 const MobileContainer = styled(Container)`
   max-width: 480px;
-  min-height: 100%;
-  border: solid red;
+  min-height: 100vh;
+  /* outline: solid red; */
   padding-top: 2.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
+  box-shadow:
+    1px 0 16px #888,
+    -1px 0 16px #888;
   @media screen and (min-width: 480px) {
     width: 480px;
   }
