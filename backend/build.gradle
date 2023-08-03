@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.14'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'org.sonarqube' version '4.2.1.3168'
 }
 
 group = 'ssafy'
@@ -41,4 +42,17 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+sonarqube {
+    properties {
+        property 'sonar.projectKey', 'S09P12A507'
+        property "sonar.java.binaries", "${buildDir}/classes"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.sources", "src/main/java"
+//        property "sonar.exclusions", "**/util/**, **/support/**, **/dto/**"
+//        property "sonar.tests", "src/test/java"
+//        property "sonar.test.inclusions", "**/*Test.java"
+//        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    }
 }

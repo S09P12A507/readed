@@ -1,72 +1,20 @@
 version: "3.0"
 services:
-
   jenkins:
     image: jenkins/jenkins:lts
     user: root
-    # - root 아님
     ports:
-      - 8081:8081
+      - 8080:8080
     volumes:
       - /jenkins:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
 
-  mysql:
-    image: mysql
-    ports:
-      - 3306:3306
-    volumes:
-      - /opt/lib/mysql:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: database
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: ssafy
-      MYSQL_PASSWORD: ssafy
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
-    depends_on:
-      -jenkins
-
-
-  # 생성할 서비스(컨테이너)명 지정
   nginx:
-    # DockerFile 기반이 아니고 image로 컨테이너 생성
     image: nginx
-    # 외부와 소통하는 경우에는 ports로 포트 설정 (외부 접근 가능하게)
-    # 호스트:컨테이터/포트 프로토콜
     ports:
-      - 80:80/tcp
-      - 443:443
-    # 로컬:컨테이너
+      - 80:80
+      - 443:433
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    # 서비스간의 종속성 순서대로 실행
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - web
-
-  api:
-    build:
-      # DockerFile의 경로를 context로 지정
-      # context: ../backend
-      dockerfile : ./Dockerfile
-    # expose는 호스트OS에 포트를 공개하지 않고, 컨테이너에만 공개
-    # 호스트OS와 직접 연결되지 않고 컨테이너-컨테이너 간의 통신만 필요할 경우 사용
-    # 외부로 노출되지 않고 같은 네트워크끼리 통신하는 경우
-    expose:
-      - 8080
-    # networks:
-    #   - db-connection
-    #   - api-connection
-    depends_on:
-      - mysql
-
-  web:
-    build:
-      # DockerFile의 경로를 context로 지정
-      # context: ../frontend
-      dockerfile : ./Dockerfile
-    expose:
-      - 3000
-    depends_on:
-      - api
+      - jenkins
