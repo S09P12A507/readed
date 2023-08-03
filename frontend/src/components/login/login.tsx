@@ -1,26 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 // import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../store/actions/authActions';
 import kakaologo from '../../assets/img/kakaologo.png';
-
-interface WebContainerProps {
-  isWebApp: boolean;
-}
-
-const WebContainer = styled.div<WebContainerProps>`
-  display: ${props => (props.isWebApp ? '' : 'grid')};
-  place-items: ${props => (props.isWebApp ? '' : 'center')};
-  width: ${props => (props.isWebApp ? '' : '600px')};
-  border: ${props => (props.isWebApp ? '' : '1px solid black')};
-  min-height: 99vh;
-  position: ${props => (props.isWebApp ? '' : 'absolute')};
-  top: ${props => (props.isWebApp ? '' : '50%')};
-  left: ${props => (props.isWebApp ? '' : '50%')};
-  transform: ${props => (props.isWebApp ? '' : 'translate(-50%, -50%)')};
-`;
 
 const Container = styled.div`
   display: flex;
@@ -79,7 +63,6 @@ const CenterText = styled.h3`
 `;
 
 function Login() {
-  const [isWebApp, setIsWebApp] = useState(false);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [remember, setRememberStatus] = useState<boolean>(false);
@@ -94,21 +77,6 @@ function Login() {
   const handleLogin = (url: string) => {
     window.location.href = url;
   };
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(display-mode: standalone)');
-    setIsWebApp(mediaQuery.matches);
-
-    const handleMediaChange = (event: MediaQueryListEvent) => {
-      setIsWebApp(event.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleMediaChange);
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMediaChange);
-    };
-  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,94 +99,92 @@ function Login() {
     }
   };
   return (
-    <WebContainer isWebApp={isWebApp}>
-      <Container>
-        <h1>리디드</h1>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <LoginBox
-              type="text"
-              id="username"
-              value={username}
-              placeholder="이메일"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setUsername(e.target.value)
-              }
-              required
-            />
-          </div>
-          <div>
-            <LoginBox
-              type="password"
-              id="password"
-              value={password}
-              placeholder="비밀번호"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPassword(e.target.value)
-              }
-              required
-            />
-            <div>
-              <input
-                type="checkbox"
-                id="remember"
-                checked={remember}
-                onChange={e => setRememberStatus(e.target.checked)}
-              />
-              로그인 유지
-            </div>
-            <div>
-              <LoginButton type="submit">로그인</LoginButton>
-            </div>
-          </div>
-        </form>
-        <br />
-        <p>
-          <a href="htpp://local:8080"> 아이디 찾기</a> |
-          <a href="htpp://local:8080"> 비밀번호 찾기</a> |
-          <Link to="/signup"> 회원가입</Link>
-        </p>
-        <br />
+    <Container>
+      <h1>리디드</h1>
+      <form onSubmit={handleSubmit}>
         <div>
-          <CenterText>간편 로그인</CenterText>
-          <br />
-          <CircleContainer>
-            <div>
-              <GoogleCircle
-                type="button"
-                onClick={() =>
-                  handleLogin(
-                    `https://accounts.google.com/o/oauth2/auth?client_id=${GoogleclientId}&redirect_uri=${GoogleredirectUri}&response_type=code&scope=openid%20email%20profile`,
-                  )
-                }>
-                <img
-                  src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                  alt="Google Logo"
-                  style={{ width: '30px', height: '30px' }}
-                />
-              </GoogleCircle>
-              <p style={{ marginLeft: '9px' }}>구글</p>
-            </div>
-            <div>
-              <KakaoCircle
-                type="button"
-                onClick={() =>
-                  handleLogin(
-                    `https://kauth.kakao.com/oauth/authorize?client_id=${KakaoRestApi}&redirect_uri=${KakaoRedirect}&response_type=code`,
-                  )
-                }>
-                <img
-                  src={kakaologo}
-                  alt="Kakao Logo"
-                  style={{ width: '30px', height: '30px' }}
-                />
-              </KakaoCircle>
-              <p style={{ marginLeft: '2px' }}>카카오</p>
-            </div>
-          </CircleContainer>
+          <LoginBox
+            type="text"
+            id="username"
+            value={username}
+            placeholder="이메일"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setUsername(e.target.value)
+            }
+            required
+          />
         </div>
-      </Container>
-    </WebContainer>
+        <div>
+          <LoginBox
+            type="password"
+            id="password"
+            value={password}
+            placeholder="비밀번호"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
+            required
+          />
+          <div>
+            <input
+              type="checkbox"
+              id="remember"
+              checked={remember}
+              onChange={e => setRememberStatus(e.target.checked)}
+            />
+            로그인 유지
+          </div>
+          <div>
+            <LoginButton type="submit">로그인</LoginButton>
+          </div>
+        </div>
+      </form>
+      <br />
+      <p>
+        <a href="htpp://local:8080"> 아이디 찾기</a> |
+        <a href="htpp://local:8080"> 비밀번호 찾기</a> |
+        <Link to="/signup"> 회원가입</Link>
+      </p>
+      <br />
+      <div>
+        <CenterText>간편 로그인</CenterText>
+        <br />
+        <CircleContainer>
+          <div>
+            <GoogleCircle
+              type="button"
+              onClick={() =>
+                handleLogin(
+                  `https://accounts.google.com/o/oauth2/auth?client_id=${GoogleclientId}&redirect_uri=${GoogleredirectUri}&response_type=code&scope=openid%20email%20profile`,
+                )
+              }>
+              <img
+                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                alt="Google Logo"
+                style={{ width: '30px', height: '30px' }}
+              />
+            </GoogleCircle>
+            <p style={{ marginLeft: '9px' }}>구글</p>
+          </div>
+          <div>
+            <KakaoCircle
+              type="button"
+              onClick={() =>
+                handleLogin(
+                  `https://kauth.kakao.com/oauth/authorize?client_id=${KakaoRestApi}&redirect_uri=${KakaoRedirect}&response_type=code`,
+                )
+              }>
+              <img
+                src={kakaologo}
+                alt="Kakao Logo"
+                style={{ width: '30px', height: '30px' }}
+              />
+            </KakaoCircle>
+            <p style={{ marginLeft: '2px' }}>카카오</p>
+          </div>
+        </CircleContainer>
+      </div>
+    </Container>
   );
 }
 

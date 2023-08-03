@@ -1,31 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { IconButton, TextField, Button, Grid } from '@mui/material';
 import styled from 'styled-components';
 import axios from 'axios';
-
-interface WebContainerProps {
-  isWebApp: boolean;
-}
-
-const WebContainer = styled.div<WebContainerProps>`
-  width: ${props => (props.isWebApp ? '' : '600px')};
-  justify-content: ${props => (props.isWebApp ? '' : 'center')};
-  align-items: ${props => (props.isWebApp ? '' : 'center')};
-  border: ${props => (props.isWebApp ? '' : '1px solid black')};
-  flex-direction: ${props => (props.isWebApp ? '' : 'column')};
-  justify-content: ${props => (props.isWebApp ? '' : 'space-between')};
-  min-height: 99vh;
-  position: ${props => (props.isWebApp ? '' : 'absolute')};
-  top: ${props => (props.isWebApp ? '' : '50%')};
-  left: ${props => (props.isWebApp ? '' : '50%')};
-  transform: ${props => (props.isWebApp ? '' : 'translate(-50%, -50%)')};
-`;
-
-const Container = styled.div`
-  padding: 5%;
-`;
 
 const AuthForm = styled(TextField)`
   width: 100%;
@@ -124,24 +102,8 @@ function Emailcheck() {
   const [email] = useState<string>(signUpData.email || '');
   const [code, setCode] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isWebApp, setIsWebApp] = useState(false);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(display-mode: standalone)');
-    setIsWebApp(mediaQuery.matches);
-
-    const handleMediaChange = (event: MediaQueryListEvent) => {
-      setIsWebApp(event.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleMediaChange);
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMediaChange);
-    };
-  }, []);
 
   const handleVerificationCodeChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -166,7 +128,7 @@ function Emailcheck() {
       })
       .catch(error => {
         console.error('인증 요청 실패', error);
-        alert('인증 번호 다시 확인해주세요');
+        // 인증 번호를 다시 확인해주세요 경고
       });
 
     //   const isVerified = true; // 임의로 인증이 그냥 된다고 가정
@@ -183,7 +145,7 @@ function Emailcheck() {
     if (isAuthenticated) {
       navigate('/signup/addprofile');
     } else {
-      alert('이메일 인증을 해주세요.');
+      // 이메일 인증을 해주세요 경고
     }
   };
 
@@ -209,77 +171,74 @@ function Emailcheck() {
   };
 
   return (
-    <WebContainer isWebApp={isWebApp}>
-      <Container>
-        <BackButton onGoBack={handleGoBack} />
-        <h1>이메일 인증</h1>
-        <h3>
-          {email}으로
-          <br /> 전송한 인증코드를 확인해주세요.
-          <br />
-          <br />
-          <Announce>
-            <IconContainer>1</IconContainer>&nbsp;
-            <AnnounceText> 기본 정보 입력 &nbsp;─&nbsp;</AnnounceText>
-            <NowContainer>2</NowContainer>&nbsp;
-            <NowText> 이메일 인증 &nbsp;─&nbsp;</NowText>
-            <IconContainer>3</IconContainer>&nbsp;
-            <AnnounceText> 프로필 입력</AnnounceText>
-          </Announce>
-          <br />
-        </h3>
-        <Grid container alignItems="center">
-          <Grid item xs={10.5}>
-            <AuthForm
-              label="*인증코드 입력"
-              variant="outlined"
-              value={code}
-              onChange={handleVerificationCodeChange}
-              margin="dense"
-              InputProps={{
-                style: {
-                  backgroundColor: '#f5f5f5',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                },
-                endAdornment: (
-                  <Button
-                    style={{
-                      backgroundColor: 'transparent',
-                      color: 'gray',
-                    }}
-                    onClick={handleResend}>
-                    재전송
-                  </Button>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item xs={1}>
-            <AuthButton
-              variant="contained"
-              onClick={handleVerify}
-              style={{ marginLeft: '10px', background: '#4B8346' }}
-              disabled={isAuthenticated}>
-              인증
-            </AuthButton>
-          </Grid>
+    <>
+      <BackButton onGoBack={handleGoBack} />
+      <h1>이메일 인증</h1>
+      <h3>
+        {email}으로
+        <br /> 전송한 인증코드를 확인해주세요.
+        <br />
+        <br />
+        <Announce>
+          <IconContainer>1</IconContainer>&nbsp;
+          <AnnounceText> 기본 정보 입력 &nbsp;─&nbsp;</AnnounceText>
+          <NowContainer>2</NowContainer>&nbsp;
+          <NowText> 이메일 인증 &nbsp;─&nbsp;</NowText>
+          <IconContainer>3</IconContainer>&nbsp;
+          <AnnounceText> 프로필 입력</AnnounceText>
+        </Announce>
+        <br />
+      </h3>
+      <Grid container alignItems="center">
+        <Grid item xs={10.5}>
+          <AuthForm
+            label="*인증코드 입력"
+            variant="outlined"
+            value={code}
+            onChange={handleVerificationCodeChange}
+            margin="dense"
+            InputProps={{
+              style: {
+                backgroundColor: '#f5f5f5',
+                display: 'flex',
+                justifyContent: 'space-between',
+              },
+              endAdornment: (
+                <Button
+                  style={{
+                    backgroundColor: 'transparent',
+                    color: 'gray',
+                  }}
+                  onClick={handleResend}>
+                  재전송
+                </Button>
+              ),
+            }}
+          />
         </Grid>
-        <SignupButton
-          variant="contained"
-          onClick={handleSignUp}
-          style={{
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            width: '100%',
-            background: '#4B8346',
-          }}
-          disabled={!isAuthenticated}>
-          다읍단계로
-        </SignupButton>
-      </Container>
-    </WebContainer>
+        <Grid item xs={1}>
+          <AuthButton
+            variant="contained"
+            onClick={handleVerify}
+            style={{ marginLeft: '10px', background: '#4B8346' }}
+            disabled={isAuthenticated}>
+            인증
+          </AuthButton>
+        </Grid>
+      </Grid>
+      <SignupButton
+        variant="contained"
+        onClick={handleSignUp}
+        style={{
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          background: '#4B8346',
+        }}
+        disabled={!isAuthenticated}>
+        다읍단계로
+      </SignupButton>
+    </>
   );
 }
 

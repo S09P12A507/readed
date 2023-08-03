@@ -1,31 +1,10 @@
-import { useState, useEffect } from 'react';
-import { IconButton, TextField, Button, Grid } from '@mui/material';
+import { useState } from 'react';
+import { Alert, IconButton, TextField, Button, Grid } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CheckIcon from '@mui/icons-material/Check';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-
-interface WebContainerProps {
-  isWebApp: boolean;
-}
-
-const WebContainer = styled.div<WebContainerProps>`
-  display: ${props => (props.isWebApp ? '' : 'flex')};
-  width: ${props => (props.isWebApp ? '' : '600px')};
-  border: ${props => (props.isWebApp ? '' : '1px solid black')};
-  flex-direction: ${props => (props.isWebApp ? '' : 'column')};
-  min-height: 99vh;
-  position: ${props => (props.isWebApp ? '' : 'absolute')};
-  top: ${props => (props.isWebApp ? '' : '50%')};
-  left: ${props => (props.isWebApp ? '' : '50%')};
-  transform: ${props => (props.isWebApp ? '' : 'translate(-50%, -50%)')};
-`;
-
-const Container = styled.div`
-  padding: 3%;
-  flex: 1;
-`;
 
 const FormButtonContainer = styled(Button)`
   display: flex;
@@ -138,26 +117,11 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password1, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
-  const [isWebApp, setIsWebApp] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [invalidPassword, setInvalidPassword] = useState(false);
   const [invalidPassword2, setInvalidPassword2] = useState(false);
   const [InvalidName, setInvalidName] = useState(false);
   const [emailExists, setEmailExists] = useState<boolean>(false);
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(display-mode: standalone)');
-    setIsWebApp(mediaQuery.matches);
-
-    const handleMediaChange = (event: MediaQueryListEvent) => {
-      setIsWebApp(event.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleMediaChange);
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMediaChange);
-    };
-  }, []);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nameValue = event.target.value;
@@ -207,7 +171,6 @@ function Signup() {
   const handleSubmit = () => {
     if (!emailExists) {
       // 중복 확인을 하지 않은 경우 알람을 띄우기
-      alert('중복 여부를 체크해주세요');
       return;
     }
     if (
@@ -235,7 +198,8 @@ function Signup() {
           console.error('이메일 전송에 실패했습니다.', error);
         });
     } else {
-      alert('유효하지 않은 입력이 있습니다.');
+      //  여기에 경고
+      <Alert severity="info">유효하지 않은 입력이 있습니다.</Alert>;
     }
   };
 
@@ -245,7 +209,6 @@ function Signup() {
 
   const handleVerify = () => {
     setEmailExists(true);
-    alert('중복확인 성공');
     //   axios
     //   	.get(`http://local:8080/user?nickname=${email}`)
     //   	.then(response => {
@@ -263,183 +226,167 @@ function Signup() {
   };
 
   return (
-    <WebContainer isWebApp={isWebApp}>
+    <>
       <BackButton onGoBack={handleGoBack} />
-      <Container>
-        <h1>회원가입</h1>
-        <h3>리디드에 오신 것을 환영합니다.</h3>
-        <br />
-        <br />
-        <Announce>
-          <NowContainer>1</NowContainer>&nbsp;
-          <NowText> 기본 정보 입력 &nbsp;─&nbsp;</NowText>
-          <IconContainer>2</IconContainer>&nbsp;
-          <AnnounceText> 이메일 인증 &nbsp;─&nbsp;</AnnounceText>
-          <IconContainer>3</IconContainer>&nbsp;
-          <AnnounceText> 프로필 입력</AnnounceText>
-        </Announce>
-        <br />
-        <br />
-        <div>
+      <h1>회원가입</h1>
+      <h3>리디드에 오신 것을 환영합니다.</h3>
+      <br />
+      <br />
+      <Announce>
+        <NowContainer>1</NowContainer>&nbsp;
+        <NowText> 기본 정보 입력 &nbsp;─&nbsp;</NowText>
+        <IconContainer>2</IconContainer>&nbsp;
+        <AnnounceText> 이메일 인증 &nbsp;─&nbsp;</AnnounceText>
+        <IconContainer>3</IconContainer>&nbsp;
+        <AnnounceText> 프로필 입력</AnnounceText>
+      </Announce>
+      <br />
+      <br />
+      <div>
+        <SignupForm
+          label="*이름"
+          variant="outlined"
+          value={MemberName}
+          onChange={handleNameChange}
+          margin="dense"
+          helperText={(() => {
+            if (InvalidName) {
+              return '유효한 이름을 입력해주세요';
+            }
+            if (isNameValid(MemberName)) {
+              return ' ';
+            }
+            return '2글자 이상의 한글 이름을 입력해주세요.';
+          })()}
+          InputProps={{
+            style: {
+              backgroundColor: '#f5f5f5',
+            },
+            endAdornment: isNameValid(MemberName) && (
+              <CheckIcon style={{ color: 'green' }} />
+            ),
+          }}
+          error={InvalidName}
+        />
+      </div>
+
+      <Grid container alignItems="center">
+        <Grid item xs={10.2}>
           <SignupForm
-            label="*이름"
+            label="*이메일"
             variant="outlined"
-            value={MemberName}
-            onChange={handleNameChange}
+            value={email}
+            onChange={handleEmailChange}
             margin="dense"
-            helperText={(() => {
-              if (InvalidName) {
-                return '유효한 이름을 입력해주세요';
-              }
-              if (isNameValid(MemberName)) {
-                return ' ';
-              }
-              return '2글자 이상의 한글 이름을 입력해주세요.';
-            })()}
             InputProps={{
               style: {
                 backgroundColor: '#f5f5f5',
               },
-              endAdornment: isNameValid(MemberName) && (
+              endAdornment: isEmailValid(email) && (
                 <CheckIcon style={{ color: 'green' }} />
               ),
             }}
-            error={InvalidName}
+            helperText={(() => {
+              if (invalidEmail) {
+                return '유효한 이메일을 입력해주세요';
+              }
+              if (isEmailValid(email)) {
+                return ' ';
+              }
+              return '이메일을 입력해주세요';
+            })()}
+            error={invalidEmail}
           />
-        </div>
-
-        <Grid container alignItems="center">
-          <Grid item xs={10.2}>
-            <SignupForm
-              label="*이메일"
-              variant="outlined"
-              value={email}
-              onChange={handleEmailChange}
-              margin="dense"
-              InputProps={{
-                style: {
-                  backgroundColor: '#f5f5f5',
-                },
-                endAdornment: isEmailValid(email) && (
-                  <CheckIcon style={{ color: 'green' }} />
-                ),
-              }}
-              helperText={(() => {
-                if (invalidEmail) {
-                  return '유효한 이메일을 입력해주세요';
-                }
-                if (isEmailValid(email)) {
-                  return ' ';
-                }
-                return '이메일을 입력해주세요';
-              })()}
-              error={invalidEmail}
-            />
-          </Grid>
-          <Grid item xs={1}>
-            <AuthButton
-              variant="contained"
-              color="primary"
-              onClick={handleVerify}
-              style={{
-                marginLeft: '10px',
-                marginBottom: '18px',
-                background: '#4B8346',
-              }}>
-              중복 확인
-            </AuthButton>
-          </Grid>
         </Grid>
+        <Grid item xs={1}>
+          <AuthButton
+            variant="contained"
+            color="primary"
+            onClick={handleVerify}
+            style={{
+              marginLeft: '10px',
+              marginBottom: '18px',
+              background: '#4B8346',
+            }}>
+            중복 확인
+          </AuthButton>
+        </Grid>
+      </Grid>
 
-        <div>
-          <SignupForm
-            label="*비밀번호"
-            type="password"
-            variant="outlined"
-            value={password1}
-            onChange={handlePasswordChange}
-            margin="dense"
-            helperText={(() => {
-              if (invalidPassword) {
-                if (password1.length < 8) {
-                  return '비밀번호가 너무 짧습니다.';
-                }
-                if (password1.length > 15) {
-                  return '비밀번호가 너무 깁니다.';
-                }
-                return '숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
+      <div>
+        <SignupForm
+          label="*비밀번호"
+          type="password"
+          variant="outlined"
+          value={password1}
+          onChange={handlePasswordChange}
+          margin="dense"
+          helperText={(() => {
+            if (invalidPassword) {
+              if (password1.length < 8) {
+                return '비밀번호가 너무 짧습니다.';
               }
-              if (isPasswordValid(password1)) {
-                return ' ';
+              if (password1.length > 15) {
+                return '비밀번호가 너무 깁니다.';
               }
-              return '알파벳, 숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
-            })()}
-            InputProps={{
-              style: {
-                backgroundColor: '#f5f5f5',
-              },
-              endAdornment: isPasswordValid(password1) && (
-                <CheckIcon style={{ color: 'green' }} />
-              ),
-            }}
-            error={invalidPassword}
-          />
-        </div>
+              return '숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
+            }
+            if (isPasswordValid(password1)) {
+              return ' ';
+            }
+            return '알파벳, 숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
+          })()}
+          InputProps={{
+            style: {
+              backgroundColor: '#f5f5f5',
+            },
+            endAdornment: isPasswordValid(password1) && (
+              <CheckIcon style={{ color: 'green' }} />
+            ),
+          }}
+          error={invalidPassword}
+        />
+      </div>
 
-        <div>
-          <SignupForm
-            label="*비밀번호 확인"
-            type="password"
-            variant="outlined"
-            value={password2}
-            onChange={handlePassword2Change}
-            margin="dense"
-            helperText={(() => {
-              if (invalidPassword2) {
-                return '비밀번호가 일치하지 않습니다';
-              }
-              if (password2 && !invalidPassword2) {
-                return ' ';
-              }
-              return '동일한 비밀번호를 입력해주세요';
-            })()}
-            InputProps={{
-              style: {
-                backgroundColor: '#f5f5f5',
-              },
-              endAdornment: !invalidPassword2 && password2.length > 1 && (
-                <CheckIcon style={{ color: 'green' }} />
-              ),
-            }}
-            error={invalidPassword2}
-          />
-        </div>
-      </Container>
-      {isWebApp ? (
-        <FormButtonContainer
-          variant="contained"
-          style={{
-            backgroundColor: '#4b8346',
-            color: '#ffffff',
-            position: 'fixed',
+      <div>
+        <SignupForm
+          label="*비밀번호 확인"
+          type="password"
+          variant="outlined"
+          value={password2}
+          onChange={handlePassword2Change}
+          margin="dense"
+          helperText={(() => {
+            if (invalidPassword2) {
+              return '비밀번호가 일치하지 않습니다';
+            }
+            if (password2 && !invalidPassword2) {
+              return ' ';
+            }
+            return '동일한 비밀번호를 입력해주세요';
+          })()}
+          InputProps={{
+            style: {
+              backgroundColor: '#f5f5f5',
+            },
+            endAdornment: !invalidPassword2 && password2.length > 1 && (
+              <CheckIcon style={{ color: 'green' }} />
+            ),
           }}
-          onClick={handleSubmit}
-          disabled={!emailExists}>
-          이메일 인증하기
-        </FormButtonContainer>
-      ) : (
-        <FormButtonContainer
-          variant="contained"
-          style={{
-            backgroundColor: '#4b8346',
-            color: '#ffffff',
-          }}
-          onClick={handleSubmit}
-          disabled={!emailExists}>
-          이메일 인증하기
-        </FormButtonContainer>
-      )}
-    </WebContainer>
+          error={invalidPassword2}
+        />
+      </div>
+      <FormButtonContainer
+        variant="contained"
+        style={{
+          backgroundColor: '#4b8346',
+          color: '#ffffff',
+        }}
+        onClick={handleSubmit}
+        disabled={!emailExists}>
+        이메일 인증하기
+      </FormButtonContainer>
+    </>
   );
 }
 

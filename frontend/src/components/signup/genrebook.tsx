@@ -5,25 +5,6 @@ import { Grid, Button, Modal, TextField } from '@mui/material';
 import axios from 'axios';
 import Rating from '@mui/material/Rating';
 
-interface WebContainerProps {
-  isWebApp: boolean;
-}
-
-const WebContainer = styled.div<WebContainerProps>`
-  display: ${props => (props.isWebApp ? '' : 'flex')};
-  width: ${props => (props.isWebApp ? '' : '600px')};
-  border: ${props => (props.isWebApp ? '' : '1px solid black')};
-  flex-direction: ${props => (props.isWebApp ? '' : 'column')};
-  height: 100vh;
-  position: ${props => (props.isWebApp ? '' : 'absolute')};
-  top: ${props => (props.isWebApp ? '' : '50%')};
-  left: ${props => (props.isWebApp ? '' : '50%')};
-  transform: ${props => (props.isWebApp ? '' : 'translate(-50%, -50%)')};
-  overflow-y: auto;
-  padding: 20px;
-  box-sizing: border-box;
-`;
-
 const Container = styled.div`
   flex: 1;
   padding-left: 20px;
@@ -105,7 +86,6 @@ function Genrebook() {
   const [inputText, setInputText] = useState('');
   const [textLength, setTextLength] = useState<number>(0);
   const [ratingValue, setRatingValue] = useState<number>(0);
-  const [isWebApp, setIsWebApp] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -160,144 +140,117 @@ function Genrebook() {
     setTextLength(inputText.length);
   }, [inputText]);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(display-mode: standalone)');
-    setIsWebApp(mediaQuery.matches);
-
-    const handleMediaChange = (event: MediaQueryListEvent) => {
-      setIsWebApp(event.matches);
-    };
-
-    mediaQuery.addEventListener('change', handleMediaChange);
-
-    return () => {
-      mediaQuery.removeEventListener('change', handleMediaChange);
-    };
-  }, []);
-
   const handleSignUp = () => {
     window.location.href = '/';
   };
 
   return (
-    <WebContainer isWebApp={isWebApp}>
-      <Container>
-        <h1>읽은 책 기록하기</h1>
-        <h3>
-          {MemberName} 님이 <br /> 재미있게 읽은 책들을 알려주세요!
-        </h3>
-        <Info>· 별점을 남길 책을 선택해주세요 </Info>
-        <BookCoverContainer>
-          <Grid container alignItems="center">
-            {bookCovers.map(imageUrl => (
-              <Grid item xs={3.5} key={imageUrl}>
-                {' '}
-                <BookCover imageUrl={imageUrl} />
-              </Grid>
-            ))}
-          </Grid>
-        </BookCoverContainer>
-        {/* 아래는 테스트코드 */}
-        <BookCoverContainer>
-          <Grid container alignItems="center">
-            {Array.from({ length: 100 }).map(() => (
-              <Grid item xs={3.5} key={Math.random()}>
-                <BookCoverTest onClick={() => handleOpenModal()}>
-                  책표지
-                </BookCoverTest>
-              </Grid>
-            ))}
-          </Grid>
-        </BookCoverContainer>
-        <Modal
-          open={IsModalOpen}
-          onClose={handleCloseModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+    // <WebContainer isWebApp={isWebApp}>
+    <Container>
+      <h1>읽은 책 기록하기</h1>
+      <h3>
+        {MemberName} 님이 <br /> 재미있게 읽은 책들을 알려주세요!
+      </h3>
+      <Info>· 별점을 남길 책을 선택해주세요 </Info>
+      <BookCoverContainer>
+        <Grid container alignItems="center">
+          {bookCovers.map(imageUrl => (
+            <Grid item xs={3.5} key={imageUrl}>
+              {' '}
+              <BookCover imageUrl={imageUrl} />
+            </Grid>
+          ))}
+        </Grid>
+      </BookCoverContainer>
+      {/* 아래는 테스트코드 */}
+      <BookCoverContainer>
+        <Grid container alignItems="center">
+          {Array.from({ length: 100 }).map(() => (
+            <Grid item xs={3.5} key={Math.random()}>
+              <BookCoverTest onClick={() => handleOpenModal()}>
+                책표지
+              </BookCoverTest>
+            </Grid>
+          ))}
+        </Grid>
+      </BookCoverContainer>
+      <Modal
+        open={IsModalOpen}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            height: '100%',
+            backgroundColor: 'white',
+            width: '600px',
           }}>
-          <div
-            style={{
-              height: '100%',
-              backgroundColor: 'white',
-              width: isWebApp ? '100%' : '600px',
-            }}>
-            <ModalUpper>
-              <ModalCloseButton
-                startIcon={<CloseIcon />}
-                onClick={handleCloseModal}
-                style={{
-                  left: '2%',
-                  margin: '2%',
-                  fontWeight: 'bold',
-                  fontSize: '1.1rem',
-                }}>
-                닫기
-              </ModalCloseButton>
-              <p> 여기엔 책이름을 넣어보자</p>
-              <ModalSendButton
-                onClick={handleSaveButton}
-                style={{
-                  color: '#7aa874',
-                  fontWeight: 'bold',
-                  fontSize: '1.1rem',
-                }}>
-                등록
-              </ModalSendButton>
-            </ModalUpper>
-            <hr />
-            <Star>
-              <Rating
-                name="half-rating"
-                value={ratingValue}
-                precision={0.5}
-                size="large"
-                onChange={handleRatingChange}
-              />
-            </Star>
-            <TextField
-              value={inputText}
-              onChange={handleInputChange}
-              placeholder="책에 대한 코멘트를 자유롭게 남겨주세요."
-              variant="standard"
-              multiline
-              rows={25}
+          <ModalUpper>
+            <ModalCloseButton
+              startIcon={<CloseIcon />}
+              onClick={handleCloseModal}
               style={{
-                width: '96%',
-                padding: '3%',
-                flexWrap: 'wrap',
-              }}
-              InputProps={{
-                disableUnderline: true,
-              }}
+                left: '2%',
+                margin: '2%',
+                fontWeight: 'bold',
+                fontSize: '1.1rem',
+              }}>
+              닫기
+            </ModalCloseButton>
+            <p> 여기엔 책이름을 넣어보자</p>
+            <ModalSendButton
+              onClick={handleSaveButton}
+              style={{
+                color: '#7aa874',
+                fontWeight: 'bold',
+                fontSize: '1.1rem',
+              }}>
+              등록
+            </ModalSendButton>
+          </ModalUpper>
+          <hr />
+          <Star>
+            <Rating
+              name="half-rating"
+              value={ratingValue}
+              precision={0.5}
+              size="large"
+              onChange={handleRatingChange}
             />
-            <Textsize>{textLength} / 300 글자</Textsize>
-          </div>
-        </Modal>
-      </Container>
-      {isWebApp ? (
-        <Start
-          variant="contained"
-          onClick={handleSignUp}
-          style={{
-            backgroundColor: '#4b8346',
-            color: '#ffffff',
-            position: 'fixed',
-          }}>
-          바로 시작하기
-        </Start>
-      ) : (
-        <Start
-          variant="contained"
-          onClick={handleSignUp}
-          style={{ backgroundColor: '#4b8346', color: '#ffffff' }}>
-          바로 시작하기
-        </Start>
-      )}
-    </WebContainer>
+          </Star>
+          <TextField
+            value={inputText}
+            onChange={handleInputChange}
+            placeholder="책에 대한 코멘트를 자유롭게 남겨주세요."
+            variant="standard"
+            multiline
+            rows={25}
+            style={{
+              width: '96%',
+              padding: '3%',
+              flexWrap: 'wrap',
+            }}
+            InputProps={{
+              disableUnderline: true,
+            }}
+          />
+          <Textsize>{textLength} / 300 글자</Textsize>
+        </div>
+      </Modal>
+
+      <Start
+        variant="contained"
+        onClick={handleSignUp}
+        style={{ backgroundColor: '#4b8346', color: '#ffffff' }}>
+        바로 시작하기
+      </Start>
+    </Container>
+    // </WebContainer>
   );
 }
 
