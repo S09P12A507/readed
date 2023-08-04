@@ -46,10 +46,17 @@ function Bookclubmeeting() {
   };
 
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: videoEnabled, audio: audioEnabled })
-      .then(handleLocalMediaStream)
-      .catch(error => console.error('Error accessing media devices:', error));
+    if (
+      'mediaDevices' in navigator &&
+      'getUserMedia' in navigator.mediaDevices
+    ) {
+      navigator.mediaDevices
+        .getUserMedia({ video: videoEnabled, audio: audioEnabled })
+        .then(handleLocalMediaStream)
+        .catch(error => console.error(error));
+    } else {
+      console.error('이 브라우저에서는 지원되지 않습니다.');
+    }
   }, [videoEnabled, audioEnabled]);
 
   return (
