@@ -5,6 +5,9 @@ spring:
   profiles:
     include: secret
     active: develop
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 ---
 spring:
   config:
@@ -33,6 +36,3 @@ spring:
       logging.level:
         org.hibernate.SQL: debug
 
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher

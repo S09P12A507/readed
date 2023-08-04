@@ -33,12 +33,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         if (token == null) {
             //토큰 정보 없음
-            throw new GlobalRuntimeException("토큰 요청 정보가 없습니다.", HttpStatus.BAD_REQUEST);
+            throw new GlobalRuntimeException("액세스토큰 요청 정보가 없습니다.", HttpStatus.BAD_REQUEST);
         }
 
-        if (!jwtTokenProvider.validateToken(token)) {
+        if (!jwtTokenProvider.validateAccessToken(token)) {
             //유효성 체크 실패
-            throw new GlobalRuntimeException("유효하지 않은 토큰입니다.", HttpStatus.BAD_REQUEST);
+            throw new GlobalRuntimeException("유효하지 않은 액세스토큰입니다.", HttpStatus.FORBIDDEN);
         }
 
         Authentication authentication = jwtTokenProvider.getAuthentication(token);

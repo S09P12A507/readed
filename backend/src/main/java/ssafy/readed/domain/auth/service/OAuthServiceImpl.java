@@ -7,6 +7,7 @@ import ssafy.readed.domain.auth.service.dto.OAuthDetailDto;
 import ssafy.readed.domain.auth.service.dto.OAuthLoginResponseDto;
 import ssafy.readed.domain.auth.service.dto.SignInResponseDto;
 import ssafy.readed.domain.auth.utility.SocialLoginType;
+import ssafy.readed.domain.auth.vo.Token;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
@@ -24,15 +25,15 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Override
     public OAuthLoginResponseDto login(SocialLoginType socialLoginType, String code) {
-        String access_token;
-        OAuthLoginResponseDto responseDto;
+        String accessToken;
+        OAuthLoginResponseDto oAuthLoginResponseDto;
 
         switch (socialLoginType) {
             case GOOGLE -> {
-                access_token = googleOAuthProvider.getToken(code);
+                accessToken = googleOAuthProvider.getToken(code);
             }
             case KAKAO -> {
-                access_token = kakaoOAuthProvider.getToken(code);
+                accessToken = kakaoOAuthProvider.getToken(code);
             }
             default -> {
                 throw new GlobalRuntimeException("알 수 없는 소셜 로그인 형식입니다.",
@@ -40,25 +41,24 @@ public class OAuthServiceImpl implements OAuthService {
             }
         }
 
-        OAuthDetailDto detailDto = getUserDetail(socialLoginType, access_token);
+        OAuthDetailDto detailDto = getUserDetail(socialLoginType, accessToken);
         boolean isDuplicated = isEmailDuplicated(detailDto.getEmail());
 
         if (!isDuplicated) {
-            responseDto = OAuthLoginResponseDto.builder()
+            oAuthLoginResponseDto = OAuthLoginResponseDto.builder()
                     .token(null)
                     .detailDto(detailDto)
                     .build();
         } else {
-            String jwtToken = jwtTokenProvider.createToken(detailDto.getEmail());
-            SignInResponseDto loginToken = SignInResponseDto.builder()
-                    .access_token(jwtToken).build();
+            Token token = jwtTokenProvider.createToken(detailDto.getEmail());
+            SignInResponseDto signInResponseDto = SignInResponseDto.from(token);
 
-            responseDto = OAuthLoginResponseDto.builder()
-                    .token(loginToken)
+            oAuthLoginResponseDto = OAuthLoginResponseDto.builder()
+                    .token(signInResponseDto)
                     .detailDto(detailDto)
                     .build();
         }
-        return responseDto;
+        return oAuthLoginResponseDto;
     }
 
     @Override

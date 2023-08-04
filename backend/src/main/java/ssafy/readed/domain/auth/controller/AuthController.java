@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ssafy.readed.domain.auth.controller.dto.CheckEmailRequestDto;
+import ssafy.readed.domain.auth.controller.dto.RefreshAccessTokenRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SendEmailRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SignInRequestDto;
 import ssafy.readed.domain.auth.service.AuthService;
@@ -39,5 +40,11 @@ public class AuthController {
     @PostMapping("/api/auth/test")
     public ResponseEntity<?> test(@RequestBody SendEmailRequestDto requestDto) {
         return JsonResponse.ok("권한 테스트 !!");
+    }
+
+    @PostMapping("api/auth/refresh")
+    public ResponseEntity<?> refresh(@RequestBody RefreshAccessTokenRequestDto requestDto) {
+        String accessToken = service.refreshAccessToken(requestDto);
+        return JsonResponse.ok("액세스토큰 재발급 완료", accessToken);
     }
 }

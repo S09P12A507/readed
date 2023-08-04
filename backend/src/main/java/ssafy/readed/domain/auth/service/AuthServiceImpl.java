@@ -6,11 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ssafy.readed.domain.auth.controller.dto.CheckEmailRequestDto;
+import ssafy.readed.domain.auth.controller.dto.RefreshAccessTokenRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SendEmailRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SignInRequestDto;
 import ssafy.readed.domain.auth.entity.MailHistory;
+import ssafy.readed.domain.auth.entity.RefreshToken;
 import ssafy.readed.domain.auth.repository.MailHistoryRepository;
+import ssafy.readed.domain.auth.repository.RefreshTokenRepository;
 import ssafy.readed.domain.auth.service.dto.SignInResponseDto;
+import ssafy.readed.domain.auth.vo.Token;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
@@ -31,6 +35,8 @@ public class AuthServiceImpl implements AuthService {
     private final MailHistoryRepository mailHistoryRepository;
 
     private final MemberRepository memberRepository;
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -88,10 +94,30 @@ public class AuthServiceImpl implements AuthService {
             throw new GlobalRuntimeException("비밀번호가 틀립니다.", HttpStatus.BAD_REQUEST);
         }
 
-        String access_token = jwtTokenProvider.createToken(requestDto.getEmail());
+        Token token = jwtTokenProvider.createToken(requestDto.getEmail());
 
-        return SignInResponseDto.builder()
-                .access_token(access_token).build();
+        saveRefreshToken(requestDto, token);
+
+        return SignInResponseDto.from(token);
+    }
+
+    @Override
+    public String refreshAccessToken(RefreshAccessTokenRequestDto requestDto) {
+        return jwtTokenProvider.refreshAccessToken(requestDto.getRefreshToken());
+    }
+
+    private void saveRefreshToken(SignInRequestDto requestDto, Token token) {
+        RefreshToken lastRefreshToken = refreshTokenRepository.findByEmail(requestDto.getEmail());
+        if(lastRefreshToken != null){
+            refreshTokenRepository.deleteByEmail(requestDto.getEmail());
+        }
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .token(token.getRefreshToken())
+                .email(requestDto.getEmail())
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
     }
 
     private String generateAuthCode() {
