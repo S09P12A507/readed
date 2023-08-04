@@ -16,9 +16,13 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import Bookclub from './pages/Bookclub';
 import BookclubCreate from './pages/bookclub/BookclubCreate';
+import BookclubDetail from './pages/bookclub/BookclubDetatil';
+import BookclubMeeting from './pages/bookclub/Bookclubmeeting';
+import Profilechange from './pages/profile/Profilechange';
 import Profile from './pages/Profile';
 import KaKao from './pages/login/KakaoLogin';
 import Google from './pages/login/GoogleLogin';
+import Report from './pages/books/Report';
 // import PageNotFound from './pages/PageNotFound';
 // components
 import BottomNav from './components/common/nav/BottomNav';
@@ -83,11 +87,21 @@ function App() {
               <Route path="/signup/" element={<Signup />} />
               <Route path="/signup/emailcheck" element={<Emailcheck />} />
               <Route path="/signup/addprofile" element={<Addprofile />} />
+              <Route path="/profilechange" element={<Profilechange />} />
               <Route path="/genre" element={<Genre />} />
               <Route path="/genre/:genre" element={<Genrebook />} />
               <Route path="/oauth/google/callback" element={<Google />} />
               <Route path="/oauth/kakao/callback" element={<KaKao />} />
               <Route path="/bookclub/create" element={<BookclubCreate />} />
+              <Route
+                path="/bookclub/:bookclubId"
+                element={<BookclubMeeting />}
+              />
+              <Route path="/report/:write" element={<Report />} />
+              <Route
+                path="/bookclub/detail/:bookclubid"
+                element={<BookclubDetail />}
+              />
               <Route path="/" element={<BottomNav />}>
                 <Route path="" element={<Home />} />
                 <Route path="search" element={<Search />} />

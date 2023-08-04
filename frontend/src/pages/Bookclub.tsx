@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Card from '@mui/material/Card';
@@ -61,6 +61,12 @@ const Infodetail = styled.div`
 `;
 
 function Bookclub() {
+  const navigate = useNavigate();
+
+  const handleBookClubClick = (bookClubId: number) => {
+    navigate(`/bookclub/detail/${bookClubId}`);
+  };
+
   return (
     <div>
       <Header>
@@ -79,7 +85,10 @@ function Bookclub() {
       </Search>
       <BookClubList>
         {Array.from({ length: 10 }).map(() => (
-          <Card sx={{ display: 'flex' }} key={Math.random()}>
+          <Card
+            onClick={() => handleBookClubClick(1)}
+            sx={{ display: 'flex', margin: '3%' }}
+            key={Math.random()}>
             <CardMedia
               component="img"
               sx={{ width: 151 }}

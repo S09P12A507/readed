@@ -11,7 +11,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 40%;
 `;
 
 const LoginBox = styled.input`
@@ -84,14 +83,15 @@ function Login() {
     axios
       .post('http://local:8080/api/auth/sign-in', { username, password })
       .then(response => {
+        console.log(response);
         const receivedToken = (response.data as { token: string }).token;
         dispatch(setToken(receivedToken));
         console.log(receivedToken);
       })
       .catch(error => {
         console.log(error);
+        console.log('로그인 실패');
       });
-    console.log('로그인 성공');
   };
   return (
     <Container>
