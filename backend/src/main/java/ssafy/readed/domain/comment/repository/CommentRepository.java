@@ -5,6 +5,5 @@ import ssafy.readed.domain.comment.entity.Comment;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    Long countByCommentId(Long commentId);
 
 }

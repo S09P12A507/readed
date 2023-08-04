@@ -95,8 +95,5 @@ public class CommentServiceImpl implements CommentService {
         );
     }
 
-    private Long getLikeCount(Long commentId) {
-        return commentRepository.countByCommentId(commentId);
-    }
 
 }
