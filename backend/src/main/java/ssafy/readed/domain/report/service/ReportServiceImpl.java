@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.book.repository.BookRepository;
 import ssafy.readed.domain.member.entity.Member;
+import ssafy.readed.domain.member.service.MemberService;
 import ssafy.readed.domain.report.controller.dto.ReportRequestDto;
 import ssafy.readed.domain.report.entity.Report;
 import ssafy.readed.domain.report.repository.ReportRepository;
@@ -21,6 +22,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
     private final BookRepository bookRepository;
+    private final MemberService memberService;
 
 
     @Transactional
@@ -28,6 +30,9 @@ public class ReportServiceImpl implements ReportService {
         try {
             authCheck(memberId, member);
         } catch (GlobalRuntimeException e) {
+            if (e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                throw e;
+            }
             return ReportToReportResponseDto(reportRepository.findPublicReportByMemberId(memberId));
         }
         return ReportToReportResponseDto(reportRepository.findAllByMemberId(memberId));
@@ -76,7 +81,11 @@ public class ReportServiceImpl implements ReportService {
         report.update(reportRequestDto);
     }
 
-    private static void authCheck(Long memberId, Member member) {
+    private void authCheck(Long memberId, Member member) {
+        if (memberService.selectMember(memberId).getId() == null) {
+            throw new GlobalRuntimeException("해당 id의 사용자가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+
         if (!memberId.equals(member.getId())) {
             throw new GlobalRuntimeException("해당 id의 독후감에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
