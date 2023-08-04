@@ -22,6 +22,9 @@ import Google from './pages/login/GoogleLogin';
 // import PageNotFound from './pages/PageNotFound';
 // components
 import BottomNav from './components/common/nav/BottomNav';
+import StatisticsTab from './components/profile/tabs/statisticsTab/StatisticsTab';
+import BookTab from './components/profile/tabs/bookTab/BookTab';
+import ReportTab from './components/profile/tabs/reportTab/ReportTab';
 
 /**
  * bottom navigation
@@ -82,14 +85,18 @@ function App() {
               <Route path="/signup/addprofile" element={<Addprofile />} />
               <Route path="/genre" element={<Genre />} />
               <Route path="/genre/:genre" element={<Genrebook />} />
+              <Route path="/oauth/google/callback" element={<Google />} />
+              <Route path="/oauth/kakao/callback" element={<KaKao />} />
               <Route path="/bookclub/create" element={<BookclubCreate />} />
-              <Route element={<BottomNav />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/bookclub" element={<Bookclub />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/oauth/google/callback" element={<Google />} />
-                <Route path="/oauth/kakao/callback" element={<KaKao />} />
+              <Route path="/" element={<BottomNav />}>
+                <Route path="" element={<Home />} />
+                <Route path="search" element={<Search />} />
+                <Route path="bookclub" element={<Bookclub />} />
+                <Route path=":userId" element={<Profile />}>
+                  <Route path="" element={<StatisticsTab />} />
+                  <Route path="book" element={<BookTab />} />
+                  <Route path="report" element={<ReportTab />} />
+                </Route>
               </Route>
 
               {/* <Route path="*" element={<PageNotFound />} /> */}

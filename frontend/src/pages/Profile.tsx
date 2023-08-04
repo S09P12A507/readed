@@ -1,12 +1,13 @@
 // import styled from 'styled-components';
-
+// components
 import ReadedH2 from '../components/common/heading/ReadedH2';
 import ProfileCard from '../components/profile/profileCard/ProfileCard';
-
+import ProfileTabs from '../components/profile/tabs/ProfileTabs';
+// types
 import { UserProfileInfo } from '../interfaces/user/UserProfileInfo';
 
 /**
- * Profile
+ * 내 서재
  *
  * @author 박성준
  * @see
@@ -30,6 +31,7 @@ function Profile() {
     <>
       <ReadedH2 text="내 서재" />
       <ProfileCard userProfileInfo={dummyUserProfileInfo} />
+      <ProfileTabs />
     </>
   );
 }

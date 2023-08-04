@@ -68,7 +68,7 @@ function BottomNav() {
         <ReadedBottomNavigationAction
           label="내 서재"
           icon={<AutoStoriesIcon />}
-          onClick={() => navigate('/profile')}
+          onClick={() => navigate('/:userId')}
         />
       </ReadedBottomNavigation>
     </>
