@@ -2,7 +2,6 @@ package ssafy.readed.domain.report.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,7 +40,7 @@ public class ReportController {
     @GetMapping(value = "/{report-id}")
     public ResponseEntity<?> getReport(@PathVariable(name = "report-id") Long reportId,
             @AuthenticationPrincipal Member member) {
-        ReportResponseDto reportResponseDto = reportService.selectReport(reportId);
+        ReportResponseDto reportResponseDto = reportService.selectReport(reportId, member);
 
         return JsonResponse.ok("독후감 1개를 불러왔습니다.", reportResponseDto);
     }
@@ -49,7 +48,7 @@ public class ReportController {
     @GetMapping(value = "/members/{member-id}")
     public ResponseEntity<?> getReportList(@PathVariable(name = "member-id") Long memberId,
             @AuthenticationPrincipal Member member) {
-        List<ReportResponseDto> reportList = reportService.getReportList(memberId);
+        List<ReportResponseDto> reportList = reportService.getReportList(memberId, member);
 
         if (reportList == null) {
             throw new GlobalRuntimeException("독후감이 하나도 존재하지 않습니다.", HttpStatus.BAD_REQUEST);

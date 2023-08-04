@@ -24,16 +24,23 @@ public class ReportServiceImpl implements ReportService {
 
 
     @Transactional
-    public List<ReportResponseDto> getReportList(Long memberId) {
-        return reportRepository.findByMemberId(memberId)
-                .stream()
-                .map(ReportResponseDto::from).toList();
+    public List<ReportResponseDto> getReportList(Long memberId, Member member) {
+        try {
+            authCheck(memberId, member);
+        } catch (GlobalRuntimeException e) {
+            return ReportToReportResponseDto(reportRepository.findPublicReportByMemberId(memberId));
+        }
+        return ReportToReportResponseDto(reportRepository.findAllByMemberId(memberId));
     }
 
     @Override
     @Transactional
-    public ReportResponseDto selectReport(Long reportId) {
-        return ReportResponseDto.from(getReport(reportId));
+    public ReportResponseDto selectReport(Long reportId, Member member) {
+        Report report = getReport(reportId);
+        if (!report.getIsPublic()) {
+            authCheck(report.getMember().getId(), member);
+        }
+        return ReportResponseDto.from(report);
     }
 
     @Override
@@ -65,13 +72,13 @@ public class ReportServiceImpl implements ReportService {
     public void updateReport(Long reportId, Member member, ReportRequestDto reportRequestDto) {
         Report report = getReport(reportId);
 
-        authCheck(member, report);
+        authCheck(report.getMember().getId(), member);
         report.update(reportRequestDto);
     }
 
-    private static void authCheck(Member member, Report report) {
-        if (!report.getMember().getId().equals(member.getId())) {
-            throw new GlobalRuntimeException("수정 권한이 없습니다.", HttpStatus.EXPECTATION_FAILED);
+    private static void authCheck(Long memberId, Member member) {
+        if (!memberId.equals(member.getId())) {
+            throw new GlobalRuntimeException("해당 id의 독후감에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
     }
 
@@ -84,6 +91,10 @@ public class ReportServiceImpl implements ReportService {
         return reportRepository.findById(reportId).orElseThrow(
                 () -> new GlobalRuntimeException("해당 id의 독후감이 존재하지 않습니다", HttpStatus.BAD_REQUEST)
         );
+    }
+
+    private static List<ReportResponseDto> ReportToReportResponseDto(List<Report> reports) {
+        return reports.stream().map(ReportResponseDto::from).toList();
     }
 
 

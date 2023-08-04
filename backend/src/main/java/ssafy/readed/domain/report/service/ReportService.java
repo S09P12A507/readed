@@ -6,9 +6,9 @@ import ssafy.readed.domain.report.controller.dto.ReportRequestDto;
 
 public interface ReportService {
 
-    List<ReportResponseDto> getReportList(Long memberId);
+    List<ReportResponseDto> getReportList(Long memberId, Member member);
 
-    ReportResponseDto selectReport(Long reportId);
+    ReportResponseDto selectReport(Long reportId, Member member);
 
     void saveReport(Long bookId, Member member, ReportRequestDto reportRequestDto);
 
