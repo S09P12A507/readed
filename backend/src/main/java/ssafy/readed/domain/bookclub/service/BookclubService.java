@@ -3,10 +3,13 @@ package ssafy.readed.domain.bookclub.service;
 
 import java.util.List;
 import ssafy.readed.domain.bookclub.service.dto.BookclubResponseDto;
+import ssafy.readed.domain.member.entity.Member;
 
 public interface BookclubService {
 
-    List<BookclubResponseDto> getBookClubList();
+    List<BookclubResponseDto> getBookclubList();
 
-    BookclubResponseDto selectBookClub(Long bookClubId);
+    BookclubResponseDto getBookclubDetail(Long bookClubId);
+
+    List<BookclubResponseDto> getMyBookclubList(Long memberId, Member member);
 }

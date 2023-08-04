@@ -34,10 +34,9 @@ public class Report extends BaseEntity {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @Column(name = "report_title")
     private String reportTitle;
 
-    @Column(name = "report_content", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String reportContent;
 
     private Boolean isPublic;

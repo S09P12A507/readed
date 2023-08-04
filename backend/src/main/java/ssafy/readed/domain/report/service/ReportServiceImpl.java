@@ -23,10 +23,10 @@ public class ReportServiceImpl implements ReportService {
     private final BookRepository bookRepository;
 
 
-    @Override
     @Transactional
     public List<ReportResponseDto> getReportList(Long memberId) {
-        return reportRepository.findByMemberId(memberId).stream()
+        return reportRepository.findByMemberId(memberId)
+                .stream()
                 .map(ReportResponseDto::from).toList();
     }
 

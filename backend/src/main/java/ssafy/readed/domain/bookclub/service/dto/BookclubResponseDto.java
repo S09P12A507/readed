@@ -13,18 +13,23 @@ import ssafy.readed.domain.bookclub.entity.Bookclub;
 @Builder
 public class BookclubResponseDto {
 
+    private Long id;
     private String title;
     private String context;
     private LocalDateTime time;
     private Integer participantCount;
     private Boolean isPublic;
+    private Boolean isFinished;
 
     public static BookclubResponseDto from(Bookclub bookclub) {
         return BookclubResponseDto.builder()
-                .title(bookclub.getBookClubTitle())
-                .context(bookclub.getBookClubContent())
+                .id(bookclub.getId())
+                .title(bookclub.getBookclubTitle())
+                .context(bookclub.getBookclubContent())
                 .time(bookclub.getStartTime())
+                .participantCount(bookclub.getParticipantCount())
                 .isPublic(bookclub.getIsPublic())
+                .isFinished(bookclub.getIsFinished())
                 .build();
     }
 }

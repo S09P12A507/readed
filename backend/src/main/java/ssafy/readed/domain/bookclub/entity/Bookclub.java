@@ -29,23 +29,21 @@ public class Bookclub extends BaseEntity {
     @Column(name = "bookclub_id")
     private Long id;
 
-    @Column(name = "bookclub_title")
-    private String bookClubTitle;
+    private String bookclubTitle;
 
-    @Column(name = "bookclub_content", columnDefinition = "TEXT")
-    private String bookClubContent;
+    @Column(columnDefinition = "TEXT")
+    private String bookclubContent;
 
     @Column(name = "bookclub_time")
     private LocalDateTime startTime;
 
-    @Column(name = "participantCount")
     private Integer participantCount;
 
-    @Column(name = "is_public")
     private Boolean isPublic;
 
-    @Column(name = "bookclub_password")
-    private String bookClubPassword;
+    private String bookclubPassword;
+
+    private Boolean isFinished;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
@@ -59,13 +57,15 @@ public class Bookclub extends BaseEntity {
     private List<Participant> participantList = new ArrayList<>();
 
     @Builder
-    public Bookclub(String bookClubTitle, String bookClubContent, LocalDateTime startTime,
-            Integer participantCount, Boolean isPublic, String bookClubPassword) {
-        this.bookClubTitle = bookClubTitle;
-        this.bookClubContent = bookClubContent;
+    public Bookclub(String bookclubTitle, String bookclubContent, LocalDateTime startTime,
+            Integer participantCount, Boolean isPublic, String bookclubPassword,
+            Boolean isFinished) {
+        this.bookclubTitle = bookclubTitle;
+        this.bookclubContent = bookclubContent;
         this.startTime = startTime;
         this.participantCount = participantCount;
         this.isPublic = isPublic;
-        this.bookClubPassword = bookClubPassword;
+        this.bookclubPassword = bookclubPassword;
+        this.isFinished = isFinished;
     }
 }
