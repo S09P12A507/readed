@@ -40,7 +40,7 @@ const RecordContainer = styled.div`
   width: 3rem;
 `;
 
-function ProfileTextContent({
+function ProfileCardTextContent({
   nickname,
   bookRead,
   bookReport,
@@ -106,4 +106,4 @@ function ProfileTextContent({
   );
 }
 
-export default ProfileTextContent;
+export default ProfileCardTextContent;

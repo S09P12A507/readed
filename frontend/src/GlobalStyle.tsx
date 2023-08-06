@@ -55,7 +55,12 @@ const GlobalStyle = createGlobalStyle`
   html {
     display: block;
     /* HTML font-size는 16px (16px == 1rem) */
-    font-size: 100%
+    font-size: 100%;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   body {

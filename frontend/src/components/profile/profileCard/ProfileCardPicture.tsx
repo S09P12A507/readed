@@ -26,7 +26,7 @@ const TmpPictureText = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-function ProfilePicture({
+function ProfileCardPicture({
   imageSource,
 }: {
   imageSource?: ImageStyle['imageSource'];
@@ -38,8 +38,8 @@ function ProfilePicture({
   );
 }
 
-ProfilePicture.defaultProps = {
+ProfileCardPicture.defaultProps = {
   imageSource: 'none',
 };
 
-export default ProfilePicture;
+export default ProfileCardPicture;

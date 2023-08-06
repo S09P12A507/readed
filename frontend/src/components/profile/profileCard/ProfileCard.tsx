@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 // components
 import ReadedParagraph from '../../common/text/ReadedParagraph';
-import ProfilePicture from './ProfilePicture';
-import ProfileTextContent from './ProfileTextContent';
+import ProfilePicture from './ProfileCardPicture';
+import ProfileCardTextContent from './ProfileCardTextContent';
 // types
 import { UserProfileInfo } from '../../../interfaces/user/UserProfileInfo';
 
@@ -43,7 +43,7 @@ function ProfileCard({
     <ProfileCardWrapper>
       <ProfileCardTop>
         <ProfilePicture imageSource={profilePic} />
-        <ProfileTextContent
+        <ProfileCardTextContent
           nickname={nickname}
           bookRead={bookRead}
           bookReport={bookReport}
