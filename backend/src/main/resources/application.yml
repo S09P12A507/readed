@@ -32,7 +32,6 @@ spring:
     properties:
       hibernate:
         format_sql: true # 실행되는 query를 보여줌
-        show_sql: true`
+        show_sql: true
       logging.level:
         org.hibernate.SQL: debug
-

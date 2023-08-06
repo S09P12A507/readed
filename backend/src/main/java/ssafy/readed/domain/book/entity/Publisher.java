@@ -1,19 +1,14 @@
 package ssafy.readed.domain.book.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.readed.global.entity.BaseEntity;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,18 +23,18 @@ public class Publisher extends BaseEntity {
     @Column(name = "publisher_name")
     private String name;
 
-    @Column(name = "publisher_logo")
-    private String logo;
-
     private String aladinId;
+
+    @OneToOne(mappedBy = "publisher", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private PublisherLogoFile publisherLogoFile;
 
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)
     private List<Book> bookList = new ArrayList<>();
 
     @Builder
-    public Publisher(String name, String logo, String aladinId) {
+    public Publisher(String name, String aladinId, PublisherLogoFile publisherLogoFile) {
         this.name = name;
-        this.logo = logo;
         this.aladinId = aladinId;
+        this.publisherLogoFile = publisherLogoFile;
     }
 }

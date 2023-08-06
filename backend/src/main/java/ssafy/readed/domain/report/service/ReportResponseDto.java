@@ -30,7 +30,6 @@ public class ReportResponseDto {
                 .isPublic(report.getIsPublic())
                 .bookId(report.getBook().getId())
                 .bookTitle(report.getBook().getTitle())
-                .bookCover(report.getBook().getCoverImage())
                 .memberId(report.getMember().getId())
                 .memberNickname(report.getMember().getNickname())
                 .build();

@@ -41,8 +41,6 @@ public class Book extends BaseEntity {
 
     private Boolean isAdult;
 
-    private String coverImage;
-
     private String packingStyle;
 
     private Long sizeWeight;
@@ -52,6 +50,9 @@ public class Book extends BaseEntity {
     private Long sizeHeight;
 
     private Long sizeWidth;
+
+    @OneToOne(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private BookCoverFile bookCoverFile;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_code_id")
@@ -85,7 +86,7 @@ public class Book extends BaseEntity {
     private Long star_5_count = 0L;
 
     @Builder
-    public Book(String title, String originalTitle, String subtitle, String description, String toc, LocalDateTime publishedDate, Long pageCount, Boolean isAdult, String coverImage, String packingStyle, Long sizeWeight, Long sizeDepth, Long sizeHeight, Long sizeWidth, BookCode bookCode, Category category, Publisher publisher) {
+    public Book(String title, String originalTitle, String subtitle, String description, String toc, LocalDateTime publishedDate, Long pageCount, Boolean isAdult, String packingStyle, Long sizeWeight, Long sizeDepth, Long sizeHeight, Long sizeWidth, BookCoverFile bookCoverFile, BookCode bookCode, Category category, Publisher publisher) {
         this.title = title;
         this.originalTitle = originalTitle;
         this.subtitle = subtitle;
@@ -94,12 +95,12 @@ public class Book extends BaseEntity {
         this.publishedDate = publishedDate;
         this.pageCount = pageCount;
         this.isAdult = isAdult;
-        this.coverImage = coverImage;
         this.packingStyle = packingStyle;
         this.sizeWeight = sizeWeight;
         this.sizeDepth = sizeDepth;
         this.sizeHeight = sizeHeight;
         this.sizeWidth = sizeWidth;
+        this.bookCoverFile = bookCoverFile;
         this.bookCode = bookCode;
         this.category = category;
         this.publisher = publisher;
