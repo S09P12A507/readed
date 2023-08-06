@@ -22,10 +22,6 @@ const ProfileImg = styled.img`
   vertical-align: middle;
 `;
 
-const AuthForm = styled(TextField)`
-  width: 100%;
-`;
-
 const IntroduceForm = styled(TextField)`
   width: 100%;
 `;
@@ -227,7 +223,7 @@ function Addprofile() {
       <p>* 닉네임 입력(필수)</p>
       <Grid container alignItems="center">
         <Grid item xs={10.2}>
-          <AuthForm
+          <IntroduceForm
             label="다른사람에게 보일 이름이에요"
             variant="outlined"
             value={nickname}
@@ -245,7 +241,7 @@ function Addprofile() {
             variant="contained"
             color="primary"
             onClick={handleVerify}
-            style={{ marginLeft: '10px', background: '#4B8346' }}>
+            style={{ marginLeft: '10px', background: 'var(--primary-dark)' }}>
             중복 확인
           </AuthButton>
         </Grid>
@@ -274,10 +270,11 @@ function Addprofile() {
         color="primary"
         onClick={handleSignUp}
         style={{
-          position: 'fixed',
-          width: '480px',
+          position: 'absolute',
+          minWidth: 'var(--screen-size-mobile)',
+          left: '0',
           bottom: '0',
-          background: '#4B8346',
+          background: 'var(--primary-dark)',
           color: 'white',
         }}>
         회원가입

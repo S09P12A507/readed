@@ -160,10 +160,11 @@ function Genre() {
         variant="contained"
         onClick={handleSignUp}
         style={{
-          position: 'fixed',
-          width: '480px',
+          position: 'absolute',
+          minWidth: 'var(--screen-size-mobile)',
+          left: '0',
           bottom: '0',
-          background: '#4B8346',
+          background: 'var(--primary-dark)',
           color: 'white',
         }}
         endIcon={<ArrowForwardIosIcon />}>

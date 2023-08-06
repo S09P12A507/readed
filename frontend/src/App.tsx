@@ -14,7 +14,7 @@ import Genre from './pages/signup/genre';
 import Genrebook from './pages/signup/genrebook';
 import Home from './pages/Home';
 import Search from './pages/Search';
-import Bookclub from './pages/Bookclub';
+import Bookclub from './pages/bookclub/Bookclub';
 import BookclubCreate from './pages/bookclub/BookclubCreate';
 import BookclubDetail from './pages/bookclub/BookclubDetatil';
 import BookclubMeeting from './pages/bookclub/Bookclubmeeting';
@@ -29,6 +29,8 @@ import BottomNav from './components/common/nav/BottomNav';
 import StatisticsTab from './components/profile/tabs/statisticsTab/StatisticsTab';
 import BookTab from './components/profile/tabs/bookTab/BookTab';
 import ReportTab from './components/profile/tabs/reportTab/ReportTab';
+import InfoChange from './components/profile/profileChange/InfoChange';
+import PwChange from './components/profile/profileChange/PwChange';
 
 /**
  * bottom navigation
@@ -87,7 +89,6 @@ function App() {
               <Route path="/signup/" element={<Signup />} />
               <Route path="/signup/emailcheck" element={<Emailcheck />} />
               <Route path="/signup/addprofile" element={<Addprofile />} />
-              <Route path="/profilechange" element={<Profilechange />} />
               <Route path="/genre" element={<Genre />} />
               <Route path="/genre/:genre" element={<Genrebook />} />
               <Route path="/oauth/google/callback" element={<Google />} />
@@ -106,6 +107,10 @@ function App() {
                 <Route path="" element={<Home />} />
                 <Route path="search" element={<Search />} />
                 <Route path="bookclub" element={<Bookclub />} />
+                <Route path="profilechange/:userId" element={<Profilechange />}>
+                  <Route path="" element={<InfoChange />} />
+                  <Route path="pwchange" element={<PwChange />} />
+                </Route>
                 <Route path=":userId" element={<Profile />}>
                   <Route path="" element={<StatisticsTab />} />
                   <Route path="book" element={<BookTab />} />

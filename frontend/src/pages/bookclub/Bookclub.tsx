@@ -9,7 +9,7 @@ import CardContent from '@mui/material/CardContent';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import PeopleIcon from '@mui/icons-material/People';
-import testimg from '../assets/img/test.jpg';
+import testimg from '../../assets/img/test.jpg';
 
 const CreateButton = styled(Button)`
   color: #7aa874;

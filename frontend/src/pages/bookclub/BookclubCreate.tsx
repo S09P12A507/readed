@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import dayjs from 'dayjs';
@@ -15,10 +15,14 @@ import {
   MenuItem,
   Button,
   Switch,
+  Modal,
+  InputBase,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import axios from 'axios';
 import Alerts from '../../components/common/alert/Alert';
-import testimg from '../../assets/img/test.jpg';
 
 const Header = styled.div`
   display: flex;
@@ -36,12 +40,6 @@ const CoverContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const Image = styled.img`
-  height: 250px;
-  width: auto;
-  margin-bottom: 20px;
 `;
 
 const ContentContainer = styled.div`
@@ -66,6 +64,58 @@ const SecretContainer = styled.div`
   justify-content: space-between;
 `;
 
+const FindBook = styled(Button)`
+  height: 250px;
+  width: 40%;
+  margin-bottom: 20px;
+`;
+
+const ModalCloseButton = styled(Button)`
+  position: absolute;
+  top: 5px;
+`;
+
+const ModalUpper = styled.div``;
+
+const Search = styled.div`
+  position: relative;
+  background-color: #f5f5f5;
+  border-radius: 10%;
+  margin-left: 5%;
+  width: 90%;
+`;
+
+const SearchIconWrapper = styled.div`
+  height: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 4px;
+`;
+
+const StyledInputBase = styled(InputBase)`
+  margin-left: 40px;
+  width: calc(100% - 40px);
+  color: inherit;
+`;
+
+interface Book {
+  // id: string;
+  authors: string[];
+  contents: string;
+  // datetime: string;
+  isbn: string;
+  // price: number;
+  // publisher: string;
+  // sale_price: number;
+  // status: string;
+  thumbnail: string;
+  title: string;
+  // translators: string[];
+  // url: string;
+}
+
 function BackButton() {
   return (
     <BackButtonContainer>
@@ -88,6 +138,11 @@ function BookclubCreate() {
   const [showAlert, setShowAlert] = useState(false);
   const todays = dayjs().startOf('minute');
   const [message, setMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [query, setQuery] = useState<string>('');
+  const [data, setData] = useState<Book[]>([]);
+  const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMeetingTitle(event.target.value);
@@ -111,6 +166,15 @@ function BookclubCreate() {
 
   const handleDateChange = (newDate: dayjs.Dayjs | null) => {
     setSelectedDate(dayjs(newDate));
+  };
+
+  const handleFindBook = () => {
+    setShowModal(true);
+  };
+
+  const handleSelectdBook = (book: Book) => {
+    setSelectedBook(book);
+    setShowModal(false);
   };
 
   const handleSubmit = () => {
@@ -138,6 +202,28 @@ function BookclubCreate() {
     }
   };
 
+  useEffect(() => {
+    if (query) {
+      axios
+        .get<{ documents: Book[] }>(
+          `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
+            query,
+          )}`,
+          {
+            headers: {
+              Authorization: `KakaoAK ${apikey}`,
+            },
+          },
+        )
+        .then(response => {
+          setData(response.data.documents);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }, [query]);
+
   return (
     <>
       <Header>
@@ -145,8 +231,24 @@ function BookclubCreate() {
         <h1>북클럽 생성</h1>
       </Header>
       <CoverContainer>
-        <Image src={testimg} alt="북클럽 이미지" />
-        <h3> 나미야 뭐시깽이</h3>
+        {selectedBook ? (
+          <img
+            src={selectedBook.thumbnail}
+            alt={selectedBook.title}
+            onClick={handleFindBook}
+          />
+        ) : (
+          <FindBook
+            onClick={handleFindBook}
+            style={{
+              background: 'rgba(0, 0, 0, 0.12)',
+              fontSize: '5rem',
+              color: 'rgba(0, 0, 0, 0.38)',
+            }}>
+            +
+          </FindBook>
+        )}
+        <h3>{selectedBook ? selectedBook.title : '책을 선택해주세요'}</h3>
       </CoverContainer>
       <ContentContainer>
         <h4> 모임 제목</h4>
@@ -243,6 +345,63 @@ function BookclubCreate() {
         북클럽 만들기
       </MakeButtonContainer>
       <Alerts open={showAlert} onClose={handleAlertClose} message={message} />
+
+      <Modal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <div
+          style={{
+            display: 'grid',
+            height: '100%',
+            backgroundColor: 'white',
+            minWidth: 'var(--screen-size-mobile)',
+            maxWidth: 'var(--screen-size-mobile)',
+            overflow: 'auto',
+          }}>
+          <ModalUpper>
+            <ModalCloseButton
+              startIcon={<CloseIcon />}
+              onClick={() => setShowModal(false)}
+              style={{
+                left: '2%',
+                margin: '2%',
+                fontWeight: 'bold',
+                fontSize: '1rem',
+              }}>
+              닫기
+            </ModalCloseButton>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="관심있는 책을 검색해보세요"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+              />
+            </Search>
+          </ModalUpper>
+          {data.map((item: Book) => (
+            <div key={item.isbn}>
+              <img
+                src={item.thumbnail}
+                alt={item.title}
+                onClick={() => handleSelectdBook(item)}
+              />
+              <h2>{item.title}</h2>
+              <p>{item.contents}</p>
+              <p>{item.isbn}</p>
+              <p>{item.authors}</p>
+              {/* 나머지 데이터도 필요한 대로 표시해보세요 */}
+            </div>
+          ))}
+        </div>
+      </Modal>
     </>
   );
 }

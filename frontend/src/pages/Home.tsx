@@ -20,7 +20,9 @@ function Home() {
       <br />
       <Link to="/login">불편하다고 하셔서 만든 로그인으로 가는 링크</Link>
       <br />
-      <Link to="/profilechange">없으면 서운한 회원 변경하러 가는 링크</Link>
+      <Link to="/profilechange/:userId">
+        없으면 서운한 회원 변경하러 가는 링크
+      </Link>
       <br />
       <Link to="/report/namiya">나중을 위해 넣어두는 독후감 작성 페이지</Link>
       <br />

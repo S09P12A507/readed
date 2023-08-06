@@ -81,12 +81,12 @@ function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     axios
-      .post('http://local:8080/api/auth/sign-in', { username, password })
+      .post('http:/localhost/8080/api/auth/sign-in', { username, password })
       .then(response => {
-        console.log(response);
-        const receivedToken = (response.data as { token: string }).token;
+        const receivedToken = (response.data as { key: string }).key;
         dispatch(setToken(receivedToken));
         console.log(receivedToken);
+        window.location.href = '/';
       })
       .catch(error => {
         console.log(error);

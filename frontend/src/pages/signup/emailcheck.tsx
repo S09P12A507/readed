@@ -75,7 +75,7 @@ function BackButton() {
   return (
     <div style={{ marginTop: '10px', marginLeft: '5px' }}>
       <Link to="/signup">
-        <IconButton style={{ color: 'gray', fontSize: '14px' }}>
+        <IconButton style={{ color: 'rgba(0, 0, 0, 0.38)', fontSize: '1rem' }}>
           <ArrowBackIcon /> 돌아가기
         </IconButton>
       </Link>
@@ -211,7 +211,7 @@ function Emailcheck() {
           <AuthButton
             variant="contained"
             onClick={handleVerify}
-            style={{ marginLeft: '10px', background: '#4B8346' }}
+            style={{ marginLeft: '10px', background: 'var(--primary-dark)' }}
             disabled={isAuthenticated}>
             인증
           </AuthButton>
@@ -221,10 +221,12 @@ function Emailcheck() {
         variant="contained"
         onClick={handleSignUp}
         style={{
-          position: 'fixed',
-          width: '480px',
+          position: 'absolute',
+          minWidth: 'var(--screen-size-mobile)',
+          left: '0',
           bottom: '0',
-          background: '#4B8346',
+          background: 'var(--primary-dark)',
+          color: 'white',
         }}
         disabled={!isAuthenticated}>
         다음단계로

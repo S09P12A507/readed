@@ -70,7 +70,7 @@ type FormData = {
   password2: string;
 };
 
-const AuthButton = styled(Button)`
+const CheckButton = styled(Button)`
   width: 20%;
   height: 56px;
 `;
@@ -233,33 +233,32 @@ function Signup() {
       </Announce>
       <br />
       <br />
-      <div>
-        <SignupForm
-          label="*이름"
-          variant="outlined"
-          value={MemberName}
-          onChange={handleNameChange}
-          margin="dense"
-          helperText={(() => {
-            if (InvalidName) {
-              return '유효한 이름을 입력해주세요';
-            }
-            if (isNameValid(MemberName)) {
-              return ' ';
-            }
-            return '2글자 이상의 한글 이름을 입력해주세요.';
-          })()}
-          InputProps={{
-            style: {
-              backgroundColor: '#f5f5f5',
-            },
-            endAdornment: isNameValid(MemberName) && (
-              <CheckIcon style={{ color: 'green' }} />
-            ),
-          }}
-          error={InvalidName}
-        />
-      </div>
+
+      <SignupForm
+        label="*이름"
+        variant="outlined"
+        value={MemberName}
+        onChange={handleNameChange}
+        margin="dense"
+        helperText={(() => {
+          if (InvalidName) {
+            return '유효한 이름을 입력해주세요';
+          }
+          if (isNameValid(MemberName)) {
+            return '사용가능한 이름입니다.';
+          }
+          return '2글자 이상의 한글 이름을 입력해주세요.';
+        })()}
+        InputProps={{
+          style: {
+            backgroundColor: '#f5f5f5',
+          },
+          endAdornment: isNameValid(MemberName) && (
+            <CheckIcon style={{ color: 'var(--primary-dark)' }} />
+          ),
+        }}
+        error={InvalidName}
+      />
       <Grid container alignItems="center">
         <Grid item xs={10.2}>
           <SignupForm
@@ -273,7 +272,7 @@ function Signup() {
                 backgroundColor: '#f5f5f5',
               },
               endAdornment: isEmailValid(email) && (
-                <CheckIcon style={{ color: 'green' }} />
+                <CheckIcon style={{ color: 'var(--primary-dark)' }} />
               ),
             }}
             helperText={(() => {
@@ -281,7 +280,7 @@ function Signup() {
                 return '유효한 이메일을 입력해주세요';
               }
               if (isEmailValid(email)) {
-                return ' ';
+                return '사용 가능한 이메일입니다';
               }
               return '이메일을 입력해주세요';
             })()}
@@ -289,88 +288,87 @@ function Signup() {
           />
         </Grid>
         <Grid item xs={1}>
-          <AuthButton
+          <CheckButton
             variant="contained"
             color="primary"
             onClick={handleVerify}
             style={{
               marginLeft: '10px',
               marginBottom: '18px',
-              background: '#4B8346',
+              background: 'var(--primary-dark)',
             }}>
             중복 확인
-          </AuthButton>
+          </CheckButton>
         </Grid>
       </Grid>
-      <div>
-        <SignupForm
-          label="*비밀번호"
-          type="password"
-          variant="outlined"
-          value={password1}
-          onChange={handlePasswordChange}
-          margin="dense"
-          helperText={(() => {
-            if (invalidPassword) {
-              if (password1.length < 8) {
-                return '비밀번호가 너무 짧습니다.';
-              }
-              if (password1.length > 15) {
-                return '비밀번호가 너무 깁니다.';
-              }
-              return '숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
+
+      <SignupForm
+        label="*비밀번호"
+        type="password"
+        variant="outlined"
+        value={password1}
+        onChange={handlePasswordChange}
+        margin="dense"
+        helperText={(() => {
+          if (invalidPassword) {
+            if (password1.length < 8) {
+              return '비밀번호가 너무 짧습니다.';
             }
-            if (isPasswordValid(password1)) {
-              return ' ';
+            if (password1.length > 15) {
+              return '비밀번호가 너무 깁니다.';
             }
-            return '알파벳, 숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
-          })()}
-          InputProps={{
-            style: {
-              backgroundColor: '#f5f5f5',
-            },
-            endAdornment: isPasswordValid(password1) && (
-              <CheckIcon style={{ color: 'green' }} />
-            ),
-          }}
-          error={invalidPassword}
-        />
-      </div>
-      <div>
-        <SignupForm
-          label="*비밀번호 확인"
-          type="password"
-          variant="outlined"
-          value={password2}
-          onChange={handlePassword2Change}
-          margin="dense"
-          helperText={(() => {
-            if (invalidPassword2) {
-              return '비밀번호가 일치하지 않습니다';
-            }
-            if (password2 && !invalidPassword2) {
-              return ' ';
-            }
-            return '동일한 비밀번호를 입력해주세요';
-          })()}
-          InputProps={{
-            style: {
-              backgroundColor: '#f5f5f5',
-            },
-            endAdornment: !invalidPassword2 && password2.length > 1 && (
-              <CheckIcon style={{ color: 'green' }} />
-            ),
-          }}
-          error={invalidPassword2}
-        />
-      </div>
+            return '숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
+          }
+          if (isPasswordValid(password1)) {
+            return '사용 가능한 비밀번호입니다';
+          }
+          return '알파벳, 숫자, 특수문자를 조합한 8~15자리로 작성해주세요';
+        })()}
+        InputProps={{
+          style: {
+            backgroundColor: '#f5f5f5',
+          },
+          endAdornment: isPasswordValid(password1) && (
+            <CheckIcon style={{ color: 'var(--primary-dark)' }} />
+          ),
+        }}
+        error={invalidPassword}
+      />
+      <SignupForm
+        label="*비밀번호 확인"
+        type="password"
+        variant="outlined"
+        value={password2}
+        onChange={handlePassword2Change}
+        margin="dense"
+        helperText={(() => {
+          if (invalidPassword2) {
+            return '비밀번호가 일치하지 않습니다';
+          }
+          if (password2 && !invalidPassword2) {
+            return '비밀번호가 일치합니다.';
+          }
+          return '동일한 비밀번호를 입력해주세요';
+        })()}
+        InputProps={{
+          style: {
+            backgroundColor: '#f5f5f5',
+          },
+          endAdornment: !invalidPassword2 && password2.length > 1 && (
+            <CheckIcon style={{ color: 'var(--primary-dark)' }} />
+          ),
+        }}
+        error={invalidPassword2}
+      />
+
       <FormButtonContainer
         variant="contained"
         style={{
-          position: 'fixed',
-          width: '480px',
+          position: 'absolute',
+          minWidth: 'var(--screen-size-mobile)',
+          left: '0',
           bottom: '0',
-          background: '#4B8346',
+          background: 'var(--primary-dark)',
           color: 'white',
         }}
         onClick={handleSubmit}
