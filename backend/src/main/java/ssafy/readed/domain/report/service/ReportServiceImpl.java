@@ -25,6 +25,7 @@ public class ReportServiceImpl implements ReportService {
     private final MemberService memberService;
 
 
+    @Override
     @Transactional
     public List<ReportResponseDto> getReportList(Long memberId, Member member) {
         try {

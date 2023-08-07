@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
+import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.repository.MemberRepository;
 
 @ExtendWith(SpringExtension.class)
@@ -56,12 +57,13 @@ class MemberServiceImplTest {
         signUp();
 
         Long id = 1L;
+        Member member = new Member();
         ModifyMemberProfileRequestDto dto = ModifyMemberProfileRequestDto.builder()
                 .nickname("modnick")
                 .profile_bio("modbio")
                 .profile_image("modimage")
                 .build();
-        memberService.modifyProfile(1L, dto);
+        memberService.modifyProfile(1L, member, dto);
     }
 
 }

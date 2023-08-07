@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ssafy.readed.domain.bookclub.entity.Bookclub;
 import ssafy.readed.domain.bookclub.entity.Participant;
+import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.report.entity.Report;
 
 @Entity
@@ -71,10 +72,14 @@ public class Member {
     private Integer star_4p5_count = 0; // 별점 4.5점
     private Integer star_5_count = 0; // 별점 5점
 
-    public void modify(String nickname, String profile_image, String profile_bio) {
-        this.nickname = nickname;
-        this.profile_bio = profile_bio;
-        this.profile_image = profile_image;
+    public void modify(ModifyMemberProfileRequestDto memberProfileRequestDto) {
+        this.nickname = memberProfileRequestDto.getNickname();
+        this.profile_bio = memberProfileRequestDto.getProfile_bio();
+        this.profile_image = memberProfileRequestDto.getProfile_image();
+    }
+
+    public void modifyPW(Password newPassword) {
+        this.password = newPassword;
     }
 
     @Builder

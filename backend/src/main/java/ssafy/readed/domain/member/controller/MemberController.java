@@ -2,9 +2,19 @@ package ssafy.readed.domain.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
+import ssafy.readed.domain.member.controller.dto.ModifyPasswordRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
+import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.service.MemberService;
 import ssafy.readed.global.response.JsonResponse;
 
@@ -40,9 +50,10 @@ public class MemberController {
     }
 
     @PatchMapping("/profile/{member-id}")
-    public ResponseEntity<?> modifyProfile(@PathVariable("member-id") Long id,
-                                            @RequestBody ModifyMemberProfileRequestDto requestDto) {
-        memberService.modifyProfile(id, requestDto);
+    public ResponseEntity<?> updateProfile(@PathVariable("member-id") Long id,
+            @AuthenticationPrincipal Member member,
+            @RequestBody ModifyMemberProfileRequestDto requestDto) {
+        memberService.modifyProfile(id, member, requestDto);
         return JsonResponse.ok("멤버 프로필 변경 성공!");
     }
 
@@ -52,9 +63,10 @@ public class MemberController {
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity<?> modifyMember(@PathVariable("member-id") Long id,
-                                           @RequestBody ModifyMemberProfileRequestDto requestDto) {
-        memberService.modifyProfile(id, requestDto);
-        return JsonResponse.ok("멤버 프로필 변경 성공!");
+    public ResponseEntity<?> updatePassword(@PathVariable("member-id") Long id,
+            @AuthenticationPrincipal Member member,
+            @RequestBody ModifyPasswordRequestDto requestDto) {
+        memberService.modifyPassword(id, member, requestDto);
+        return JsonResponse.ok("멤버 회원정보 변경 성공!");
     }
 }

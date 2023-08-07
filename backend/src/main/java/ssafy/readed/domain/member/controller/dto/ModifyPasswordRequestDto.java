@@ -7,7 +7,9 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-public class ModifyMemberEmailRequestDto {
+public class ModifyPasswordRequestDto {
 
-    private String email;
+    private String prevPassword;
+    private String password;
+    private String password2;
 }

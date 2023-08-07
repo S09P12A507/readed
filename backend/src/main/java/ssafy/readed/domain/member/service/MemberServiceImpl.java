@@ -1,22 +1,23 @@
 package ssafy.readed.domain.member.service;
 
+import java.util.regex.Pattern;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
+import ssafy.readed.domain.member.controller.dto.ModifyPasswordRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.entity.Password;
 import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
+import ssafy.readed.domain.member.repository.PasswordRepository;
 import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 import ssafy.readed.domain.member.service.dto.SelectProfileResponseDto;
 import ssafy.readed.global.exception.GlobalRuntimeException;
-
-import javax.transaction.Transactional;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     private final MemberRepository memberRepository;
-
+    private final PasswordRepository passwordRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -61,19 +62,33 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void modifyProfile(Long id, ModifyMemberProfileRequestDto requestDto) {
+    public void modifyProfile(Long id, Member member, ModifyMemberProfileRequestDto requestDto) {
         checkNicknameRegexp(requestDto.getNickname());
-        Member member = getMember(id);
-        log.info("변경 전 : " + member.getNickname());
-        member.modify(requestDto.getNickname(), requestDto.getProfile_image(),
-                requestDto.getProfile_bio());
-        log.info("변경 후 : " + member.getNickname());
+
+        Member modifiedMember = getMember(id);
+        authCheck(id, member);
+        modifiedMember.modify(requestDto);
     }
 
     @Override
     public SelectMemberResponseDto selectMember(Long id) {
         Member member = getMember(id);
         return SelectMemberResponseDto.from(member);
+    }
+
+    @Override
+    @Transactional
+    public void modifyPassword(Long id, Member member,
+            ModifyPasswordRequestDto passwordRequestDto) {
+
+        Member modifiedMember = getMember(id);
+
+        checkPrevPassword(passwordRequestDto, modifiedMember);
+        checkPasswordMatch(passwordRequestDto.getPassword(), passwordRequestDto.getPassword2());
+        checkPasswordRegexp(passwordRequestDto.getPassword());
+
+        modifiedMember.modifyPW(
+                new Password(passwordEncoder.encode(passwordRequestDto.getPassword())));
     }
 
     @Transactional
@@ -111,6 +126,19 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+    private void authCheck(Long memberId, Member member) {
+        if (!memberId.equals(member.getId())) {
+            throw new GlobalRuntimeException("해당 id의 프로필에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    private void checkPrevPassword(ModifyPasswordRequestDto passwordRequestDto,
+            Member modifiedMember) {
+        if (!passwordEncoder.matches(passwordRequestDto.getPrevPassword(),
+                modifiedMember.getPassword().getPasswordValue())) {
+            throw new GlobalRuntimeException("비밀번호가 틀립니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
 
     private void checkEmailRegexp(String email) {
         if (!Pattern.matches("\\w+@\\w+\\.\\w+(\\.\\w+)?", email)) {

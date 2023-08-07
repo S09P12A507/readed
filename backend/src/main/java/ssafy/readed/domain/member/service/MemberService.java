@@ -1,7 +1,9 @@
 package ssafy.readed.domain.member.service;
 
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
+import ssafy.readed.domain.member.controller.dto.ModifyPasswordRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
+import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 import ssafy.readed.domain.member.service.dto.SelectProfileResponseDto;
 
@@ -11,11 +13,13 @@ public interface MemberService {
 
     SelectProfileResponseDto selectProfile(Long id);
 
-    void modifyProfile(Long id, ModifyMemberProfileRequestDto requestDto);
+    void modifyProfile(Long id, Member member, ModifyMemberProfileRequestDto profileRequestDto);
 
     SelectMemberResponseDto selectMember(Long id);
 
     void emailDuplicationCheck(String email);
 
     void nicknameDuplicationCheck(String nickname);
+
+    void modifyPassword(Long id, Member member, ModifyPasswordRequestDto passwordRequestDto);
 }
