@@ -73,7 +73,7 @@ public class Book extends BaseEntity {
     private List<Report> reportList = new ArrayList<>();
 
     private Long commentCount = 0L;
-    private Long avgRating = 0L;
+    private Double avgRating = 0.0;
     private Long star_0p5_count = 0L;
     private Long star_1_count = 0L;
     private Long star_1p5_count = 0L;

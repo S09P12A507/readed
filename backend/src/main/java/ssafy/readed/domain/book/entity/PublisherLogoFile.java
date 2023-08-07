@@ -7,7 +7,7 @@ import ssafy.readed.global.entity.File;
 
 import javax.persistence.*;
 
-@DiscriminatorValue("AuthorProfile")
+@DiscriminatorValue("PublisherLogo")
 @Getter
 @Entity
 @NoArgsConstructor
