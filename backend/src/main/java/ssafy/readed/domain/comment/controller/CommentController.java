@@ -43,7 +43,6 @@ public class CommentController {
         CommentResponseDto commentResponseDto = commentService.selectComment(commentId, member);
 
         return JsonResponse.ok("코멘트 1개를 불러왔습니다.", commentResponseDto);
-//    한 개 상세보기 할 때는 맴버아이디, 코멘트아이디를 갖고 가서 isLike을 갖고 오면 되고
     }
 
     @GetMapping(value = "/members/{member-id}")
@@ -67,8 +66,6 @@ public class CommentController {
             throw new GlobalRuntimeException("해당 책의 코멘트가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
         return JsonResponse.ok("책 코멘트 리스트를 불러왔습니다.", commentList);
-//        여러 개 리스트를 가져올 때는 isLike가 들어있는 코멘트리스트를 프론트에 줘야한다
-//        그냥 코멘트를 리스트를 불러오고 + 맴버아이디랑 책아이디로 코멘트좋아요리스트를 가져와서 + 책 리스트에 주입시켜준다
     }
 
     @PatchMapping(value = "/{comment-id}")
@@ -86,17 +83,15 @@ public class CommentController {
         return JsonResponse.ok("코멘트가 삭제되었습니다.");
     }
 
-    @PostMapping("/likes/{comment-id}/{member-id}")
+    @PostMapping("/likes/{comment-id}")
     public ResponseEntity<?> likeComment(@PathVariable(name = "comment-id") Long commentId,
-            @PathVariable("member-id") Long memberId,
             @AuthenticationPrincipal Member member) {
         commentService.likeComment(commentId, member);
         return JsonResponse.ok("코멘트 좋아요를 완료했습니다.");
     }
 
-    @DeleteMapping(value = "/likes/{comment-id}/{member-id}")
+    @DeleteMapping("/likes/{comment-id}")
     public ResponseEntity<?> unlikeComment(@PathVariable(name = "comment-id") Long commentId,
-            @PathVariable("member-id") Long memberId,
             @AuthenticationPrincipal Member member) {
         commentService.unlikeComment(commentId, member);
         return JsonResponse.ok("코멘트 좋아요 취소가 완료되었습니다.");

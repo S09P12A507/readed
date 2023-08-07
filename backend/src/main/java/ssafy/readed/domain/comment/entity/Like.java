@@ -51,7 +51,7 @@ public class Like extends BaseEntity {
         return like;
     }
 
-    public static void deleteLike(Member member, Comment comment) {
+    public static void deleteLike(Comment comment) {
         comment.decreaseOneLike();
     }
 

@@ -10,6 +10,7 @@ import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.book.repository.BookRepository;
 import ssafy.readed.domain.comment.controller.dto.CommentRequestDto;
 import ssafy.readed.domain.comment.entity.Comment;
+import ssafy.readed.domain.comment.entity.Like;
 import ssafy.readed.domain.comment.repository.CommentRepository;
 import ssafy.readed.domain.comment.repository.LikeRepository;
 import ssafy.readed.domain.member.entity.Member;
@@ -42,43 +43,63 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public CommentResponseDto selectComment(Long commentId, Member member) {
-        Comment comment = getComment(commentId);
-        return null;
+        return CommentResponseDto.from(getComment(commentId),
+                checkLikeByMember(commentId, member.getId()));
     }
 
     @Override
+    @Transactional
     public List<CommentResponseDto> getMemberCommentList(Long memberId, Member member) {
-        return null;
+        return checkLikeList(commentRepository.findAllByMemberId(memberId), member);
     }
 
     @Override
+    @Transactional
     public List<CommentResponseDto> getBookCommentList(Long bookId, Member member) {
-        return null;
+        return checkLikeList(commentRepository.findAllByBookId(bookId), member);
     }
 
     @Override
+    @Transactional
     public void updateComment(Long commentId, Member member, CommentRequestDto commentRequestDto) {
+        Comment comment = getComment(commentId);
 
+        authCheckComment(member, comment);
+        comment.update(commentRequestDto);
     }
 
     @Override
+    @Transactional
     public void deleteComment(Long commentId, Member member) {
+        Comment comment = getComment(commentId);
 
+        authCheckComment(member, comment);
+        deleteLikeByComment(commentId);
+
+        commentRepository.delete(comment);
     }
 
     @Override
+    @Transactional
     public void likeComment(Long commentId, Member member) {
-
+        likeRepository.save(Like.createLike(member, getComment(commentId)));
     }
 
     @Override
+    @Transactional
     public void unlikeComment(Long commentId, Member member) {
+        Like like = likeRepository.findByCommentAndMember(commentId, member.getId()).orElseThrow(
+                () -> new GlobalRuntimeException("해당 좋아요가 존재하지 않습니다", HttpStatus.BAD_REQUEST)
+        );
 
+        Like.deleteLike(getComment(commentId));
+        likeRepository.delete(like);
     }
 
 
-    private static void authCheck(Member member, Comment comment) {
+    private static void authCheckComment(Member member, Comment comment) {
         if (!comment.getMember().getId().equals(member.getId())) {
             throw new GlobalRuntimeException("권한이 없습니다.", HttpStatus.EXPECTATION_FAILED);
         }
@@ -93,6 +114,22 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.findById(commentId).orElseThrow(
                 () -> new GlobalRuntimeException("해당 코멘트가 존재하지 않습니다", HttpStatus.BAD_REQUEST)
         );
+    }
+
+    private Boolean checkLikeByMember(Long commentId, Long memberId) {
+        return likeRepository.findByCommentAndMember(commentId, memberId).isPresent();
+    }
+
+    private List<CommentResponseDto> checkLikeList(List<Comment> commentList, Member member) {
+        return commentList.stream().map(comment ->
+                checkLikeByMember(comment.getId(), member.getId()) ?
+                        CommentResponseDto.from(comment, true)
+                        : CommentResponseDto.from(comment, false)
+        ).toList();
+    }
+
+    private void deleteLikeByComment(Long commentId) {
+        likeRepository.deleteByComment(commentId);
     }
 
 
