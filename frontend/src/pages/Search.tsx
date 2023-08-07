@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { InputBase } from '@mui/material';
+import { Grid, InputBase } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-// 임시로 테스트를 위해서 만든 페이지이므로 전반적 수정 필요합니다
 
 const Container = styled.div``;
 
@@ -31,25 +30,63 @@ const StyledInputBase = styled(InputBase)`
 `;
 
 interface Book {
-  // id: string;
   authors: string[];
   contents: string;
-  // datetime: string;
   isbn: string;
-  // price: number;
-  // publisher: string;
-  // sale_price: number;
-  // status: string;
   thumbnail: string;
   title: string;
-  // translators: string[];
-  // url: string;
+}
+
+function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function highlightMatchingText(text: string, query: string): React.ReactNode {
+  if (!query) return text;
+
+  const parts = text.split(new RegExp(`(${escapeRegExp(query)})`, 'gi'));
+  return parts.map(part => (
+    <React.Fragment key={Math.random()}>
+      {part.toLowerCase() === query.toLowerCase() ? (
+        <strong>{part}</strong>
+      ) : (
+        part
+      )}
+    </React.Fragment>
+  ));
 }
 
 function Search() {
   const [query, setQuery] = useState<string>('');
   const [data, setData] = useState<Book[]>([]);
+  const [suggestquery, setSuggestQuery] = useState<string>('');
+  const [suggestions, setSuggestions] = useState<Book[]>([]);
   const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
+
+  useEffect(() => {
+    if (suggestquery) {
+      axios
+        .get<{ documents: Book[] }>(
+          `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
+            suggestquery,
+          )}`,
+          {
+            headers: {
+              Authorization: `KakaoAK ${apikey}`,
+            },
+          },
+        )
+        .then(response => {
+          setSuggestions(response.data.documents);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    } else {
+      setSuggestions([]);
+    }
+  }, [suggestquery]);
+
   useEffect(() => {
     if (query) {
       axios
@@ -64,6 +101,7 @@ function Search() {
           },
         )
         .then(response => {
+          setSuggestions([]);
           setData(response.data.documents);
         })
         .catch(error => {
@@ -71,6 +109,12 @@ function Search() {
         });
     }
   }, [query]);
+
+  const navigate = useNavigate();
+
+  const handlebookDetail = (bookId: string) => {
+    navigate(`/book/${bookId}`);
+  };
 
   return (
     <Container>
@@ -86,20 +130,53 @@ function Search() {
           </SearchIconWrapper>
           <StyledInputBase
             placeholder="관심있는 책을 검색해보세요"
-            value={query}
-            onChange={e => setQuery(e.target.value)}
+            value={suggestquery}
+            onChange={e => {
+              setSuggestQuery(e.target.value);
+            }}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                setQuery(suggestquery);
+              }
+            }}
           />
         </Searched>
-        {data.map((item: Book) => (
-          <div key={item.isbn}>
-            <img src={item.thumbnail} alt={item.title} />
-            <h2>{item.title}</h2>
-            <p>{item.contents}</p>
-            <p>{item.isbn}</p>
-            <p>{item.authors}</p>
-            {/* 나머지 데이터도 필요한 대로 표시해보세요 */}
+        {suggestions.length > 0 && (
+          <div
+            style={{
+              maxHeight: '200px',
+              overflowY: 'auto',
+              zIndex: 1,
+            }}>
+            {suggestions.map(suggestion => (
+              <div
+                key={suggestion.title}
+                onClick={() => {
+                  handlebookDetail(suggestion.title);
+                }}
+                role="button"
+                tabIndex={0}
+                style={{ cursor: 'pointer' }}>
+                <span>
+                  {highlightMatchingText(suggestion.title, suggestquery)}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
+        <br />
+        <Grid container alignItems="center">
+          {data.map((item: Book) => (
+            <Grid
+              item
+              xs={4}
+              key={item.isbn}
+              onClick={() => handlebookDetail(item.title)}>
+              <img src={item.thumbnail} alt={item.title} />
+              <p>{item.title}</p>
+            </Grid>
+          ))}
+        </Grid>
       </div>
     </Container>
   );

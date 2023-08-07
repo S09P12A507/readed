@@ -17,7 +17,9 @@ import Search from './pages/Search';
 import Bookclub from './pages/bookclub/Bookclub';
 import BookclubCreate from './pages/bookclub/BookclubCreate';
 import BookclubDetail from './pages/bookclub/BookclubDetatil';
-import BookclubMeeting from './pages/bookclub/Bookclubmeeting';
+import BookclubRoom from './pages/bookclub/BookclubRoom';
+import BookclubMeeting from './pages/bookclub/BookclubMeeting';
+import BookDetail from './pages/books/BookDetail';
 import Profilechange from './pages/profile/Profilechange';
 import Profile from './pages/Profile';
 import KaKao from './pages/login/KakaoLogin';
@@ -95,17 +97,22 @@ function App() {
               <Route path="/oauth/kakao/callback" element={<KaKao />} />
               <Route path="/bookclub/create" element={<BookclubCreate />} />
               <Route
-                path="/bookclub/:bookclubId"
-                element={<BookclubMeeting />}
+                path="/bookclub/detail/:bookclubid"
+                element={<BookclubDetail />}
+              />
+              <Route
+                path="/bookclub/waiting/:bookclubId"
+                element={<BookclubRoom />}
               />
               <Route path="/report/:write" element={<Report />} />
               <Route
-                path="/bookclub/detail/:bookclubid"
-                element={<BookclubDetail />}
+                path="/bookclub/:bookclubid"
+                element={<BookclubMeeting />}
               />
               <Route path="/" element={<BottomNav />}>
                 <Route path="" element={<Home />} />
                 <Route path="search" element={<Search />} />
+                <Route path="book/:bookId" element={<BookDetail />} />
                 <Route path="bookclub" element={<Bookclub />} />
                 <Route path="profilechange/:userId" element={<Profilechange />}>
                   <Route path="" element={<InfoChange />} />

@@ -69,7 +69,7 @@ function BookClubDetail() {
   };
 
   const handleSubmit = () => {
-    window.location.href = '/bookclub/Namiya';
+    window.location.href = '/bookclub/waiting/Namiya';
   };
 
   return (
