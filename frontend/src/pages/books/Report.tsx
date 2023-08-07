@@ -68,6 +68,8 @@ function Report() {
 
   const handleSaveButton = () => {
     console.log('Input Text:', inputText);
+    console.log(MemberName);
+    console.log(bookCovers);
   };
 
   useEffect(() => {
