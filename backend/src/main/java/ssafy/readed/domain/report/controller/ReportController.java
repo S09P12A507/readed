@@ -67,7 +67,7 @@ public class ReportController {
     @DeleteMapping(value = "{report-id}")
     public ResponseEntity<?> deleteReport(@PathVariable(name = "report-id") Long reportId,
             @AuthenticationPrincipal Member member) {
-        reportService.deleteReport(reportId);
+        reportService.deleteReport(reportId, member);
         return JsonResponse.ok("독후감이 삭제되었습니다.");
     }
 

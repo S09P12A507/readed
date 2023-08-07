@@ -12,7 +12,7 @@ public interface ReportService {
 
     void saveReport(Long bookId, Member member, ReportRequestDto reportRequestDto);
 
-    void deleteReport(Long reportId);
+    void deleteReport(Long reportId, Member member);
 
     void updateReport(Long reportId, Member member, ReportRequestDto reportRequestDto);
 }

@@ -68,8 +68,11 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional
-    public void deleteReport(Long reportId) {
-        reportRepository.delete(getReport(reportId));
+    public void deleteReport(Long reportId, Member member) {
+        Report report = getReport(reportId);
+
+        authCheck(report.getMember().getId(), member);
+        reportRepository.delete(report);
     }
 
     @Override
