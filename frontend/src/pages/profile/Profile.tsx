@@ -1,10 +1,10 @@
 // import styled from 'styled-components';
 // components
-import ReadedH2 from '../components/common/heading/ReadedH2';
-import ProfileCard from '../components/profile/profileCard/ProfileCard';
-import ProfileTabs from '../components/profile/tabs/ProfileTabs';
+import ReadedH2 from '../../components/common/heading/ReadedH2';
+import ProfileCard from '../../components/profile/profileCard/ProfileCard';
+import ProfileTabs from '../../components/profile/tabs/ProfileTabs';
 // types
-import { UserProfileInfo } from '../interfaces/user/UserProfileInfo';
+import { UserProfileInfo } from '../../interfaces/user/UserProfileInfo';
 
 /**
  * 내 서재

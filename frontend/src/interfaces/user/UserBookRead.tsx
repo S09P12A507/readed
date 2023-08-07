@@ -1,7 +1,7 @@
 export interface UserBookRead {
   bookId: string;
   bookTitle: string;
-  bookThumbnail: string;
+  bookCover: string;
   userRate: number;
   userComment: string;
 }

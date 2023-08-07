@@ -21,7 +21,7 @@ import BookclubRoom from './pages/bookclub/BookclubRoom';
 import BookclubMeeting from './pages/bookclub/BookclubMeeting';
 import BookDetail from './pages/books/BookDetail';
 import Profilechange from './pages/profile/Profilechange';
-import Profile from './pages/Profile';
+import Profile from './pages/profile/Profile';
 import KaKao from './pages/login/KakaoLogin';
 import Google from './pages/login/GoogleLogin';
 import Report from './pages/books/Report';

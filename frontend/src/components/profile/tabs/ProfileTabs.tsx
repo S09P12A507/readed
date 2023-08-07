@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { Divider } from '@mui/material';
 import {
   MemoryRouter,
   Link,
@@ -58,7 +59,13 @@ function ProfileTabs() {
 
   return (
     <>
-      <Tabs value={currentTab} centered sx={{ marginBottom: '1rem' }}>
+      <Divider variant="middle" />
+      <Tabs
+        value={currentTab}
+        centered
+        sx={{
+          marginBottom: '1rem',
+        }}>
         <Tab
           label="통계"
           value=":userId"
