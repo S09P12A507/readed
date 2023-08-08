@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import CloseIcon from '@mui/icons-material/Close';
-import { Grid, Button, Modal, TextField } from '@mui/material';
+import { Grid, Button, Modal } from '@mui/material';
 import axios from 'axios';
-import Rating from '@mui/material/Rating';
+import Comments from '../../components/book/Comment';
 
 const Container = styled.div`
   flex: 1;
@@ -33,34 +32,6 @@ const BookCoverTest = styled.div`
 
 const Start = styled(Button)`
   height: 50px;
-`;
-
-const ModalCloseButton = styled(Button)`
-  position: absolute;
-  top: 5px;
-`;
-
-const ModalSendButton = styled(Button)`
-  position: absolute;
-  top: 5px;
-  right: 3%;
-`;
-
-const ModalUpper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Textsize = styled.div`
-  float: right;
-  margin-right: 5%;
-`;
-
-const Star = styled.div`
-  display: flex;
-  justify-content: center;
-  font-size: 20px;
 `;
 
 interface NameData {
@@ -172,69 +143,20 @@ function Genrebook() {
       <Modal
         open={IsModalOpen}
         onClose={handleCloseModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
         style={{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
         }}>
-        <div
-          style={{
-            height: '100%',
-            backgroundColor: 'white',
-            width: '600px',
-          }}>
-          <ModalUpper>
-            <ModalCloseButton
-              startIcon={<CloseIcon />}
-              onClick={handleCloseModal}
-              style={{
-                left: '2%',
-                margin: '2%',
-                fontWeight: 'bold',
-                fontSize: '1.1rem',
-              }}>
-              닫기
-            </ModalCloseButton>
-            <p> 여기엔 책이름을 넣어보자</p>
-            <ModalSendButton
-              onClick={handleSaveButton}
-              style={{
-                color: '#7aa874',
-                fontWeight: 'bold',
-                fontSize: '1.1rem',
-              }}>
-              등록
-            </ModalSendButton>
-          </ModalUpper>
-          <hr />
-          <Star>
-            <Rating
-              name="half-rating"
-              value={ratingValue}
-              precision={0.5}
-              size="large"
-              onChange={handleRatingChange}
-            />
-          </Star>
-          <TextField
-            value={inputText}
-            onChange={handleInputChange}
-            placeholder="책에 대한 코멘트를 자유롭게 남겨주세요."
-            variant="standard"
-            multiline
-            rows={25}
-            style={{
-              width: '96%',
-              padding: '3%',
-              flexWrap: 'wrap',
-            }}
-            InputProps={{
-              disableUnderline: true,
-            }}
+        <div>
+          <Comments
+            onClose={handleCloseModal}
+            onSave={handleSaveButton}
+            handleRatingChange={handleRatingChange}
+            handleInputChange={handleInputChange}
+            textLength={textLength}
+            ratingValue={ratingValue}
+            inputText={inputText}
           />
-          <Textsize>{textLength} / 300 글자</Textsize>
         </div>
       </Modal>
 

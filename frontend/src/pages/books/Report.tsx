@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, TextField, Switch } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Divider from '@mui/material/Divider';
 
@@ -48,6 +49,8 @@ function Report() {
   const [bookCovers, setBookCovers] = useState<string[]>([]);
   const [inputText, setInputText] = useState('');
   const [isPublic, setIsPublic] = useState(true);
+  const { bookId } = useParams();
+  const bookname = bookId as string;
 
   const handleCloseModal = () => {
     setInputText('');
@@ -93,14 +96,12 @@ function Report() {
           startIcon={<CloseIcon />}
           onClick={handleCloseModal}
           style={{
-            left: '2%',
-            margin: '2%',
             fontWeight: 'bold',
             fontSize: '1.1rem',
           }}>
           닫기
         </CloseButton>
-        <p> 여기엔 책이름을 넣어보자</p>
+        <h2> {bookname}</h2>
         <ApplyButton
           onClick={handleSaveButton}
           style={{
