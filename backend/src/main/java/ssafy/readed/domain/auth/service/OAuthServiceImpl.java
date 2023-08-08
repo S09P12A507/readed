@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ssafy.readed.domain.auth.service.dto.OAuthDetailDto;
 import ssafy.readed.domain.auth.service.dto.OAuthLoginResponseDto;
-import ssafy.readed.domain.auth.service.dto.SignInResponseDto;
+import ssafy.readed.domain.auth.service.dto.TokenDto;
 import ssafy.readed.domain.auth.utility.SocialLoginType;
 import ssafy.readed.domain.auth.vo.Token;
 import ssafy.readed.domain.member.entity.Member;
@@ -51,10 +51,10 @@ public class OAuthServiceImpl implements OAuthService {
                     .build();
         } else {
             Token token = jwtTokenProvider.createToken(detailDto.getEmail());
-            SignInResponseDto signInResponseDto = SignInResponseDto.from(token);
+            TokenDto tokenDto = TokenDto.from(token);
 
             oAuthLoginResponseDto = OAuthLoginResponseDto.builder()
-                    .token(signInResponseDto)
+                    .token(tokenDto)
                     .detailDto(detailDto)
                     .build();
         }

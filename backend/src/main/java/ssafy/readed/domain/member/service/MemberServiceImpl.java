@@ -4,9 +4,12 @@ import java.util.regex.Pattern;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ssafy.readed.domain.auth.repository.RefreshTokenRepository;
+import ssafy.readed.domain.auth.service.dto.TokenDto;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.member.controller.dto.ModifyPasswordRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
@@ -14,10 +17,11 @@ import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.entity.Password;
 import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
-import ssafy.readed.domain.member.repository.PasswordRepository;
 import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 import ssafy.readed.domain.member.service.dto.SelectProfileResponseDto;
+import ssafy.readed.global.config.RedisUtil;
 import ssafy.readed.global.exception.GlobalRuntimeException;
+import ssafy.readed.global.security.JwtTokenProvider;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +30,11 @@ public class MemberServiceImpl implements MemberService {
 
 
     private final MemberRepository memberRepository;
-    private final PasswordRepository passwordRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RedisUtil redisUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     @Transactional
@@ -71,6 +78,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public SelectMemberResponseDto selectMember(Long id) {
         Member member = getMember(id);
         return SelectMemberResponseDto.from(member);
@@ -91,6 +99,13 @@ public class MemberServiceImpl implements MemberService {
                 new Password(passwordEncoder.encode(passwordRequestDto.getPassword())));
     }
 
+    @Override
+    @Transactional
+    public void deleteMember(Long id, Member member) {
+
+    }
+
+    @Override
     @Transactional
     public void emailDuplicationCheck(String email) {
         Member member = memberRepository.findByEmail(email);
@@ -100,6 +115,7 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
     @Transactional
     public void nicknameDuplicationCheck(String nickname) {
         Member member = memberRepository.findByNickname(nickname);
@@ -107,6 +123,14 @@ public class MemberServiceImpl implements MemberService {
         if (member != null) {
             throw new GlobalRuntimeException("이미 존재하는 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    @Transactional
+    public void logout(Member member, TokenDto tokenDto) {
+        Long expirationTime = jwtTokenProvider.getExpirationTime(tokenDto.getAccessToken());
+        refreshTokenRepository.deleteByEmail(member.getEmail());
+        redisUtil.setBlackList(tokenDto.getAccessToken(), "accessToken", expirationTime);
     }
 
     public void checkValidation(SignUpRequestDto requestDto) {

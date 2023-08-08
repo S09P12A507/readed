@@ -1,5 +1,8 @@
 package ssafy.readed.domain.auth.service;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,17 +16,13 @@ import ssafy.readed.domain.auth.entity.MailHistory;
 import ssafy.readed.domain.auth.entity.RefreshToken;
 import ssafy.readed.domain.auth.repository.MailHistoryRepository;
 import ssafy.readed.domain.auth.repository.RefreshTokenRepository;
-import ssafy.readed.domain.auth.service.dto.SignInResponseDto;
+import ssafy.readed.domain.auth.service.dto.TokenDto;
 import ssafy.readed.domain.auth.vo.Token;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 import ssafy.readed.global.security.JwtTokenProvider;
-
-import javax.transaction.Transactional;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -74,15 +73,14 @@ public class AuthServiceImpl implements AuthService {
         if (mailHistory.isOverTimeLimit(LocalDateTime.now())) {
             throw new GlobalRuntimeException("인증 시간이 만료되었습니다.", HttpStatus.CONFLICT);
         }
-
-
     }
 
     @Override
     @Transactional
-    public SignInResponseDto defaultSignIn(SignInRequestDto requestDto) {
+    public TokenDto defaultSignIn(SignInRequestDto requestDto) {
 
-        Member member = memberRepository.findByEmailAndProvider(requestDto.getEmail(), Provider.DEFAULT);
+        Member member = memberRepository.findByEmailAndProvider(requestDto.getEmail(),
+                Provider.DEFAULT);
 
         if (member == null) {
             throw new GlobalRuntimeException("가입되지 않은 Email 입니다.", HttpStatus.NOT_FOUND);
@@ -98,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
 
         saveRefreshToken(requestDto, token);
 
-        return SignInResponseDto.from(token);
+        return TokenDto.from(token);
     }
 
     @Override
@@ -108,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
 
     private void saveRefreshToken(SignInRequestDto requestDto, Token token) {
         RefreshToken lastRefreshToken = refreshTokenRepository.findByEmail(requestDto.getEmail());
-        if(lastRefreshToken != null){
+        if (lastRefreshToken != null) {
             refreshTokenRepository.deleteByEmail(requestDto.getEmail());
         }
 

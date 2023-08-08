@@ -14,5 +14,5 @@ import lombok.Setter;
 public class OAuthLoginResponseDto {
 
     private OAuthDetailDto detailDto;
-    private SignInResponseDto token;
+    private TokenDto token;
 }

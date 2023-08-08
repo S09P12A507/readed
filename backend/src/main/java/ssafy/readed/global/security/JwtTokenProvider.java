@@ -4,6 +4,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -15,13 +21,7 @@ import org.springframework.stereotype.Component;
 import ssafy.readed.domain.auth.vo.Token;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.repository.MemberRepository;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import ssafy.readed.global.config.RedisUtil;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 
 @RequiredArgsConstructor
@@ -33,6 +33,8 @@ public class JwtTokenProvider {
 
     @Value("${jwt.secret.refresh}")
     private String refreshTokenSalt;
+
+    private final RedisUtil redisUtil;
 
     private final long EXPIRATION_TIME_OF_ACCESS_TOKEN = 1000L * 60 * 60;
     private final long EXPIRATION_TIME_OF_REFRESH_TOKEN = 1000L * 60 * 60 * 24 * 30;
@@ -93,6 +95,9 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(accessTokenSalt)
                     .parseClaimsJws(accessToken);
+            if (redisUtil.hasKeyBlackList(accessToken)) {
+                throw new GlobalRuntimeException("로그아웃된 사용자 입니다.", HttpStatus.FORBIDDEN);
+            }
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
@@ -109,8 +114,8 @@ public class JwtTokenProvider {
         }
     }
 
-    public String refreshAccessToken(String refreshToken){
-        if(validateRefreshToken(refreshToken)){
+    public String refreshAccessToken(String refreshToken) {
+        if (validateRefreshToken(refreshToken)) {
             String email = getEmailFromRefreshToken(refreshToken);
             return reCreationAccessToken(email);
         } else {
@@ -129,6 +134,12 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(now.getTime() + EXPIRATION_TIME_OF_ACCESS_TOKEN))
                 .signWith(SignatureAlgorithm.HS256, accessTokenSalt)
                 .compact();
+    }
+
+    public Long getExpirationTime(String accessToken) {
+        Jws<Claims> claims = Jwts.parser().setSigningKey(accessTokenSalt)
+                .parseClaimsJws(accessToken);
+        return claims.getBody().getExpiration().getTime() - new Date().getTime();
     }
 
 }

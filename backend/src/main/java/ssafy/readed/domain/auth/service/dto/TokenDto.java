@@ -9,18 +9,19 @@ import ssafy.readed.domain.auth.vo.Token;
 @NoArgsConstructor
 @Getter
 @Setter
-public class SignInResponseDto {
+public class TokenDto {
 
     private String accessToken;
     private String refreshToken;
+
     @Builder
-    public SignInResponseDto(String accessToken, String refreshToken) {
+    public TokenDto(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 
-    public static SignInResponseDto from(Token token){
-        return SignInResponseDto.builder()
+    public static TokenDto from(Token token) {
+        return TokenDto.builder()
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
                 .build();

@@ -2,6 +2,7 @@ package ssafy.readed.domain.report.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +26,7 @@ import ssafy.readed.global.response.JsonResponse;
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/reports")
 @CrossOrigin("*")
+@Slf4j
 public class ReportController {
 
     private final ReportService reportService;
