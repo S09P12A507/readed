@@ -2,7 +2,7 @@
 
 // 기본적인 구조입니다.
 
-function Loading() {
+function BookclubMeeting() {
   return (
     <>
       <span>로딩중</span>
@@ -11,4 +11,4 @@ function Loading() {
   );
 }
 
-export default Loading;
+export default BookclubMeeting;
