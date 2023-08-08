@@ -1,7 +1,5 @@
-// import styled from 'styled-components';
-
-// 기본적인 구조입니다.
-// const Container = styled.div``;
+import StatisticsTabReadAmount from './StatisticsTabReadAmount';
+import StatisticsTabRatingGraph from './StatisticsTabRatingGraph';
 
 /**
  * 내 서재 - 통계 탭
@@ -15,8 +13,8 @@
 function StatisticsTab() {
   return (
     <>
-      <div>내 서재 통계 나오는 탭</div>
-      <div />
+      <StatisticsTabReadAmount />
+      <StatisticsTabRatingGraph />
     </>
   );
 }

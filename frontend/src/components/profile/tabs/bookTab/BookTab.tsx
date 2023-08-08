@@ -208,7 +208,7 @@ const BookTabCoverList = styled.section`
   text-align: center;
   justify-content: space-between;
   display: grid;
-  grid-template-columns: repeat(3, 32.5%);
+  grid-template-columns: repeat(3, 32.4%);
   row-gap: 0.4rem;
 `;
 

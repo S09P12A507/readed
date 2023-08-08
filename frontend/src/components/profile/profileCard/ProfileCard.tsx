@@ -32,22 +32,36 @@ const ParagraphWrapper = styled.div`
   margin-right: 2rem;
 `;
 
+// interface ProfileCardProps {
+//   profileCardInfo: Partial<UserProfileInfo>;
+// }
+
+type ProfileCardInfo = Pick<
+  UserProfileInfo,
+  | 'nickname'
+  | 'bio'
+  | 'profileImage'
+  | 'readCount'
+  | 'reportCount'
+  | 'bookClubCount'
+>;
+
 function ProfileCard({
-  userProfileInfo,
+  profileCardInfo,
 }: {
-  userProfileInfo: UserProfileInfo;
+  profileCardInfo: ProfileCardInfo;
 }) {
-  const { profilePic, nickname, bookRead, bookReport, bookClubActivity, bio } =
-    userProfileInfo;
+  const { profileImage, nickname, readCount, reportCount, bookClubCount, bio } =
+    profileCardInfo;
   return (
     <ProfileCardWrapper>
       <ProfileCardTop>
-        <ProfilePicture imageSource={profilePic} />
+        <ProfilePicture imageSource={profileImage} />
         <ProfileCardTextContent
           nickname={nickname}
-          bookRead={bookRead}
-          bookReport={bookReport}
-          bookClubActivity={bookClubActivity}
+          readCount={readCount}
+          reportCount={reportCount}
+          bookClubCount={bookClubCount}
         />
       </ProfileCardTop>
 

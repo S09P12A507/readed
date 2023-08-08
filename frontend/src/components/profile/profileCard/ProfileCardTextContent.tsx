@@ -37,23 +37,23 @@ const RecordContainer = styled.div`
   flex-flow: column;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
-  width: 3rem;
+  width: 3.5rem;
 `;
 
 function ProfileCardTextContent({
   nickname,
-  bookRead,
-  bookReport,
-  bookClubActivity,
+  readCount,
+  reportCount,
+  bookClubCount,
 }: {
   nickname: UserProfileInfo['nickname'];
-  bookRead: UserProfileInfo['bookRead'];
-  bookReport: UserProfileInfo['bookReport'];
-  bookClubActivity: UserProfileInfo['bookClubActivity'];
+  readCount: UserProfileInfo['readCount'];
+  reportCount: UserProfileInfo['reportCount'];
+  bookClubCount: UserProfileInfo['bookClubCount'];
 }) {
-  const bookReadString = bookRead.toString();
-  const bookReportString = bookReport.toString();
-  const bookClubActivityString = bookClubActivity.toString();
+  const readCountString: string = readCount.toString();
+  const reportCountString: string = reportCount.toString();
+  const bookClubCountString: string = bookClubCount.toString();
   return (
     <ProfileTextContentWrapper>
       <NicknameWrapper>
@@ -63,7 +63,7 @@ function ProfileCardTextContent({
       <RecordContainerWrapper>
         <RecordContainer>
           <ReadedSpan
-            text={bookReadString}
+            text={readCountString}
             fontWeight="600"
             textAlign="center"
           />
@@ -76,7 +76,7 @@ function ProfileCardTextContent({
         </RecordContainer>
         <RecordContainer>
           <ReadedSpan
-            text={bookReportString}
+            text={reportCountString}
             fontWeight="600"
             textAlign="center"
           />
@@ -89,7 +89,7 @@ function ProfileCardTextContent({
         </RecordContainer>
         <RecordContainer>
           <ReadedSpan
-            text={bookClubActivityString}
+            text={bookClubCountString}
             fontWeight="600"
             textAlign="center"
           />
