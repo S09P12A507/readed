@@ -18,7 +18,7 @@ import Bookclub from './pages/bookclub/Bookclub';
 import BookclubCreate from './pages/bookclub/BookclubCreate';
 import BookclubDetail from './pages/bookclub/BookclubDetatil';
 import BookclubRoom from './pages/bookclub/BookclubRoom';
-import BookclubMeeting from './pages/bookclub/BookclubMeeting';
+import BookclubMeeting from './pages/bookclub/Bookclubmeeting';
 import BookDetail from './pages/books/BookDetail';
 import Profilechange from './pages/profile/Profilechange';
 import Profile from './pages/profile/Profile';
