@@ -15,9 +15,11 @@ import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.global.entity.BaseEntity;
+import ssafy.readed.global.exception.GlobalRuntimeException;
 
 @Entity
 @Getter
@@ -34,8 +36,11 @@ public class Bookclub extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String bookclubContent;
 
-    @Column(name = "bookclub_time")
+    @Column(name = "bookclub_start_time")
     private LocalDateTime startTime;
+
+    @Column(name = "bookclub_end_time")
+    private LocalDateTime endTime;
 
     private Integer participantCount;
 
@@ -57,15 +62,29 @@ public class Bookclub extends BaseEntity {
     private List<Participant> participantList = new ArrayList<>();
 
     @Builder
-    public Bookclub(String bookclubTitle, String bookclubContent, LocalDateTime startTime,
+    public Bookclub(String bookclubTitle, String bookclubContent, LocalDateTime startTime, LocalDateTime endTime,
             Integer participantCount, Boolean isPublic, String bookclubPassword,
-            Boolean isFinished) {
+            Boolean isFinished, Book book, Member host) {
         this.bookclubTitle = bookclubTitle;
         this.bookclubContent = bookclubContent;
         this.startTime = startTime;
+        this.endTime = endTime;
         this.participantCount = participantCount;
         this.isPublic = isPublic;
         this.bookclubPassword = bookclubPassword;
         this.isFinished = isFinished;
+        this.book = book;
+        this.host = host;
+    }
+
+    public void finish(){
+        if(this.isFinished){
+            throw new GlobalRuntimeException("이미 종료된 방입니다.", HttpStatus.CONFLICT);
+        }
+        this.isFinished = true;
+    }
+
+    public void out(){
+        this.participantCount--;
     }
 }
