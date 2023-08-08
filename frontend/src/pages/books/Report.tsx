@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, TextField, Switch } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Divider from '@mui/material/Divider';
 
@@ -52,8 +52,9 @@ function Report() {
   const { bookId } = useParams();
   const bookname = bookId as string;
 
-  const handleCloseModal = () => {
-    setInputText('');
+  const navigate = useNavigate();
+  const handleClose = () => {
+    navigate(-1);
   };
 
   const handlePublicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,10 +95,10 @@ function Report() {
       <Header>
         <CloseButton
           startIcon={<CloseIcon />}
-          onClick={handleCloseModal}
+          onClick={handleClose}
           style={{
             fontWeight: 'bold',
-            fontSize: '1.1rem',
+            fontSize: '1rem',
           }}>
           닫기
         </CloseButton>
@@ -107,7 +108,7 @@ function Report() {
           style={{
             color: '#7aa874',
             fontWeight: 'bold',
-            fontSize: '1.1rem',
+            fontSize: '1rem',
           }}>
           등록
         </ApplyButton>

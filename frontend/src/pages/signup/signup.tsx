@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { IconButton, TextField, Button, Grid } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { TextField, Button, Grid } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import Alerts from '../../components/common/alert/Alert';
+import BackButton from '../../components/common/button/BackButton';
 
 const FormButtonContainer = styled(Button)`
   height: 50px;
@@ -89,18 +88,6 @@ const isNameValid = (name: string) => {
   const nameRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,}$/;
   return nameRegex.test(name);
 };
-
-function BackButton() {
-  return (
-    <div style={{ marginTop: '10px', marginLeft: '5px' }}>
-      <Link to="/login">
-        <IconButton style={{ color: 'gray', fontSize: '14px' }}>
-          <ArrowBackIcon /> 돌아가기
-        </IconButton>
-      </Link>
-    </div>
-  );
-}
 
 function Signup() {
   const [MemberName, setName] = useState('');

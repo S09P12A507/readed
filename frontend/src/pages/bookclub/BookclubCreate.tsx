@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -10,30 +9,25 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import {
   SelectChangeEvent,
   TextField,
-  IconButton,
   Select,
   MenuItem,
   Button,
   Switch,
   Modal,
   InputBase,
+  Grid,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import Alerts from '../../components/common/alert/Alert';
+import BackButton from '../../components/common/button/BackButton';
 
 const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-`;
-
-const BackButtonContainer = styled.div`
-  position: absolute;
-  left: 5px;
 `;
 
 const CoverContainer = styled.div`
@@ -114,18 +108,6 @@ interface Book {
   title: string;
   // translators: string[];
   // url: string;
-}
-
-function BackButton() {
-  return (
-    <BackButtonContainer>
-      <Link to="/bookclub">
-        <IconButton style={{ color: 'gray', fontSize: '14px' }}>
-          <ArrowBackIcon /> 이전으로
-        </IconButton>
-      </Link>
-    </BackButtonContainer>
-  );
 }
 
 function BookclubCreate() {
@@ -226,8 +208,8 @@ function BookclubCreate() {
 
   return (
     <>
+      <BackButton />
       <Header>
-        <BackButton />
         <h1>북클럽 생성</h1>
       </Header>
       <CoverContainer>
@@ -386,7 +368,19 @@ function BookclubCreate() {
               />
             </Search>
           </ModalUpper>
-          {data.map((item: Book) => (
+          <Grid container alignItems="center">
+            {data.map((item: Book) => (
+              <Grid
+                item
+                xs={4}
+                key={item.isbn}
+                onClick={() => handleSelectdBook(item)}>
+                <img src={item.thumbnail} alt={item.title} />
+                <p>{item.title}</p>
+              </Grid>
+            ))}
+          </Grid>
+          {/* {data.map((item: Book) => (
             <div key={item.isbn}>
               <img
                 src={item.thumbnail}
@@ -397,9 +391,8 @@ function BookclubCreate() {
               <p>{item.contents}</p>
               <p>{item.isbn}</p>
               <p>{item.authors}</p>
-              {/* 나머지 데이터도 필요한 대로 표시해보세요 */}
             </div>
-          ))}
+          ))} */}
         </div>
       </Modal>
     </>

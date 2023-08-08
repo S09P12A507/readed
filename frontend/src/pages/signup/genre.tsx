@@ -161,7 +161,8 @@ function Genre() {
         onClick={handleSignUp}
         style={{
           position: 'absolute',
-          minWidth: 'var(--screen-size-mobile)',
+          maxWidth: 'var(--screen-size-mobile)',
+          width: '100%',
           left: '0',
           bottom: '0',
           background: 'var(--primary-dark)',

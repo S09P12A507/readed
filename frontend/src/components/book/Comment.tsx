@@ -9,33 +9,33 @@ const ModalHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 7%;
 `;
 
 const ModalCloseButton = styled(Button)`
   left: 2%;
   margin: 2%;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1rem;
 `;
-
-const ModalTitle = styled.p``;
 
 const ModalSendButton = styled(Button)`
   color: #7aa874;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1rem;
 `;
 
 const ModalContentContainer = styled.div`
-  /* height: 100%; */
   background-color: white;
   width: var(--screen-size-mobile);
+  height: 100vh;
 `;
 
 const Star = styled.div`
   display: flex;
   justify-content: center;
-  font-size: 20px;
+  font-size: 1.8rem;
+  margin-top: 1rem;
 `;
 
 const Textsize = styled.div`
@@ -54,6 +54,7 @@ interface ModalProps {
   textLength: number;
   ratingValue: number;
   inputText: string;
+  title: string;
 }
 
 function Comments({
@@ -64,6 +65,7 @@ function Comments({
   textLength,
   ratingValue,
   inputText,
+  title,
 }: ModalProps) {
   return (
     <div>
@@ -72,7 +74,7 @@ function Comments({
           <ModalCloseButton startIcon={<CloseIcon />} onClick={onClose}>
             닫기
           </ModalCloseButton>
-          <ModalTitle>여기엔 책이름을 넣어보자</ModalTitle>
+          <h2>{title}</h2>
           <ModalSendButton onClick={onSave}>등록</ModalSendButton>
         </ModalHeaderContainer>
         <Divider />

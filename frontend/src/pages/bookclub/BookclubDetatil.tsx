@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { Button, IconButton, Box, Grid } from '@mui/material';
+import { Button, Box, Grid } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import PeopleIcon from '@mui/icons-material/People';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Divider from '@mui/material/Divider';
 import testimg from '../../assets/img/test.jpg';
+import BackButton from '../../components/common/button/BackButton';
 
 const CreateButton = styled(Button)`
   color: #7aa874;
@@ -18,11 +18,6 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-
-const BackButtonContainer = styled.div`
-  position: flex;
-  left: 5px;
 `;
 
 const Info = styled.div`
@@ -48,18 +43,6 @@ const Members = styled.div`
 const StartButtonContainer = styled(Button)`
   height: 50px;
 `;
-
-function BackButton() {
-  return (
-    <BackButtonContainer>
-      <Link to="/bookclub">
-        <IconButton style={{ color: 'gray', fontSize: '14px' }}>
-          <ArrowBackIcon /> 이전으로
-        </IconButton>
-      </Link>
-    </BackButtonContainer>
-  );
-}
 
 function BookClubDetail() {
   const navigate = useNavigate();

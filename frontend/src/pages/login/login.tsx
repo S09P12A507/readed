@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../store/actions/authActions';
 import kakaologo from '../../assets/img/kakaologo.png';
+import AlertsModal from '../../components/common/alert/Alert';
 
 const Container = styled.div`
   display: flex;
@@ -66,6 +67,8 @@ function Login() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [remember, setRememberStatus] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
   const dispatch = useDispatch();
 
   const KakaoRestApi = 'e1496c3a1b0232c4d6f84d511cf90255';
@@ -88,9 +91,9 @@ function Login() {
         console.log(receivedToken);
         window.location.href = '/';
       })
-      .catch(error => {
-        console.log(error);
-        console.log('로그인 실패');
+      .catch(() => {
+        setMessage('아이디와 비밀번호를 확인해주세요.');
+        setShowAlert(true);
       });
   };
   return (
@@ -179,6 +182,11 @@ function Login() {
           </div>
         </CircleContainer>
       </div>
+      <AlertsModal
+        open={showAlert}
+        onClose={() => setShowAlert(false)}
+        message={message}
+      />
     </Container>
   );
 }

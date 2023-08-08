@@ -64,6 +64,7 @@ function Search() {
   const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
 
   useEffect(() => {
+    setData([]);
     if (suggestquery) {
       axios
         .get<{ documents: Book[] }>(

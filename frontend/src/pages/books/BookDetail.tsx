@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useParams, useNavigate } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
-import {
-  Table,
-  TableBody,
-  TableRow,
-  TableCell,
-  IconButton,
-} from '@mui/material';
+import { Table, TableBody, TableRow, TableCell, Modal } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ModeIcon from '@mui/icons-material/Mode';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
@@ -16,6 +9,8 @@ import ContactsIcon from '@mui/icons-material/Contacts';
 import styled from 'styled-components';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
+import Comments from '../../components/book/Comment';
+import BackButton from '../../components/common/button/BackButton';
 
 const Container = styled.div`
   display: flex;
@@ -31,11 +26,6 @@ const BookImage = styled.img`
   display: grid;
   width: 50%;
   height: auto;
-`;
-
-const BackButtonContainer = styled.div`
-  position: flex;
-  left: 5px;
 `;
 
 const Star = styled.div`
@@ -65,6 +55,7 @@ const StyledTable = styled(Table)`
     border-bottom: 1px solid rgba(255, 255, 255);
   }
 `;
+
 interface Book {
   authors: string[];
   publisher: string;
@@ -75,22 +66,14 @@ interface Book {
   title: string;
 }
 
-function BackButton() {
-  return (
-    <BackButtonContainer>
-      <Link to="/bookclub">
-        <IconButton style={{ color: 'gray', fontSize: '14px' }}>
-          <ArrowBackIcon /> 이전으로
-        </IconButton>
-      </Link>
-    </BackButtonContainer>
-  );
-}
-
 function BookDetail() {
   const { bookId } = useParams();
   const [data, setData] = useState<Book | null>(null);
   const [ratingValue, setRatingValue] = useState<number>(0);
+  const [IsModalOpen, setIsModalOpen] = useState(false);
+  const [inputText, setInputText] = useState('');
+  const [textLength, setTextLength] = useState<number>(0);
+
   const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
   const query = bookId as string;
 
@@ -99,6 +82,42 @@ function BookDetail() {
   const handleReport = () => {
     if (bookId) {
       navigate(`/report/${bookId}`);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    setInputText('');
+    setRatingValue(0);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setInputText('');
+    setRatingValue(0);
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+
+    if (inputValue.length > 300) {
+      return;
+    }
+    setInputText(inputValue);
+  };
+
+  const handleSaveButton = () => {
+    console.log('Input Text:', inputText);
+    console.log('Rating:', ratingValue);
+    setIsModalOpen(false);
+  };
+
+  const handleRatingChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: number | null,
+  ) => {
+    if (newValue !== null) {
+      setRatingValue(newValue);
     }
   };
 
@@ -124,18 +143,13 @@ function BookDetail() {
       });
   }, [query]);
 
+  useEffect(() => {
+    setTextLength(inputText.length);
+  }, [inputText]);
+
   if (!data) {
     return <div>로--딩--중!...</div>;
   }
-
-  const handleRatingChange = (
-    event: React.SyntheticEvent<Element, Event>,
-    newValue: number | null,
-  ) => {
-    if (newValue !== null) {
-      setRatingValue(newValue);
-    }
-  };
 
   return (
     <div>
@@ -172,7 +186,10 @@ function BookDetail() {
                 <FavoriteBorderIcon />
               </TableCell>
               <TableCell>
-                <ModeIcon />
+                <ModeIcon
+                  onClick={handleOpenModal}
+                  style={{ cursor: 'pointer' }}
+                />
               </TableCell>
               <TableCell>
                 <MenuBookIcon
@@ -209,6 +226,35 @@ function BookDetail() {
         <h2>(대충 사진) {data.translators}</h2>
         <p>역자</p>
       </InfoContainer>
+      <Divider />
+      <InfoContainer>
+        <h3>대충 통계 </h3>
+      </InfoContainer>
+      <Divider />
+      <InfoContainer>
+        <h3>대충 댓글</h3>
+      </InfoContainer>
+
+      <Modal
+        open={IsModalOpen}
+        onClose={handleCloseModal}
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}>
+        <div>
+          <Comments
+            onClose={handleCloseModal}
+            onSave={handleSaveButton}
+            handleRatingChange={handleRatingChange}
+            handleInputChange={handleInputChange}
+            textLength={textLength}
+            ratingValue={ratingValue}
+            inputText={inputText}
+            title={query}
+          />
+        </div>
+      </Modal>
     </div>
   );
 }

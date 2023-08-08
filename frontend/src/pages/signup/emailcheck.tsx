@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { IconButton, TextField, Button, Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { TextField, Button, Grid } from '@mui/material';
 import styled from 'styled-components';
 import axios from 'axios';
 import Alerts from '../../components/common/alert/Alert';
+import BackButton from '../../components/common/button/BackButton';
 
 const AuthForm = styled(TextField)`
   width: 100%;
@@ -69,18 +69,6 @@ const NowText = styled.div`
 
 interface SignUpData {
   email: string;
-}
-
-function BackButton() {
-  return (
-    <div style={{ marginTop: '10px', marginLeft: '5px' }}>
-      <Link to="/signup">
-        <IconButton style={{ color: 'rgba(0, 0, 0, 0.38)', fontSize: '1rem' }}>
-          <ArrowBackIcon /> 돌아가기
-        </IconButton>
-      </Link>
-    </div>
-  );
 }
 
 function Emailcheck() {
@@ -222,7 +210,8 @@ function Emailcheck() {
         onClick={handleSignUp}
         style={{
           position: 'absolute',
-          minWidth: 'var(--screen-size-mobile)',
+          maxWidth: 'var(--screen-size-mobile)',
+          width: '100%',
           left: '0',
           bottom: '0',
           background: 'var(--primary-dark)',

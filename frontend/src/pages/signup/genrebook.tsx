@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Grid, Button, Modal } from '@mui/material';
 import axios from 'axios';
 import Comments from '../../components/book/Comment';
+import BackButton from '../../components/common/button/BackButton';
 
 const Container = styled.div`
   flex: 1;
@@ -111,8 +112,8 @@ function Genrebook() {
   };
 
   return (
-    // <WebContainer isWebApp={isWebApp}>
     <Container>
+      <BackButton />
       <h1>읽은 책 기록하기</h1>
       <h3>
         {MemberName} 님이 <br /> 재미있게 읽은 책들을 알려주세요!
@@ -156,6 +157,7 @@ function Genrebook() {
             textLength={textLength}
             ratingValue={ratingValue}
             inputText={inputText}
+            title="여기엔 책 제목을 넣어보자"
           />
         </div>
       </Modal>
@@ -165,7 +167,8 @@ function Genrebook() {
         onClick={handleSignUp}
         style={{
           position: 'fixed',
-          width: '480px',
+          maxWidth: 'var(--screen-size-mobile)',
+          width: '100%',
           bottom: '0',
           background: '#4B8346',
           color: 'white',
@@ -173,7 +176,6 @@ function Genrebook() {
         바로 시작하기
       </Start>
     </Container>
-    // </WebContainer>
   );
 }
 
