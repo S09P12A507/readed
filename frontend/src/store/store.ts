@@ -19,8 +19,8 @@ store.subscribe(() => {
   const { accessToken, refreshToken } = state.auth;
 
   if (accessToken && refreshToken) {
-    sessionStorage.setItem('accessToken', accessToken as string);
-    sessionStorage.setItem('refreshToken', refreshToken as string);
+    sessionStorage.setItem('accessToken', accessToken);
+    sessionStorage.setItem('refreshToken', refreshToken);
   }
 });
 

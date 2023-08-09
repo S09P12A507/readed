@@ -20,7 +20,7 @@ pipeline {
         stage('Pull from GitLab') {
             steps {
                 git url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A507.git',
-                    branch: 'feat/75',
+                    branch: 'fe/develop',
                     credentialsId: 'GitLab-Token'
             }
         }
