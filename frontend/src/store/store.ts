@@ -3,6 +3,7 @@ import { createStore } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage/session';
 import rootReducer from './reducers';
+import { setTokens } from './actions/authActions';
 
 const persistConfig = {
   key: 'root',
@@ -14,11 +15,12 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = createStore(persistedReducer);
 
 store.subscribe(() => {
-  const state = store.getState();
-  const { token } = state.auth;
+  const state: RootState = store.getState();
+  const { accessToken, refreshToken } = state.auth;
 
-  if (token) {
-    sessionStorage.setItem('token', token);
+  if (accessToken && refreshToken) {
+    sessionStorage.setItem('accessToken', accessToken as string);
+    sessionStorage.setItem('refreshToken', refreshToken as string);
   }
 });
 
@@ -26,4 +28,4 @@ const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-export { store, persistor };
+export { store, persistor, setTokens };

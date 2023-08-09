@@ -1,10 +1,14 @@
 export interface AuthState {
-  token: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
 }
 
-export interface SetTokenAction {
-  type: 'SET_TOKEN';
-  payload: string | null;
+export interface SetTokensAction {
+  type: 'SET_TOKENS';
+  payload: {
+    accessToken: string | null;
+    refreshToken: string | null;
+  };
 }
 
-export type ActionTypes = SetTokenAction;
+export type ActionTypes = SetTokensAction;

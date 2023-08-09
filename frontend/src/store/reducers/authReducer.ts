@@ -1,9 +1,9 @@
-// authReducer.ts
-import { SET_TOKEN } from '../actions/authActions';
+import { SET_TOKENS } from '../actions/authActions';
 import { ActionTypes, AuthState } from '../types';
 
 const initialState: AuthState = {
-  token: null,
+  accessToken: null,
+  refreshToken: null,
 };
 
 const authReducer = (
@@ -11,10 +11,11 @@ const authReducer = (
   action: ActionTypes,
 ): AuthState => {
   switch (action.type) {
-    case SET_TOKEN:
+    case SET_TOKENS:
       return {
         ...state,
-        token: action.payload,
+        accessToken: action.payload.accessToken as string,
+        refreshToken: action.payload.refreshToken as string,
       };
     default:
       return state;

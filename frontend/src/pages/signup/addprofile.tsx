@@ -105,7 +105,7 @@ function Addprofile() {
   const [password1] = useState<string>(signUpData.password1 || '');
   const [password2] = useState<string>(signUpData.password2 || '');
 
-  const [ProfileImage, setprofileimage] = useState<File | null>(null);
+  // const [ProfileImage, setprofileimage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
   const [ProfileBio, setprofilebio] = useState<string>('');
@@ -116,7 +116,7 @@ function Addprofile() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      setprofileimage(file);
+      // setprofileimage(file);
 
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -168,22 +168,29 @@ function Addprofile() {
       password2,
       nickname,
       profile_bio: ProfileBio,
-      profile_image: ProfileImage,
+      profile_image: previewUrl,
     };
     console.log(formData);
-    // window.location.href = '/genre';
-    // 테스트 용으로 여기에 삽입 > 이후에 axios로 true 여부 체크
 
     axios
-      .post('http://localhost:8080/api/members/sign-up', formData)
-      .then(response => {
-        console.log('회원가입 성공:', response.data);
+      .post('http://localhost:8081/api/members/sign-up', formData)
+      .then(() => {
+        setMessage('회원 가입에 성공했습니다.');
+        setShowAlert(true);
+        window.location.href = '/genre';
       })
       .catch(error => {
         console.error('회원가입 실패:', error);
       });
   };
 
+  const handleAlertClose = () => {
+    setShowAlert(false);
+
+    if (message === '정회원 가입에 성공했습니다.') {
+      window.location.href = '/genre';
+    }
+  };
   return (
     <>
       <h1>거의 다 왔어요</h1>
@@ -281,7 +288,8 @@ function Addprofile() {
       </SignupButton>
       <Alerts
         open={showAlert}
-        onClose={() => setShowAlert(false)}
+        onClose={handleAlertClose}
+        // onClose={() => setShowAlert(false)}
         message={message}
       />
     </>

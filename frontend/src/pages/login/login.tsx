@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { setToken } from '../../store/actions/authActions';
+import { setTokens } from '../../store/actions/authActions';
 import kakaologo from '../../assets/img/kakaologo.png';
 import AlertsModal from '../../components/common/alert/Alert';
 
@@ -63,6 +63,11 @@ const CenterText = styled.h3`
   text-align: center;
 `;
 
+interface Tokens {
+  AccessToken: string;
+  RepreshToken: string;
+}
+
 function Login() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -84,11 +89,19 @@ function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     axios
-      .post('http:/localhost/8080/api/auth/sign-in', { username, password })
+      .post('http://localhost:8081/api/auth/sign-in', {
+        email: username,
+        password,
+      })
       .then(response => {
-        const receivedToken = (response.data as { key: string }).key;
-        dispatch(setToken(receivedToken));
-        console.log(receivedToken);
+        const receivedToken = (response.data as { data: Tokens[] }).data;
+        if (receivedToken.length > 0) {
+          const AToken = receivedToken[0].AccessToken;
+          const RToken = receivedToken[0].RepreshToken;
+          if (AToken && RToken) {
+            dispatch(setTokens(AToken, RToken));
+          }
+        }
         window.location.href = '/';
       })
       .catch(() => {

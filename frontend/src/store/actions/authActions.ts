@@ -1,11 +1,20 @@
-export const SET_TOKEN = 'SET_TOKEN';
+export const SET_TOKENS = 'SET_TOKENS';
 
-export interface AuthAction {
-  type: typeof SET_TOKEN;
-  payload: string;
+export interface SetTokensAction {
+  type: typeof SET_TOKENS;
+  payload: {
+    accessToken: string;
+    refreshToken: string;
+  };
 }
 
-export const setToken = (token: string): AuthAction => ({
-  type: SET_TOKEN,
-  payload: token,
+export const setTokens = (
+  accessToken: string,
+  refreshToken: string,
+): SetTokensAction => ({
+  type: SET_TOKENS,
+  payload: {
+    accessToken,
+    refreshToken,
+  },
 });

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { TextField, Button } from '@mui/material';
 import axios from 'axios';
 import { RootState } from '../../../store/store';
-import basic from '../../../assets/img/non.png';
+// import basic from '../../../assets/img/non.png';
 
 const ImageContainer = styled.div`
   text-align: center;
@@ -35,26 +35,29 @@ interface UserInfo {
   name: string;
   email: string;
   nickname: string;
-  // profile_image: string;
-  // profile_bio: string;
+  profile_image: string;
+  profile_bio: string;
 }
 
 function InfoChange() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [ProfileImage, setprofileimage] = useState<File | null>(null);
+  // const [ProfileImage, setprofileimage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
   const [ProfileBio, setprofilebio] = useState<string>('');
   const [nicknameExists, setNicknameExists] = useState<boolean>(false);
+  const [ProfileImage, setprofileimage] = useState<string | undefined>(
+    undefined,
+  );
 
   const token: string | null = useSelector(
-    (state: RootState) => state.auth.token,
+    (state: RootState) => state.auth.accessToken,
   );
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      setprofileimage(file);
+      // setprofileimage(file);
 
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -72,7 +75,7 @@ function InfoChange() {
 
   const handleIntroChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setprofilebio(event.target.value);
-    console.log(ProfileImage);
+    // console.log(ProfileImage);
     console.log(nicknameExists);
   };
 
@@ -81,7 +84,7 @@ function InfoChange() {
       try {
         const response = await axios.get(`/api/members/{member-id}`, {
           headers: {
-            Authorization: `Token ${token as string}`,
+            'X-READED-ACCESSTOKEN': `${token as string}`,
           },
         });
         setUserInfo(response.data as UserInfo);
@@ -98,8 +101,8 @@ function InfoChange() {
   useEffect(() => {
     if (userInfo) {
       setNickname(userInfo.nickname);
-      // 이미지도
-      // 한줄 소개글도
+      setprofilebio(userInfo.profile_bio);
+      setprofileimage(userInfo.profile_image);
     }
   }, [userInfo]);
   return (
@@ -113,7 +116,7 @@ function InfoChange() {
               {previewUrl ? (
                 <ProfileImg src={previewUrl} alt="프로필 미리보기" />
               ) : (
-                <ProfileImg src={basic} alt="기본 이미지" />
+                <ProfileImg src={ProfileImage} alt="기본 이미지" />
               )}
             </label>
             <input

@@ -168,7 +168,7 @@ function Signup() {
       localStorage.setItem('signupData', JSON.stringify(formData));
 
       axios
-        .post('http://localhost:8080/api/auth/send-email', { email })
+        .post('http://localhost:8081/api/auth/send-email', { email })
         .then(response => {
           console.log('이메일이 성공적으로 보내졌습니다.');
           window.location.href = '/signup/emailcheck';
