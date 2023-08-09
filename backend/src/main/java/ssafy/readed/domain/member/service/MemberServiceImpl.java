@@ -67,11 +67,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void modifyProfile(Long id, Member member, ModifyMemberProfileRequestDto requestDto) {
+    public void modifyProfile(Member member, ModifyMemberProfileRequestDto requestDto) {
         checkNicknameRegexp(requestDto.getNickname());
 
-        Member modifiedMember = getMember(id);
-        authCheck(id, member);
+        Member modifiedMember = getMember(member.getId());
         modifiedMember.modify(requestDto);
     }
 
@@ -84,10 +83,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void modifyPassword(Long id, Member member,
+    public void modifyPassword(Member member,
             ModifyPasswordRequestDto passwordRequestDto) {
 
-        Member modifiedMember = getMember(id);
+        Member modifiedMember = getMember(member.getId());
 
         checkPrevPassword(passwordRequestDto, modifiedMember);
         checkPasswordMatch(passwordRequestDto.getPassword(), passwordRequestDto.getPassword2());
@@ -148,12 +147,6 @@ public class MemberServiceImpl implements MemberService {
         emailDuplicationCheck(email);
 
 
-    }
-
-    private void authCheck(Long memberId, Member member) {
-        if (!memberId.equals(member.getId())) {
-            throw new GlobalRuntimeException("해당 id의 프로필에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN);
-        }
     }
 
     private void checkPrevPassword(ModifyPasswordRequestDto passwordRequestDto,

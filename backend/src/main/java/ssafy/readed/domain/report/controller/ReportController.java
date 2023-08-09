@@ -47,8 +47,8 @@ public class ReportController {
         return JsonResponse.ok("독후감 1개를 불러왔습니다.", reportResponseDto);
     }
 
-    @GetMapping(value = "/members/{member-id}")
-    public ResponseEntity<?> getReportList(@PathVariable(name = "member-id") Long memberId,
+    @GetMapping(value = "/members")
+    public ResponseEntity<?> getReportList(Long memberId,
             @AuthenticationPrincipal Member member) {
         List<ReportResponseDto> reportList = reportService.getReportList(memberId, member);
 

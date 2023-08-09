@@ -14,7 +14,7 @@ public interface MemberService {
 
     SelectProfileResponseDto selectProfile(Long id);
 
-    void modifyProfile(Long id, Member member, ModifyMemberProfileRequestDto profileRequestDto);
+    void modifyProfile(Member member, ModifyMemberProfileRequestDto profileRequestDto);
 
     SelectMemberResponseDto selectMember(Long id);
 
@@ -22,7 +22,7 @@ public interface MemberService {
 
     void nicknameDuplicationCheck(String nickname);
 
-    void modifyPassword(Long id, Member member, ModifyPasswordRequestDto passwordRequestDto);
+    void modifyPassword(Member member, ModifyPasswordRequestDto passwordRequestDto);
 
     void deleteMember(Member member, TokenDto tokenDto);
 

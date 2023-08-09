@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,35 +36,32 @@ public class MemberController {
     }
 
 
-
-    @GetMapping("/profile/{member-id}")
-    public ResponseEntity<?> selectProfile(@PathVariable("member-id") Long id) {
+    @GetMapping("/profile")
+    public ResponseEntity<?> selectProfile(Long id) {
         return JsonResponse.ok("멤버 프로필 조회 성공!", memberService.selectProfile(id));
     }
 
-    @PatchMapping("/profile/{member-id}")
-    public ResponseEntity<?> updateProfile(@PathVariable("member-id") Long id,
-            @AuthenticationPrincipal Member member,
+    @PatchMapping("/profile")
+    public ResponseEntity<?> updateProfile(@AuthenticationPrincipal Member member,
             @RequestBody ModifyMemberProfileRequestDto requestDto) {
-        memberService.modifyProfile(id, member, requestDto);
+        memberService.modifyProfile(member, requestDto);
         return JsonResponse.ok("멤버 프로필 변경 성공!");
     }
 
-    @GetMapping("/{member-id}")
-    public ResponseEntity<?> selectMember(@PathVariable("member-id") Long id) {
+    @GetMapping
+    public ResponseEntity<?> selectMember(Long id) {
         return JsonResponse.ok("멤버 회원정보 조회 성공!", memberService.selectMember(id));
     }
 
-    @PatchMapping("/{member-id}")
-    public ResponseEntity<?> updatePassword(@PathVariable("member-id") Long id,
-            @AuthenticationPrincipal Member member,
+    @PatchMapping
+    public ResponseEntity<?> updatePassword(@AuthenticationPrincipal Member member,
             @RequestBody ModifyPasswordRequestDto requestDto) {
-        memberService.modifyPassword(id, member, requestDto);
+        memberService.modifyPassword(member, requestDto);
         return JsonResponse.ok("멤버 회원정보 변경 성공!");
     }
 
     @DeleteMapping("/logout")
-    private ResponseEntity<?> logout(@AuthenticationPrincipal Member member,
+    public ResponseEntity<?> logout(@AuthenticationPrincipal Member member,
             @RequestBody TokenDto tokenDto) {
 
         memberService.logout(member, tokenDto);
@@ -73,7 +69,7 @@ public class MemberController {
     }
 
     @DeleteMapping
-    private ResponseEntity<?> deleteMember(@AuthenticationPrincipal Member member,
+    public ResponseEntity<?> deleteMember(@AuthenticationPrincipal Member member,
             @RequestBody TokenDto tokenDto) {
         memberService.deleteMember(member, tokenDto);
         return JsonResponse.ok("회원 탈퇴가 완료되었습니다.");
