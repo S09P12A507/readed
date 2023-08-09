@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { SwipeableDrawer } from '@mui/material';
 // types
-import { UserBookRead } from '../../../../interfaces/user/UserBookRead';
+import { UserBookRead } from '../../../../interfaces/user/IUserBookRead';
 
 /**
  * 내 서재 - 읽은 책 탭의 책 요소

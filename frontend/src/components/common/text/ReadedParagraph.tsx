@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TextStyle } from '../../../interfaces/common/TextStyle';
+import { ITextStyle } from '../../../interfaces/common/ITextStyle';
 
 /**
  * p 컴포넌트, 기본값 1rem, 500
@@ -8,7 +8,7 @@ import { TextStyle } from '../../../interfaces/common/TextStyle';
  * @see
  */
 
-const ReadedParagraphWrapper = styled.p<TextStyle>`
+const ReadedParagraphWrapper = styled.p<ITextStyle>`
   font-size: ${props => props.fontSize};
   font-weight: ${props => props.fontWeight};
 `;
@@ -18,8 +18,8 @@ function ReadedParagraph({
   fontWeight,
 }: {
   text: string;
-  fontSize: TextStyle['fontSize'];
-  fontWeight: TextStyle['fontWeight'];
+  fontSize: ITextStyle['fontSize'];
+  fontWeight: ITextStyle['fontWeight'];
 }) {
   return (
     <ReadedParagraphWrapper fontSize={fontSize} fontWeight={fontWeight}>

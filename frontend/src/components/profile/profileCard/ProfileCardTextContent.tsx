@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import ReadedH3 from '../../common/heading/ReadedH3';
 import ReadedSpan from '../../common/text/ReadedSpan';
 // types
-import { UserProfileInfo } from '../../../interfaces/user/UserProfileInfo';
+import { UserProfileInfo } from '../../../interfaces/user/IUserProfileInfo';
 
 /**
  * 프로필카드 우측 텍스트 내용 컴포넌트

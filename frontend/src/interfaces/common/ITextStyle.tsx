@@ -1,4 +1,4 @@
-export interface TextStyle {
+export interface ITextStyle {
   fontSize?: string;
   fontWeight?:
     | '100'

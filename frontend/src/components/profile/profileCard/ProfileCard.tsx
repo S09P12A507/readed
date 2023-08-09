@@ -4,7 +4,7 @@ import ReadedParagraph from '../../common/text/ReadedParagraph';
 import ProfilePicture from './ProfileCardPicture';
 import ProfileCardTextContent from './ProfileCardTextContent';
 // types
-import { UserProfileInfo } from '../../../interfaces/user/UserProfileInfo';
+import { UserProfileInfo } from '../../../interfaces/user/IUserProfileInfo';
 
 /**
  * 프로필 페이지에 들어갈 프로필 카드 컴포넌트

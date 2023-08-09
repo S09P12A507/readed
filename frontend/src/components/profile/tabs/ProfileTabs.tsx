@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { ReactNode } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Divider } from '@mui/material';
@@ -18,7 +18,7 @@ import { StaticRouter } from 'react-router-dom/server';
  * @see
  */
 
-function Router(props: { children?: React.ReactNode }) {
+function Router(props: { children?: ReactNode }) {
   const { children } = props;
   if (typeof window === 'undefined') {
     return <StaticRouter location="">{children}</StaticRouter>;

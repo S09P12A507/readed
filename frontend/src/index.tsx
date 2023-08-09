@@ -7,6 +7,11 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store/store';
 
+/**
+ * @author 김보석, 박성준
+ * @todo 로고, favicon, 페이지별 이름 변경
+ */
+
 const queryClient = new QueryClient();
 
 ReactDOM.render(
@@ -17,6 +22,19 @@ ReactDOM.render(
   </QueryClientProvider>,
   document.getElementById('root'),
 );
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('./service-worker.ts', { scope: '/' })
+      .then(registration => {
+        console.log('Service Worker registered:', registration);
+      })
+      .catch(error => {
+        console.log('Service Worker registration failed:', error);
+      });
+  });
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

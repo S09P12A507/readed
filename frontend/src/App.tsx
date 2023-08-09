@@ -46,8 +46,8 @@ const MobileContainer = styled(Container)`
   max-width: var(--screen-size-mobile);
   min-height: 100vh;
   padding-top: 2.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
   box-shadow:
     1px 0 16px #888,
     -1px 0 16px #888;
@@ -114,7 +114,7 @@ function App() {
                   <Route path="pwchange" element={<PwChange />} />
                 </Route>
                 <Route path=":userId" element={<Profile />}>
-                  <Route path="" element={<StatisticsTab />} />
+                  <Route index path="" element={<StatisticsTab />} />
                   <Route path="book" element={<BookTab />} />
                   <Route path="report" element={<ReportTab />} />
                 </Route>

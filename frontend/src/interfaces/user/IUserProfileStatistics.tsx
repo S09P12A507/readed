@@ -1,11 +1,6 @@
-export interface UserProfileInfo {
+export interface IUserProfileStatistics {
   id: number;
-  nickname: string;
-  bio: string;
-  profileImage: string;
   readCount: number;
-  reportCount: number;
-  bookClubCount: number;
   pageCount: number;
   star0count: number;
   star0p5count: number;

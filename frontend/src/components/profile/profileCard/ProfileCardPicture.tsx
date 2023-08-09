@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ImageStyle } from '../../../interfaces/common/ImageStyle';
+import { IImageStyle } from '../../../interfaces/common/IImageStyle';
 
 /**
  * 프로필사진 컴포넌트
@@ -7,7 +7,7 @@ import { ImageStyle } from '../../../interfaces/common/ImageStyle';
  * @author 박성준
  */
 
-const ProfileFrame = styled.div<ImageStyle>`
+const ProfileFrame = styled.div<IImageStyle>`
   position: relative;
   margin-right: 1.5rem;
   min-width: 6rem;
@@ -29,7 +29,7 @@ const TmpPictureText = styled.div`
 function ProfileCardPicture({
   imageSource,
 }: {
-  imageSource?: ImageStyle['imageSource'];
+  imageSource?: IImageStyle['imageSource'];
 }) {
   return (
     <ProfileFrame imageSource={imageSource}>

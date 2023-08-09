@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TextStyle } from '../../../interfaces/common/TextStyle';
+import { ITextStyle } from '../../../interfaces/common/ITextStyle';
 
 /**
  * span 컴포넌트, 기본값 1rem, 500
@@ -8,7 +8,7 @@ import { TextStyle } from '../../../interfaces/common/TextStyle';
  * @see
  */
 
-const ReadedSpanWrapper = styled.span<TextStyle>`
+const ReadedSpanWrapper = styled.span<ITextStyle>`
   font-size: ${props => props.fontSize};
   font-weight: ${props => props.fontWeight};
   text-align: ${props => props.textAlign};
@@ -22,10 +22,10 @@ function ReadedSpan({
   whiteSpace,
 }: {
   text: string;
-  fontSize?: TextStyle['fontSize'];
-  fontWeight?: TextStyle['fontWeight'];
-  textAlign?: TextStyle['textAlign'];
-  whiteSpace?: TextStyle['whiteSpace'];
+  fontSize?: ITextStyle['fontSize'];
+  fontWeight?: ITextStyle['fontWeight'];
+  textAlign?: ITextStyle['textAlign'];
+  whiteSpace?: ITextStyle['whiteSpace'];
 }) {
   return (
     <ReadedSpanWrapper

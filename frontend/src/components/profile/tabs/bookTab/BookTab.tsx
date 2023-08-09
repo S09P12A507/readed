@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import BookTabCover from './BookTabCover';
 // hooks
 // types
-import { UserBookRead } from '../../../../interfaces/user/UserBookRead';
+import { UserBookRead } from '../../../../interfaces/user/IUserBookRead';
 
 /**
  * 내 서재 - 읽은 책 탭
