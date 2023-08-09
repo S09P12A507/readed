@@ -66,4 +66,10 @@ class MemberServiceImplTest {
         memberService.modifyProfile(1L, member, dto);
     }
 
+    void comment(){
+        int page = 500;
+        int star = 4;
+        Member member;
+    }
+
 }

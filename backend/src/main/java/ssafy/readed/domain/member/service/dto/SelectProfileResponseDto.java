@@ -35,10 +35,7 @@ public class SelectProfileResponseDto {
     @Builder
     public SelectProfileResponseDto(Long id, String nickname, String profile_bio,
             String profile_image,
-            int readCount, int reportCount, int bookclubCount, int pageCount, int star_0_count,
-            int star_0p5_count, int star_1_count, int star_1p5_count, int star_2_count,
-            int star_2p5_count, int star_3_count, int star_3p5_count, int star_4_count,
-            int star_4p5_count, int star_5_count) {
+            int readCount, int reportCount, int bookclubCount, int pageCount) {
         this.id = id;
         this.nickname = nickname;
         this.profile_bio = profile_bio;
@@ -47,16 +44,6 @@ public class SelectProfileResponseDto {
         this.reportCount = reportCount;
         this.bookclubCount = bookclubCount;
         this.pageCount = pageCount;
-        this.star_0p5_count = star_0p5_count;
-        this.star_1_count = star_1_count;
-        this.star_1p5_count = star_1p5_count;
-        this.star_2_count = star_2_count;
-        this.star_2p5_count = star_2p5_count;
-        this.star_3_count = star_3_count;
-        this.star_3p5_count = star_3p5_count;
-        this.star_4_count = star_4_count;
-        this.star_4p5_count = star_4p5_count;
-        this.star_5_count = star_5_count;
     }
 
     public static SelectProfileResponseDto from(Member member) {
@@ -69,16 +56,6 @@ public class SelectProfileResponseDto {
                 .reportCount(member.getReportCount())
                 .bookclubCount(member.getBookclubCount())
                 .pageCount(member.getPageCount())
-                .star_0p5_count(member.getStar_0p5_count())
-                .star_1_count(member.getStar_1_count())
-                .star_1p5_count(member.getStar_1p5_count())
-                .star_2_count(member.getStar_2_count())
-                .star_2p5_count(member.getStar_2p5_count())
-                .star_3_count(member.getStar_3_count())
-                .star_3p5_count(member.getStar_3p5_count())
-                .star_4_count(member.getStar_4_count())
-                .star_4p5_count(member.getStar_4p5_count())
-                .star_5_count(member.getStar_5_count())
                 .build();
     }
 }
