@@ -136,23 +136,24 @@ function Addprofile() {
   };
 
   const handleVerify = () => {
-    setNicknameExists(true);
-    setMessage('중복 확인되었습니다.');
-    setShowAlert(true);
-    // axios
-    //   .get(`http://local:8080/user?nickname=${nickname}`)
-    //   .then(response => {
-    //     if (response.status >= 200 && response.status <= 299) {
-    //       setNicknameExists(true);
-    //       console.log('인증 성공');
-    //     } else {
-    //       setNicknameExists(false);
-    //       console.log('인증 실패');
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('중복 확인 실패:', error);
-    //   });
+    axios
+      .get(
+        `http://3.38.252.22/api/auth/check-nickname-duplicate?nickname=${nickname}`,
+      )
+      .then(response => {
+        if (response.status >= 200 && response.status <= 299) {
+          setNicknameExists(true);
+          setMessage('중복 확인되었습니다.');
+          setShowAlert(true);
+        } else {
+          setNicknameExists(false);
+          setMessage('중복된 닉네임입니다.');
+          setShowAlert(true);
+        }
+      })
+      .catch(error => {
+        console.error('중복 확인 실패:', error);
+      });
   };
 
   const handleSignUp = () => {
@@ -173,7 +174,7 @@ function Addprofile() {
     console.log(formData);
 
     axios
-      .post('http://localhost:8081/api/members/sign-up', formData)
+      .post('http://3.38.252.22/api/members/sign-up', formData)
       .then(() => {
         setMessage('회원 가입에 성공했습니다.');
         setShowAlert(true);

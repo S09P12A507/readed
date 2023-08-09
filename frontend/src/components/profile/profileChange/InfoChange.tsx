@@ -80,22 +80,20 @@ function InfoChange() {
   };
 
   useEffect(() => {
-    async function fetchUserInfo() {
-      try {
-        const response = await axios.get(`/api/members/{member-id}`, {
+    if (token) {
+      axios
+        .get<{ data: UserInfo }>(`http://3.38.252.22/api/members/profile/1`, {
           headers: {
-            'X-READED-ACCESSTOKEN': `${token as string}`,
+            'X-READED-ACCESSTOKEN': `${token}`,
           },
+        })
+        .then(response => {
+          setUserInfo(response.data.data);
+        })
+        .catch(error => {
+          console.log(error);
         });
-        setUserInfo(response.data as UserInfo);
-      } catch (error) {
-        console.error(error);
-      }
     }
-
-    fetchUserInfo().catch(error => {
-      console.error(error);
-    });
   }, [token]);
 
   useEffect(() => {

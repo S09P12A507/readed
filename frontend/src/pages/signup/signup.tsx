@@ -168,7 +168,7 @@ function Signup() {
       localStorage.setItem('signupData', JSON.stringify(formData));
 
       axios
-        .post('http://localhost:8081/api/auth/send-email', { email })
+        .post('http://3.38.252.22/api/auth/send-email', { email })
         .then(response => {
           console.log('이메일이 성공적으로 보내졌습니다.');
           window.location.href = '/signup/emailcheck';
@@ -184,23 +184,22 @@ function Signup() {
   };
 
   const handleVerify = () => {
-    setEmailExists(true);
-    setMessage('중복 확인되었습니다.');
-    setShowAlert(true);
-    //   axios
-    //   	.get(`http://local:8080/user?nickname=${email}`)
-    //   	.then(response => {
-    //       if (response.status >= 200 && response.status <= 299) {
-    //         setEmailExists(true);
-    //         console.log('인증 성공');
-    //       } else {
-    //         setEmailExists(false);
-    //         console.log('인증 실패');
-    //       }
-    //     })
-    //   	.catch(error => {
-    //   		console.error('중복 확인 실패:', error);
-    //   	});
+    axios
+      .get(`http://3.38.252.22/api/auth/check-email-duplicate?email=${email}`)
+      .then(response => {
+        if (response.status >= 200 && response.status <= 299) {
+          setEmailExists(true);
+          setMessage('중복 확인되었습니다.');
+          setShowAlert(true);
+        } else {
+          setEmailExists(false);
+          setMessage('이미 존재하는 이메일입니다.');
+          setShowAlert(true);
+        }
+      })
+      .catch(error => {
+        console.error('중복 확인 실패:', error);
+      });
   };
 
   return (

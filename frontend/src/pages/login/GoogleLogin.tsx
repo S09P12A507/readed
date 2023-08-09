@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 import { setTokens } from '../../store/actions/authActions';
 
 interface Tokens {
-  AccessToken: string;
-  RepreshToken: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 function GoogleLogin() {
@@ -20,22 +20,26 @@ function GoogleLogin() {
         const apiUrl = 'http://localhost:8081/api/auth/google';
 
         axios
-          .post(apiUrl, {
+          .post<{ data: Tokens }>(apiUrl, {
             code: authorizationCode,
           })
           .then(response => {
-            const receivedToken = (response.data as { data: Tokens[] }).data;
-            if (receivedToken.length > 0) {
-              const AToken = receivedToken[0].AccessToken;
-              const RToken = receivedToken[0].RepreshToken;
+            const receivedToken: Tokens = response.data.data;
+
+            if (receivedToken) {
+              const AToken = receivedToken.accessToken;
+              const RToken = receivedToken.refreshToken;
+              console.log(AToken);
+              console.log(RToken);
               if (AToken && RToken) {
                 dispatch(setTokens(AToken, RToken));
               }
             }
-            window.location.href = '/';
+            console.log(receivedToken);
+            window.location.href = '/signup/addprofile';
           })
-          .catch(error => {
-            console.log(error);
+          .catch(() => {
+            window.location.href = '/';
           });
       }
     };

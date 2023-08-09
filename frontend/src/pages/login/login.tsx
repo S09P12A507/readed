@@ -64,8 +64,8 @@ const CenterText = styled.h3`
 `;
 
 interface Tokens {
-  AccessToken: string;
-  RepreshToken: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 function Login() {
@@ -77,10 +77,10 @@ function Login() {
   const dispatch = useDispatch();
 
   const KakaoRestApi = 'e1496c3a1b0232c4d6f84d511cf90255';
-  const KakaoRedirect = 'http://localhost:3000/oauth/kakao/callback';
+  const KakaoRedirect = 'http://3.38.252.22/oauth/kakao/callback';
   const GoogleclientId =
     '59438726779-mukgldfttu2qm0oikt8jeirkra7bliji.apps.googleusercontent.com';
-  const GoogleredirectUri = 'http://localhost:3000/oauth/google/callback';
+  const GoogleredirectUri = 'http://3.38.252.22/oauth/google/callback';
 
   const handleLogin = (url: string) => {
     window.location.href = url;
@@ -89,15 +89,18 @@ function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     axios
-      .post('http://localhost:8081/api/auth/sign-in', {
+      .post<{ data: Tokens }>('http://3.38.252.22/api/auth/sign-in', {
         email: username,
         password,
       })
       .then(response => {
-        const receivedToken = (response.data as { data: Tokens[] }).data;
-        if (receivedToken.length > 0) {
-          const AToken = receivedToken[0].AccessToken;
-          const RToken = receivedToken[0].RepreshToken;
+        const receivedToken: Tokens = response.data.data;
+
+        if (receivedToken) {
+          const AToken = receivedToken.accessToken;
+          const RToken = receivedToken.refreshToken;
+          console.log(AToken);
+          console.log(RToken);
           if (AToken && RToken) {
             dispatch(setTokens(AToken, RToken));
           }

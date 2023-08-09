@@ -94,7 +94,7 @@ function Emailcheck() {
 
   const handleVerify = () => {
     axios
-      .post('http://localhost:8081/api/auth/check-email', {
+      .post('http://3.38.252.22/api/auth/check-email', {
         email,
         code,
       })
@@ -134,7 +134,7 @@ function Emailcheck() {
 
   const handleSubmit = () => {
     axios
-      .post('http://localhost:8081/api/auth/send-email', { email })
+      .post('http://3.38.252.22/api/auth/send-email', { email })
       .then(response => {
         console.log('이메일이 성공적으로 보내졌습니다.');
 

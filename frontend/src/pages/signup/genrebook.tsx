@@ -92,7 +92,7 @@ function Genrebook() {
   useEffect(() => {
     if (isPageLoaded) {
       axios
-        .get('http://localhost:8081/api/select')
+        .get('http://3.38.252.22/api/select')
         .then(response => {
           setBookCovers(response.data as string[]);
         })
