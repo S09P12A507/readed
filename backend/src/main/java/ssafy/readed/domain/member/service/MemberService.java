@@ -24,7 +24,7 @@ public interface MemberService {
 
     void modifyPassword(Long id, Member member, ModifyPasswordRequestDto passwordRequestDto);
 
-    void deleteMember(Long id, Member member);
+    void deleteMember(Member member, TokenDto tokenDto);
 
     void logout(Member member, TokenDto tokenDto);
 }

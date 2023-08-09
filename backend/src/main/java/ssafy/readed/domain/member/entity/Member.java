@@ -19,16 +19,19 @@ import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 import ssafy.readed.domain.bookclub.entity.Bookclub;
 import ssafy.readed.domain.bookclub.entity.Participant;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.report.entity.Report;
+import ssafy.readed.global.entity.BaseEntity;
 import ssafy.readed.global.util.IntegerArrayConverter;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Member {
+@Where(clause = "is_valid=true")
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,11 +67,10 @@ public class Member {
     private Integer reportCount = 0; // 독후감 수
     private Integer bookclubCount = 0; // 북클럽 횟수
     private Integer pageCount = 0; // 읽은 페이지 수
-    
-    @Convert(converter = IntegerArrayConverter.class)
-    private List<Integer> starCount = new ArrayList<>(Arrays.asList(0,0,0,0,0,0,0,0,0,0)); //별점 갯수
 
-    private boolean isValid = true;
+    @Convert(converter = IntegerArrayConverter.class)
+    private List<Integer> starCount = new ArrayList<>(
+            Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //별점 갯수
 
     public void modify(ModifyMemberProfileRequestDto memberProfileRequestDto) {
         this.nickname = memberProfileRequestDto.getNickname();
@@ -97,7 +99,7 @@ public class Member {
     public void addComment(int page, int star) {
         this.readCount++;
         this.pageCount += page;
-        this.starCount.set(star,this.starCount.get(star)+1);
+        this.starCount.set(star, this.starCount.get(star) + 1);
     }
 
     @Builder

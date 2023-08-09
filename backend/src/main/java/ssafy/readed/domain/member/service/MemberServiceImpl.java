@@ -4,7 +4,6 @@ import java.util.regex.Pattern;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,6 @@ public class MemberServiceImpl implements MemberService {
     private final RedisUtil redisUtil;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final RedisTemplate<String, Object> redisTemplate;
 
     @Override
     @Transactional
@@ -101,8 +99,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void deleteMember(Long id, Member member) {
-
+    public void deleteMember(Member member, TokenDto tokenDto) {
+        Member findMember = getMember(member.getId());
+        logout(findMember, tokenDto);
+        findMember.delete();
     }
 
     @Override

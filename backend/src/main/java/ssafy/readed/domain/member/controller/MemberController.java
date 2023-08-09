@@ -81,4 +81,11 @@ public class MemberController {
         memberService.logout(member, tokenDto);
         return JsonResponse.ok("로그아웃이 완료되었습니다.");
     }
+
+    @DeleteMapping
+    private ResponseEntity<?> deleteMember(@AuthenticationPrincipal Member member,
+            @RequestBody TokenDto tokenDto) {
+        memberService.deleteMember(member, tokenDto);
+        return JsonResponse.ok("회원 탈퇴가 완료되었습니다.");
+    }
 }
