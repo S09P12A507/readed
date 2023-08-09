@@ -3,6 +3,7 @@ package ssafy.readed.domain.auth.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import ssafy.readed.domain.auth.controller.dto.RefreshAccessTokenRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SendEmailRequestDto;
 import ssafy.readed.domain.auth.controller.dto.SignInRequestDto;
 import ssafy.readed.domain.auth.service.AuthService;
+import ssafy.readed.domain.member.service.MemberService;
 import ssafy.readed.global.response.JsonResponse;
 
 @RestController
@@ -21,6 +23,8 @@ import ssafy.readed.global.response.JsonResponse;
 public class AuthController {
 
     private final AuthService service;
+
+    private final MemberService memberService;
 
     @PostMapping("/sign-in")
     public ResponseEntity<?> defaultSignIn(@RequestBody SignInRequestDto requestDto) {
@@ -42,6 +46,18 @@ public class AuthController {
     @PostMapping("/test")
     public ResponseEntity<?> test(@RequestBody SendEmailRequestDto requestDto) {
         return JsonResponse.ok("권한 테스트 !!");
+    }
+
+    @GetMapping("/check-email-duplicate")
+    public ResponseEntity<?> checkEmailDuplicate(String email) {
+        memberService.emailDuplicationCheck(email);
+        return JsonResponse.ok("중복 체크 완료");
+    }
+
+    @GetMapping("/check-nickname-duplicate")
+    public ResponseEntity<?> checkNicknameDuplicate(String nickname) {
+        memberService.nicknameDuplicationCheck(nickname);
+        return JsonResponse.ok("중복 체크 완료");
     }
 
     @PostMapping("/refresh")

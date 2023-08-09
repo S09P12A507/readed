@@ -47,6 +47,7 @@ public class Member extends BaseEntity {
     private Provider provider;
     private String nickname;
     private String profile_bio;
+    @Column(length = 40000)
     private String profile_image;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

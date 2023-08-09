@@ -36,17 +36,7 @@ public class MemberController {
         return JsonResponse.ok("회원가입 성공!");
     }
 
-    @GetMapping("/check-email-duplicate")
-    public ResponseEntity<?> checkEmailDuplicate(String email) {
-        memberService.emailDuplicationCheck(email);
-        return JsonResponse.ok("중복 체크 완료");
-    }
 
-    @GetMapping("/check-nickname-duplicate")
-    public ResponseEntity<?> checkNicknameDuplicate(String nickname) {
-        memberService.nicknameDuplicationCheck(nickname);
-        return JsonResponse.ok("중복 체크 완료");
-    }
 
     @GetMapping("/profile/{member-id}")
     public ResponseEntity<?> selectProfile(@PathVariable("member-id") Long id) {

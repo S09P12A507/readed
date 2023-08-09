@@ -95,9 +95,9 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(accessTokenSalt)
                     .parseClaimsJws(accessToken);
-            if (redisUtil.hasKeyBlackList(accessToken)) {
-                throw new GlobalRuntimeException("로그아웃된 사용자 입니다.", HttpStatus.FORBIDDEN);
-            }
+//            if (redisUtil.hasKeyBlackList(accessToken)) {
+//                throw new GlobalRuntimeException("로그아웃된 사용자 입니다.", HttpStatus.FORBIDDEN);
+//            }
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
