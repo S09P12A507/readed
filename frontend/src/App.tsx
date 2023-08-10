@@ -25,7 +25,7 @@ import Profile from './pages/profile/Profile';
 import KaKao from './pages/login/KakaoLogin';
 import Google from './pages/login/GoogleLogin';
 import Report from './pages/books/Report';
-import PageNotFound from './pages/PageNotFound';
+// import PageNotFound from './pages/PageNotFound';
 // components
 import BottomNav from './components/common/nav/BottomNav';
 import StatisticsTab from './components/profile/tabs/statisticsTab/StatisticsTab';
@@ -39,7 +39,7 @@ import PwChange from './components/profile/profileChange/PwChange';
  * bottom navigation
  *
  * @author 김보석, 박성준
- * @breif 메인 app 컴포넌트
+ * @breif 메인 app 컴포넌트.
  * @see
  * @todo profile 페이지 url을 userId만 받아도 되도록 하고, 그 외의 값이 들어오면 접근 불가하도록
  */
@@ -136,7 +136,7 @@ function App() {
                 </Route>
                 <Route path="bookmark" element={<Bookmark />} />
               </Route>
-              <Route path="*" element={<PageNotFound />} />
+              {/* <Route path="*" element={<PageNotFound />} /> */}
             </Routes>
           </Router>
         </MobileContainer>
