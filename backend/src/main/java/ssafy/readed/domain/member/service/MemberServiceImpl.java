@@ -1,12 +1,11 @@
 package ssafy.readed.domain.member.service;
 
-import java.util.regex.Pattern;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ssafy.readed.domain.auth.repository.RefreshTokenRepository;
 import ssafy.readed.domain.auth.service.dto.TokenDto;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
@@ -21,6 +20,11 @@ import ssafy.readed.domain.member.service.dto.SelectProfileResponseDto;
 import ssafy.readed.global.config.RedisUtil;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 import ssafy.readed.global.security.JwtTokenProvider;
+import ssafy.readed.global.service.S3FileService;
+
+import javax.transaction.Transactional;
+import java.io.IOException;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +37,9 @@ public class MemberServiceImpl implements MemberService {
     private final RedisUtil redisUtil;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final S3FileService s3FileService;
+
+    private final String path = "/image/member/profile/";
 
     @Override
     @Transactional
@@ -84,7 +91,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void modifyPassword(Member member,
-            ModifyPasswordRequestDto passwordRequestDto) {
+                               ModifyPasswordRequestDto passwordRequestDto) {
 
         Member modifiedMember = getMember(member.getId());
 
@@ -132,6 +139,12 @@ public class MemberServiceImpl implements MemberService {
         redisUtil.setBlackList(tokenDto.getAccessToken(), "accessToken", expirationTime);
     }
 
+    @Override
+    public void saveNewProfileFile(Member member, MultipartFile multipartFile) throws IOException {
+        String savedFilename = s3FileService.saveFile(path, multipartFile);
+        member.saveNewProfileFile(path, multipartFile.getOriginalFilename(), savedFilename);
+    }
+
     public void checkValidation(SignUpRequestDto requestDto) {
         String email = requestDto.getEmail();
         String password1 = requestDto.getPassword();
@@ -145,12 +158,10 @@ public class MemberServiceImpl implements MemberService {
         checkNameRegexp(name);
         checkNicknameRegexp(nickname);
         emailDuplicationCheck(email);
-
-
     }
 
     private void checkPrevPassword(ModifyPasswordRequestDto passwordRequestDto,
-            Member modifiedMember) {
+                                   Member modifiedMember) {
         if (!passwordEncoder.matches(passwordRequestDto.getPrevPassword(),
                 modifiedMember.getPassword().getPasswordValue())) {
             throw new GlobalRuntimeException("비밀번호가 틀립니다.", HttpStatus.BAD_REQUEST);

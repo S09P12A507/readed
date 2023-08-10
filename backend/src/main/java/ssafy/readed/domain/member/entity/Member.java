@@ -1,21 +1,5 @@
 package ssafy.readed.domain.member.entity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +10,11 @@ import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.report.entity.Report;
 import ssafy.readed.global.entity.BaseEntity;
 import ssafy.readed.global.util.IntegerArrayConverter;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,8 +36,9 @@ public class Member extends BaseEntity {
     private Provider provider;
     private String nickname;
     private String profile_bio;
-    @Column(length = 40000)
-    private String profile_image;
+
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private MemberProfileFile memberProfileFile;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "password_id")
@@ -103,9 +93,18 @@ public class Member extends BaseEntity {
         this.starCount.set(star, this.starCount.get(star) + 1);
     }
 
+    public void saveNewProfileFile(String path, String originalFilename, String savedFilename) {
+        this.memberProfileFile = MemberProfileFile
+                .builder()
+                .savedFilename(savedFilename)
+                .savedPath(path)
+                .originalFilename(originalFilename)
+                .member(this).build();
+    }
+
     @Builder
     public Member(String email, String name, Provider provider, String nickname, String profile_bio,
-            String profile_image, Password password) {
+                  String profile_image, Password password) {
         this.email = email;
         this.name = name;
         this.provider = provider;
