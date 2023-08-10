@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
 import { RootState } from '../../../store/store';
-// import basic from '../../../assets/img/non.png';
+import AlertsModal from '../../common/alert/Alert';
 
 const ImageContainer = styled.div`
   text-align: center;
@@ -23,12 +23,13 @@ const ProfileImg = styled.img`
   vertical-align: middle;
 `;
 
-const AuthForm = styled(TextField)`
+const IntroduceForm = styled(TextField)`
   width: 100%;
 `;
 
-const IntroduceForm = styled(TextField)`
-  width: 100%;
+const AuthButton = styled(Button)`
+  width: 20%;
+  height: 56px;
 `;
 
 interface UserInfo {
@@ -49,6 +50,8 @@ function InfoChange() {
   const [ProfileImage, setprofileimage] = useState<string | undefined>(
     undefined,
   );
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
 
   const token: string | null = useSelector(
     (state: RootState) => state.auth.accessToken,
@@ -75,18 +78,65 @@ function InfoChange() {
 
   const handleIntroChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setprofilebio(event.target.value);
-    // console.log(ProfileImage);
     console.log(nicknameExists);
+  };
+
+  const handleInfoChange = () => {
+    const formData = {
+      nickname,
+      profile_bio: ProfileBio,
+      profile_image: previewUrl,
+    };
+    console.log(formData);
+    if (token) {
+      axios
+        .patch('https://i9a507.p.ssafy.io/api/members/profile/', formData, {
+          headers: {
+            'X-READED-ACCESSTOKEN': `${token}`,
+          },
+        })
+        .then(() => {
+          setMessage('회원 정보가 변경됐습니다.');
+          setShowAlert(true);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  };
+
+  const handleVerify = () => {
+    axios
+      .get(
+        `https://i9a507.p.ssafy.io/api/auth/check-nickname-duplicate?nickname=${nickname}`,
+      )
+      .then(response => {
+        if (response.status >= 200 && response.status <= 299) {
+          setNicknameExists(true);
+          setMessage('중복 확인되었습니다.');
+          setShowAlert(true);
+        } else {
+          setNicknameExists(false);
+          setMessage('중복된 닉네임입니다.');
+          setShowAlert(true);
+        }
+      })
+      .catch(error => {
+        console.error('중복 확인 실패:', error);
+      });
   };
 
   useEffect(() => {
     if (token) {
       axios
-        .get<{ data: UserInfo }>(`http://3.38.252.22/api/members/profile/1`, {
-          headers: {
-            'X-READED-ACCESSTOKEN': `${token}`,
+        .get<{ data: UserInfo }>(
+          `https://i9a507.p.ssafy.io/api/members/profile/`,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': `${token}`,
+            },
           },
-        })
+        )
         .then(response => {
           setUserInfo(response.data.data);
         })
@@ -107,7 +157,6 @@ function InfoChange() {
     <div>
       {userInfo ? (
         <div>
-          {/* <img src={userInfo.profile_image} alt="프로필 사진" /> */}
           <h2> 프로필 이미지</h2>
           <ImageContainer>
             <label htmlFor="fileInput">
@@ -126,18 +175,35 @@ function InfoChange() {
           </ImageContainer>
           <h3>이메일</h3>
           <p>{userInfo.email}</p>
-          <AuthForm
-            label="닉네임"
-            variant="outlined"
-            value={nickname}
-            onChange={handleNicknameChange}
-            margin="dense"
-            InputProps={{
-              style: {
-                backgroundColor: '#f5f5f5',
-              },
-            }}
-          />
+
+          <Grid container alignItems="center">
+            <Grid item xs={10.2}>
+              <IntroduceForm
+                label="닉네임"
+                variant="outlined"
+                value={nickname}
+                onChange={handleNicknameChange}
+                margin="dense"
+                InputProps={{
+                  style: {
+                    backgroundColor: '#f5f5f5',
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <AuthButton
+                variant="contained"
+                color="primary"
+                onClick={handleVerify}
+                style={{
+                  marginLeft: '10px',
+                  background: 'var(--primary-dark)',
+                }}>
+                중복 확인
+              </AuthButton>
+            </Grid>
+          </Grid>
           <IntroduceForm
             label="한 줄 소개"
             variant="outlined"
@@ -152,18 +218,22 @@ function InfoChange() {
               },
             }}
           />
-          {/* <p>한줄 소개: {userInfo.profile_bio}</p> */}
           <Button variant="contained" style={{ width: '40%', margin: '5%' }}>
-            {' '}
             취소
           </Button>
           <Button
             variant="contained"
             color="success"
-            style={{ width: '40%', margin: '5%' }}>
-            {' '}
+            style={{ width: '40%', margin: '5%' }}
+            onClick={handleInfoChange}>
             저장
           </Button>
+
+          <AlertsModal
+            open={showAlert}
+            onClose={() => setShowAlert(false)}
+            message={message}
+          />
         </div>
       ) : (
         <p>로딩중.. (안되면 axios 에러 난거임)</p>

@@ -168,7 +168,7 @@ function Signup() {
       localStorage.setItem('signupData', JSON.stringify(formData));
 
       axios
-        .post('http://3.38.252.22/api/auth/send-email', { email })
+        .post('https://i9a507.p.ssafy.io/api/auth/send-email', { email })
         .then(response => {
           console.log('이메일이 성공적으로 보내졌습니다.');
           window.location.href = '/signup/emailcheck';
@@ -185,7 +185,9 @@ function Signup() {
 
   const handleVerify = () => {
     axios
-      .get(`http://3.38.252.22/api/auth/check-email-duplicate?email=${email}`)
+      .get(
+        `https://i9a507.p.ssafy.io/api/auth/check-email-duplicate?email=${email}`,
+      )
       .then(response => {
         if (response.status >= 200 && response.status <= 299) {
           setEmailExists(true);

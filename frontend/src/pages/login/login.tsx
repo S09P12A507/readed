@@ -77,10 +77,10 @@ function Login() {
   const dispatch = useDispatch();
 
   const KakaoRestApi = 'e1496c3a1b0232c4d6f84d511cf90255';
-  const KakaoRedirect = 'http://3.38.252.22/oauth/kakao/callback';
+  const KakaoRedirect = 'https://i9a507.p.ssafy.io/oauth/kakao/callback';
   const GoogleclientId =
     '59438726779-mukgldfttu2qm0oikt8jeirkra7bliji.apps.googleusercontent.com';
-  const GoogleredirectUri = 'http://3.38.252.22/oauth/google/callback';
+  const GoogleredirectUri = 'https://i9a507.p.ssafy.io/oauth/google/callback';
 
   const handleLogin = (url: string) => {
     window.location.href = url;
@@ -89,7 +89,7 @@ function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     axios
-      .post<{ data: Tokens }>('http://3.38.252.22/api/auth/sign-in', {
+      .post<{ data: Tokens }>('https://i9a507.p.ssafy.io/api/auth/sign-in', {
         email: username,
         password,
       })

@@ -18,6 +18,7 @@ import Bookclub from './pages/bookclub/Bookclub';
 import BookclubCreate from './pages/bookclub/BookclubCreate';
 import BookclubDetail from './pages/bookclub/BookclubDetatil';
 import BookclubRoom from './pages/bookclub/BookclubRoom';
+import BookclubMeeting from './pages/bookclub/BookclubMeeting';
 import BookDetail from './pages/books/BookDetail';
 import Profilechange from './pages/profile/Profilechange';
 import Profile from './pages/profile/Profile';
@@ -112,6 +113,10 @@ function App() {
               <Route
                 path="/bookclub/waiting/:bookclubId"
                 element={<BookclubRoom />}
+              />
+              <Route
+                path="/bookclub/:bookclubId"
+                element={<BookclubMeeting />}
               />
               <Route path="/report/:bookId" element={<Report />} />
               <Route path="/" element={<BottomNav />}>

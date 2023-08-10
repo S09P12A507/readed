@@ -105,7 +105,7 @@ function Addprofile() {
   const [password1] = useState<string>(signUpData.password1 || '');
   const [password2] = useState<string>(signUpData.password2 || '');
 
-  // const [ProfileImage, setprofileimage] = useState<File | null>(null);
+  const [ProfileImage, setprofileimage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
   const [ProfileBio, setprofilebio] = useState<string>('');
@@ -116,7 +116,7 @@ function Addprofile() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      // setprofileimage(file);
+      setprofileimage(file);
 
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -138,17 +138,17 @@ function Addprofile() {
   const handleVerify = () => {
     axios
       .get(
-        `http://3.38.252.22/api/auth/check-nickname-duplicate?nickname=${nickname}`,
+        `https://i9a507.p.ssafy.io/api/auth/check-nickname-duplicate?nickname=${nickname}`,
       )
       .then(response => {
         if (response.status >= 200 && response.status <= 299) {
           setNicknameExists(true);
           setMessage('중복 확인되었습니다.');
           setShowAlert(true);
+          console.log(response);
         } else {
           setNicknameExists(false);
-          setMessage('중복된 닉네임입니다.');
-          setShowAlert(true);
+          console.log('인증 실패');
         }
       })
       .catch(error => {
@@ -162,19 +162,32 @@ function Addprofile() {
       setShowAlert(true);
       return;
     }
-    const formData = {
+    const InfoData = {
       name: MemberName,
       email,
       password: password1,
       password2,
       nickname,
-      profile_bio: ProfileBio,
-      profile_image: previewUrl,
+      profileBio: ProfileBio,
     };
-    console.log(formData);
+
+    const InfoDataJson = JSON.stringify(InfoData);
+    const formData = new FormData();
+    formData.append(
+      'requestDto',
+      new Blob([InfoDataJson], { type: 'application/json' }),
+    );
+    if (ProfileImage) {
+      formData.append('image', ProfileImage);
+    }
+    console.log(InfoData);
 
     axios
-      .post('http://3.38.252.22/api/members/sign-up', formData)
+      .post('https://i9a507.p.ssafy.io/api/members/sign-up', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       .then(() => {
         setMessage('회원 가입에 성공했습니다.');
         setShowAlert(true);
@@ -223,6 +236,7 @@ function Addprofile() {
         <input
           type="file"
           id="fileInput"
+          multiple
           onChange={handleFileChange}
           style={{ display: 'none' }}
         />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import AliceCarousel from 'react-alice-carousel';
 import axios from 'axios';
@@ -74,6 +74,12 @@ function Home() {
       });
   }, []);
 
+  const navigate = useNavigate();
+
+  const handlebookDetail = (bookId: string) => {
+    navigate(`/book/${bookId}`);
+  };
+
   return (
     <div>
       <div>
@@ -86,7 +92,12 @@ function Home() {
         <AliceCarousel
           mouseTracking
           items={data.map((item: Book) => (
-            <div key={item.isbn} style={{ width: 130 }}>
+            <div
+              role="button"
+              tabIndex={0}
+              key={item.isbn}
+              style={{ width: 130 }}
+              onClick={() => handlebookDetail(item.title)}>
               <img src={item.thumbnail} alt={item.title} />
               {item.title}
             </div>
@@ -98,7 +109,12 @@ function Home() {
         <AliceCarousel
           mouseTracking
           items={best.map((item: Book) => (
-            <div key={item.isbn} style={{ width: 130 }}>
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => handlebookDetail(item.title)}
+              key={item.isbn}
+              style={{ width: 130 }}>
               <img src={item.thumbnail} alt={item.title} />
               {item.title}
             </div>

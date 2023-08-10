@@ -94,21 +94,22 @@ function Emailcheck() {
 
   const handleVerify = () => {
     axios
-      .post('http://3.38.252.22/api/auth/check-email', {
+      .post('https://i9a507.p.ssafy.io/api/auth/check-email', {
         email,
         code,
       })
       .then(response => {
         if (response.status >= 200 && response.status <= 299) {
           setIsAuthenticated(true);
-          console.log('인증 성공');
+          setMessage('인증되었습니다..');
+          setShowAlert(true);
         } else {
           setIsAuthenticated(false);
-          console.log('인증 실패');
+          setMessage('인증 번호를 다시 확인해주세요.');
+          setShowAlert(true);
         }
       })
-      .catch(error => {
-        console.error('인증 요청 실패', error);
+      .catch(() => {
         setMessage('인증 번호를 다시 확인해주세요.');
         setShowAlert(true);
       });
@@ -134,7 +135,7 @@ function Emailcheck() {
 
   const handleSubmit = () => {
     axios
-      .post('http://3.38.252.22/api/auth/send-email', { email })
+      .post('https://i9a507.p.ssafy.io/api/auth/send-email', { email })
       .then(response => {
         console.log('이메일이 성공적으로 보내졌습니다.');
 

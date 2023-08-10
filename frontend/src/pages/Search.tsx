@@ -11,7 +11,7 @@ const Searched = styled.div`
   position: relative;
   background-color: #f5f5f5;
   border-radius: 10%;
-  width: 90%;
+  width: 100%;
 `;
 
 const SearchIconWrapper = styled.div`
@@ -48,7 +48,7 @@ function highlightMatchingText(text: string, query: string): React.ReactNode {
   return parts.map(part => (
     <React.Fragment key={Math.random()}>
       {part.toLowerCase() === query.toLowerCase() ? (
-        <strong>{part}</strong>
+        <strong style={{ color: 'var(--primary-dark)' }}>{part}</strong>
       ) : (
         part
       )}
