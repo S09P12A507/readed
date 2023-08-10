@@ -24,12 +24,13 @@ import Profile from './pages/profile/Profile';
 import KaKao from './pages/login/KakaoLogin';
 import Google from './pages/login/GoogleLogin';
 import Report from './pages/books/Report';
-// import PageNotFound from './pages/PageNotFound';
+import PageNotFound from './pages/PageNotFound';
 // components
 import BottomNav from './components/common/nav/BottomNav';
 import StatisticsTab from './components/profile/tabs/statisticsTab/StatisticsTab';
 import BookTab from './components/profile/tabs/bookTab/BookTab';
 import ReportTab from './components/profile/tabs/reportTab/ReportTab';
+import Bookmark from './pages/profile/meatballMenu/Bookmark';
 import InfoChange from './components/profile/profileChange/InfoChange';
 import PwChange from './components/profile/profileChange/PwChange';
 
@@ -39,6 +40,7 @@ import PwChange from './components/profile/profileChange/PwChange';
  * @author 김보석, 박성준
  * @breif 메인 app 컴포넌트
  * @see
+ * @todo profile 페이지 url을 userId만 받아도 되도록 하고, 그 외의 값이 들어오면 접근 불가하도록
  */
 
 const MobileContainer = styled(Container)`
@@ -74,6 +76,14 @@ const theme = createTheme({
       dark: '#F3C32C',
       light: '#F9E88E',
       contrastText: '#000',
+    },
+    common: {
+      black: 'rgba(0, 0, 0, 0.87)',
+      white: '#fff',
+      // textPrimary: 'rgba(0, 0, 0, 0.87)',
+      // textSecondary: 'rgba(0, 0, 0, 0.60)',
+      // textDisabled: 'rgba(0, 0, 0, 0.38)',
+      // divider: 'rgba(0, 0, 0, 0.12)',
     },
   },
 });
@@ -113,14 +123,15 @@ function App() {
                   <Route path="" element={<InfoChange />} />
                   <Route path="pwchange" element={<PwChange />} />
                 </Route>
-                <Route path=":userId" element={<Profile />}>
+
+                <Route path="/profile/:userId" element={<Profile />}>
                   <Route index path="" element={<StatisticsTab />} />
                   <Route path="book" element={<BookTab />} />
                   <Route path="report" element={<ReportTab />} />
                 </Route>
+                <Route path="bookmark" element={<Bookmark />} />
               </Route>
-
-              {/* <Route path="*" element={<PageNotFound />} /> */}
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
           </Router>
         </MobileContainer>

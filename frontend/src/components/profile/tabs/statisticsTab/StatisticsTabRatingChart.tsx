@@ -19,7 +19,7 @@ import { IUserProfileStatistics } from '../../../../interfaces/user/IUserProfile
  *
  * @author 박성준
  * @see
- * @todo 배치, css
+ * @todo 스크롤을 내렸을 때 차트가 렌더링
  */
 
 const Container = styled.article``;
@@ -29,6 +29,7 @@ const ChartContainer = styled.div`
   margin: 0 auto;
   margin-top: 0.5rem;
   transform: translate(-0.5rem);
+  /* visibility: hidden; */
 `;
 const DataContainer = styled.div`
   display: flex;
@@ -145,9 +146,11 @@ function StatisticsTabRatingChart({
       },
     ],
   };
+
   return (
     <Container>
       <ReadedSpan text="별점 통계" fontSize="1.125rem" fontWeight="600" />
+      <div id="chart" style={{ visibility: 'hidden' }} />
       <ChartContainer>
         <Bar options={options} data={data} />
       </ChartContainer>

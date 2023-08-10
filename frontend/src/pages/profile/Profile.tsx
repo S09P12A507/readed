@@ -8,7 +8,7 @@ import ProfileTabs from '../../components/profile/tabs/ProfileTabs';
 // import ProfileCardLoading from './loading/ProfileCardLoading';
 // types
 import { IUserProfileInfo } from '../../interfaces/user/IUserProfileInfo';
-import MeatballMenuButton from '../../components/profile/meatballMenu/MeatballMenuButton';
+import MeatballMenu from '../../components/profile/meatballMenu/MeatballMenu';
 
 /**
  * 내 서재
@@ -20,6 +20,7 @@ import MeatballMenuButton from '../../components/profile/meatballMenu/MeatballMe
 const HeaderTopContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const dummyUserProfileInfo: IUserProfileInfo = {
@@ -50,7 +51,7 @@ function Profile() {
     <>
       <HeaderTopContainer>
         <ReadedH2 text="내 서재" />
-        <MeatballMenuButton />
+        <MeatballMenu />
       </HeaderTopContainer>
       {/* {isLoading ? (
         <ProfileCardLoading />

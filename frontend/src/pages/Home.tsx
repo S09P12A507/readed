@@ -79,11 +79,9 @@ function Home() {
       <div>
         <span>홈임</span>
         <br />
-        <Link to="/login">불편하다고 하셔서 만든 로그인으로 가는 링크</Link>
+        <Link to="/login">로그인 임시 링크</Link>
         <br />
-        <Link to="/profilechange/:userId">
-          없으면 서운한 회원 변경하러 가는 링크
-        </Link>
+        <Link to="/profilechange/:userId">회원 변경 임시 링크</Link>
         <h2>리디드 Top 10</h2>
         <AliceCarousel
           mouseTracking
