@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public interface MemberService {
 
-    void signUp(SignUpRequestDto requestDto);
+    void signUp(SignUpRequestDto requestDto, MultipartFile image);
 
     SelectProfileResponseDto selectProfile(Long id);
 

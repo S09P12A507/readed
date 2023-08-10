@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ssafy.readed.domain.auth.service.dto.TokenDto;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.member.controller.dto.ModifyPasswordRequestDto;
@@ -23,8 +24,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto requestDto) {
-        memberService.signUp(requestDto);
+    public ResponseEntity<?> signUp(@RequestPart SignUpRequestDto requestDto, @RequestPart
+            MultipartFile image) {
+        memberService.signUp(requestDto, image);
         return JsonResponse.ok("회원가입 성공!");
     }
 

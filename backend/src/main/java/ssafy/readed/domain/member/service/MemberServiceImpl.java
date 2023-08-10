@@ -12,6 +12,7 @@ import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.member.controller.dto.ModifyPasswordRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.entity.Member;
+import ssafy.readed.domain.member.entity.MemberProfileFile;
 import ssafy.readed.domain.member.entity.Password;
 import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
@@ -39,11 +40,11 @@ public class MemberServiceImpl implements MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final S3FileService s3FileService;
 
-    private final String path = "/image/member/profile/";
+    private final String path = "image/member/profile/";
 
     @Override
     @Transactional
-    public void signUp(SignUpRequestDto requestDto) {
+    public void signUp(SignUpRequestDto requestDto, MultipartFile image) {
 
         checkValidation(requestDto);
 
@@ -56,10 +57,15 @@ public class MemberServiceImpl implements MemberService {
                 .email(requestDto.getEmail())
                 .provider(Provider.DEFAULT)
                 .nickname(requestDto.getNickname())
-                .profile_bio(requestDto.getProfile_bio())
-                .profile_image(requestDto.getProfile_image())
+                .profileBio(requestDto.getProfileBio())
                 .password(password)
                 .build();
+
+        try {
+            saveNewProfileFile(member,image);
+        } catch (IOException e) {
+            throw new GlobalRuntimeException("프로필 사진 저장 실패",HttpStatus.CONFLICT);
+        }
 
         memberRepository.save(member);
 
@@ -69,7 +75,8 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public SelectProfileResponseDto selectProfile(Long id) {
         Member member = getMember(id);
-        return SelectProfileResponseDto.from(member);
+        String url = s3FileService.getS3Url(path,member.getMemberProfileFile().getSavedFilename());
+        return SelectProfileResponseDto.from(member,url);
     }
 
     @Override
@@ -78,6 +85,14 @@ public class MemberServiceImpl implements MemberService {
         checkNicknameRegexp(requestDto.getNickname());
 
         Member modifiedMember = getMember(member.getId());
+
+        try {
+            saveNewProfileFile(modifiedMember, requestDto.getProfileImage());
+        } catch (IOException e){
+            e.printStackTrace();
+            throw new GlobalRuntimeException("프로필 사진 저장 실패",HttpStatus.CONFLICT);
+        }
+
         modifiedMember.modify(requestDto);
     }
 
@@ -85,6 +100,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public SelectMemberResponseDto selectMember(Long id) {
         Member member = getMember(id);
+
         return SelectMemberResponseDto.from(member);
     }
 

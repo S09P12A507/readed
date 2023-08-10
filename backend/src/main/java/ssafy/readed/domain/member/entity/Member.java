@@ -35,7 +35,7 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Provider provider;
     private String nickname;
-    private String profile_bio;
+    private String profileBio;
 
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private MemberProfileFile memberProfileFile;
@@ -65,8 +65,7 @@ public class Member extends BaseEntity {
 
     public void modify(ModifyMemberProfileRequestDto memberProfileRequestDto) {
         this.nickname = memberProfileRequestDto.getNickname();
-        this.profile_bio = memberProfileRequestDto.getProfile_bio();
-        this.profile_image = memberProfileRequestDto.getProfile_image();
+        this.profileBio = memberProfileRequestDto.getProfileBio();
     }
 
     public void modifyPW(Password newPassword) {
@@ -103,14 +102,13 @@ public class Member extends BaseEntity {
     }
 
     @Builder
-    public Member(String email, String name, Provider provider, String nickname, String profile_bio,
-                  String profile_image, Password password) {
+    public Member(String email, String name, Provider provider, String nickname, String profileBio,
+            Password password) {
         this.email = email;
         this.name = name;
         this.provider = provider;
         this.nickname = nickname;
-        this.profile_bio = profile_bio;
-        this.profile_image = profile_image;
+        this.profileBio = profileBio;
         this.password = password;
     }
 }

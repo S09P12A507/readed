@@ -30,8 +30,8 @@ public class S3FileService {
         return savedFilename;
     }
 
-    public String getS3Url(String filename) {
-        return amazonS3.getUrl(bucket, filename).toString();
+    public String getS3Url(String path, String savedFilename) {
+        return amazonS3.getUrl(bucket, path+ savedFilename).toString();
     }
 
     public void deleteImage(String filename) {

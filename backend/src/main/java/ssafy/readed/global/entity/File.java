@@ -1,10 +1,12 @@
 package ssafy.readed.global.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @NoArgsConstructor

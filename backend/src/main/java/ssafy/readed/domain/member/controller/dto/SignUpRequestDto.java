@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -20,7 +21,6 @@ public class SignUpRequestDto {
     private String password;
     private String password2;
     private String nickname;
-    private String profile_image;
-    private String profile_bio;
+    private String profileBio;
 
 }

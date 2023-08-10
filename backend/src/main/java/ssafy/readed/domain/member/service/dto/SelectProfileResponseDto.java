@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ssafy.readed.domain.member.entity.Member;
+import ssafy.readed.domain.member.entity.MemberProfileFile;
+import ssafy.readed.global.service.S3FileService;
 
 @Getter
 @NoArgsConstructor
@@ -13,8 +15,8 @@ public class SelectProfileResponseDto {
 
     private Long id;
     private String nickname;
-    private String profile_bio;
-    private String profile_image;
+    private String profileBio;
+    private String profileImage;
 
     private int readCount;
     private int reportCount;
@@ -33,25 +35,26 @@ public class SelectProfileResponseDto {
     private int star_5_count; // 별점 5점
 
     @Builder
-    public SelectProfileResponseDto(Long id, String nickname, String profile_bio,
-            String profile_image,
+    public SelectProfileResponseDto(Long id, String nickname, String profileBio,
+            String profileImage,
             int readCount, int reportCount, int bookclubCount, int pageCount) {
         this.id = id;
         this.nickname = nickname;
-        this.profile_bio = profile_bio;
-        this.profile_image = profile_image;
+        this.profileBio = profileBio;
+        this.profileImage = profileImage;
         this.readCount = readCount;
         this.reportCount = reportCount;
         this.bookclubCount = bookclubCount;
         this.pageCount = pageCount;
     }
 
-    public static SelectProfileResponseDto from(Member member) {
+    public static SelectProfileResponseDto from(Member member, String url) {
+
         return SelectProfileResponseDto.builder()
                 .id(member.getId())
                 .nickname(member.getNickname())
-                .profile_bio(member.getProfile_bio())
-                .profile_image(member.getProfile_image())
+                .profileBio(member.getProfileBio())
+                .profileImage(url)
                 .readCount(member.getReadCount())
                 .reportCount(member.getReportCount())
                 .bookclubCount(member.getBookclubCount())
