@@ -13,7 +13,7 @@ public interface BookclubService {
 
     BookclubResponseDto getBookclubDetail(Long bookClubId);
 
-    List<BookclubResponseDto> getMyBookclubList(Long memberId, Member member);
+    List<BookclubResponseDto> getMyBookclubList(Member member);
 
     OpenBookclubResponseDto openBookclubSession(Member member, OpenBookclubRequestDto requestDto);
 

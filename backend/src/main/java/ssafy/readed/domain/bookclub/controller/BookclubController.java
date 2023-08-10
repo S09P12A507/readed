@@ -67,11 +67,11 @@ public class BookclubController {
         return JsonResponse.ok("해당 id의 북클럽을 불러왔습니다.", bookclub);
     }
 
-    @GetMapping("/members/{member-id}")
-    public ResponseEntity<?> selectMyBookclubList(@PathVariable(name = "member-id") Long memberId,
+    @GetMapping("/mylist")
+    public ResponseEntity<?> selectMyBookclubList(
             @AuthenticationPrincipal Member member) {
         List<BookclubResponseDto> myBookclubList =
-                bookclubService.getMyBookclubList(memberId, member);
+                bookclubService.getMyBookclubList(member);
         return JsonResponse.ok("내가 참여한 북클럽 리스트를 불러왔습니다.", myBookclubList);
     }
 

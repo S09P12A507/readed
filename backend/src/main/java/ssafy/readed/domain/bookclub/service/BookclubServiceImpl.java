@@ -131,7 +131,7 @@ public class BookclubServiceImpl implements BookclubService {
 
     @Override
     public List<BookclubResponseDto> getBookclubList() {
-        return bookclubRepository.findAll().stream().map(BookclubResponseDto::from).toList();
+        return bookclubRepository.findAllByIsFinished(false).stream().map(BookclubResponseDto::from).toList();
     }
 
     @Override
@@ -140,10 +140,8 @@ public class BookclubServiceImpl implements BookclubService {
     }
 
     @Override
-    public List<BookclubResponseDto> getMyBookclubList(Long memberId, Member member) {
-        authCheck(memberId, member);
-
-        return bookclubRepository.selectParticipantsByMemeberIdFetchJoin(memberId).stream()
+    public List<BookclubResponseDto> getMyBookclubList(Member member) {
+        return bookclubRepository.selectParticipantsByMemeberIdFetchJoin(member.getId()).stream()
                 .map(Participant::getBookclub).map(BookclubResponseDto::from).toList();
     }
 
