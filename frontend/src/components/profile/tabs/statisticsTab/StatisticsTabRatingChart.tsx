@@ -9,6 +9,7 @@ import {
 } from 'chart.js';
 import styled from 'styled-components';
 import { Bar } from 'react-chartjs-2';
+import { Divider } from '@mui/material';
 import ReadedSpan from '../../../common/text/ReadedSpan';
 // types
 import { IUserProfileStatistics } from '../../../../interfaces/user/IUserProfileStatistics';
@@ -26,7 +27,20 @@ const ChartContainer = styled.div`
   width: 80%;
   max-width: var(--screen-size-mobile);
   margin: 0 auto;
+  margin-top: 0.5rem;
   transform: translate(-0.5rem);
+`;
+const DataContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+`;
+const DatumContainer = styled.div`
+  display: flex;
+  flex-flow: column;
+  text-align: center;
+  width: 33%;
 `;
 
 ChartJS.register(
@@ -137,9 +151,59 @@ function StatisticsTabRatingChart({
       <ChartContainer>
         <Bar options={options} data={data} />
       </ChartContainer>
-      <div>별점 평균: {countRatingAvg(userRateData)}</div>
-      <div>별점 개수: {countRatingVal(userRateData)}</div>
-      <div>많이 준 별점: {Math.round(maxIndex + 1) / 2}</div>
+      <DataContainer>
+        <DatumContainer>
+          <ReadedSpan
+            text="별점 평균"
+            fontSize="0.875rem"
+            fontWeight="300"
+            fontColor="var(--text-secondary)"
+            textAlign="center"
+          />
+          <ReadedSpan
+            text={countRatingAvg(userRateData)}
+            fontSize="1.5rem"
+            fontWeight="500"
+            textAlign="center"
+          />
+        </DatumContainer>
+        <div>
+          <Divider orientation="vertical" />
+        </div>
+        <DatumContainer>
+          <ReadedSpan
+            text="별점 개수"
+            fontSize="0.875rem"
+            fontWeight="300"
+            fontColor="var(--text-secondary)"
+            textAlign="center"
+          />
+          <ReadedSpan
+            text={countRatingVal(userRateData).toString()}
+            fontSize="1.5rem"
+            fontWeight="500"
+            textAlign="center"
+          />
+        </DatumContainer>
+        <div>
+          <Divider orientation="vertical" />
+        </div>
+        <DatumContainer>
+          <ReadedSpan
+            text="많이 준 별점"
+            fontSize="0.875rem"
+            fontWeight="300"
+            fontColor="var(--text-secondary)"
+            textAlign="center"
+          />
+          <ReadedSpan
+            text={(Math.round(maxIndex + 1) / 2).toString()}
+            fontSize="1.5rem"
+            fontWeight="500"
+            textAlign="center"
+          />
+        </DatumContainer>
+      </DataContainer>
     </Container>
   );
 }

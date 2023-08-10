@@ -34,7 +34,7 @@ const GlobalStyle = createGlobalStyle`
     --main-white: #FFFFFF;
     --main-black: #000000;
     --text-primary: rgba(0, 0, 0, 0.87);
-    --text-secondary: rgba(0, 0, 0, 0.38);
+    --text-secondary: rgba(0, 0, 0, 0.60);
     --text-disabled: rgba(0, 0, 0, 0.38);
     --divider: rgba(0, 0, 0, 0.12);
 

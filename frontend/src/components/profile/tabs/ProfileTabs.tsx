@@ -59,7 +59,7 @@ function ProfileTabs() {
 
   return (
     <>
-      <Divider variant="middle" />
+      <Divider variant="middle" sx={{ marginTop: '1rem' }} />
       <Tabs
         value={currentTab}
         centered

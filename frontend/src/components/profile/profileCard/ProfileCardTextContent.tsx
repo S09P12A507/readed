@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import ReadedH3 from '../../common/heading/ReadedH3';
 import ReadedSpan from '../../common/text/ReadedSpan';
 // types
-import { UserProfileInfo } from '../../../interfaces/user/IUserProfileInfo';
+import { IUserProfileInfo } from '../../../interfaces/user/IUserProfileInfo';
 
 /**
  * 프로필카드 우측 텍스트 내용 컴포넌트
@@ -24,8 +24,8 @@ const NicknameDeco = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 1rem;
-  width: 0.3rem;
-  height: 1rem;
+  width: 0.25rem;
+  height: 1.25rem;
 `;
 const RecordContainerWrapper = styled.div`
   display: flex;
@@ -46,10 +46,10 @@ function ProfileCardTextContent({
   reportCount,
   bookClubCount,
 }: {
-  nickname: UserProfileInfo['nickname'];
-  readCount: UserProfileInfo['readCount'];
-  reportCount: UserProfileInfo['reportCount'];
-  bookClubCount: UserProfileInfo['bookClubCount'];
+  nickname: IUserProfileInfo['nickname'];
+  readCount: IUserProfileInfo['readCount'];
+  reportCount: IUserProfileInfo['reportCount'];
+  bookClubCount: IUserProfileInfo['bookClubCount'];
 }) {
   const readCountString: string = readCount.toString();
   const reportCountString: string = reportCount.toString();
@@ -64,7 +64,8 @@ function ProfileCardTextContent({
         <RecordContainer>
           <ReadedSpan
             text={readCountString}
-            fontWeight="600"
+            fontSize="1.125rem"
+            fontWeight="500"
             textAlign="center"
           />
           <ReadedSpan
@@ -77,7 +78,8 @@ function ProfileCardTextContent({
         <RecordContainer>
           <ReadedSpan
             text={reportCountString}
-            fontWeight="600"
+            fontSize="1.125rem"
+            fontWeight="500"
             textAlign="center"
           />
           <ReadedSpan
@@ -90,7 +92,8 @@ function ProfileCardTextContent({
         <RecordContainer>
           <ReadedSpan
             text={bookClubCountString}
-            fontWeight="600"
+            fontSize="1.125rem"
+            fontWeight="500"
             textAlign="center"
           />
           <ReadedSpan

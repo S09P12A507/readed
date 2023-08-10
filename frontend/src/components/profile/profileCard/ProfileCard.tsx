@@ -4,7 +4,7 @@ import ReadedParagraph from '../../common/text/ReadedParagraph';
 import ProfilePicture from './ProfileCardPicture';
 import ProfileCardTextContent from './ProfileCardTextContent';
 // types
-import { UserProfileInfo } from '../../../interfaces/user/IUserProfileInfo';
+import { IUserProfileInfo } from '../../../interfaces/user/IUserProfileInfo';
 
 /**
  * 프로필 페이지에 들어갈 프로필 카드 컴포넌트
@@ -17,27 +17,29 @@ const ProfileCardWrapper = styled.div`
   position: relative;
   display: flex;
   flex-flow: column;
-  margin: 1rem;
   flex-basis: auto;
+  margin: 0 auto;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 `;
 
 const ProfileCardTop = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   margin-bottom: 0.5rem;
 `;
 
 const ParagraphWrapper = styled.div`
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: calc((100% - 20rem) / 2);
+  margin-right: calc((100% - 20rem) / 2);
 `;
 
 // interface ProfileCardProps {
 //   profileCardInfo: Partial<UserProfileInfo>;
 // }
 
-type ProfileCardInfo = Pick<
-  UserProfileInfo,
+type IProfileCardInfo = Pick<
+  IUserProfileInfo,
   | 'nickname'
   | 'bio'
   | 'profileImage'
@@ -49,7 +51,7 @@ type ProfileCardInfo = Pick<
 function ProfileCard({
   profileCardInfo,
 }: {
-  profileCardInfo: ProfileCardInfo;
+  profileCardInfo: IProfileCardInfo;
 }) {
   const { profileImage, nickname, readCount, reportCount, bookClubCount, bio } =
     profileCardInfo;

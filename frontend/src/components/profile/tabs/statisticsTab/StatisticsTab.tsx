@@ -16,7 +16,7 @@ import ReadedFooter from '../../../common/Footer';
 const dummyStatisticsData: IUserProfileStatistics = {
   id: 0,
   readCount: 154,
-  pageCount: 6748,
+  pageCount: 67483,
   star0count: 3,
   star0p5count: 2,
   star1count: 4,

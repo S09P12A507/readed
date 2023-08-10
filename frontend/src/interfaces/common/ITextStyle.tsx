@@ -10,6 +10,7 @@ export interface ITextStyle {
     | '700'
     | '800'
     | '900';
+  fontColor?: string;
   textAlign?: 'left' | 'center' | 'right';
   whiteSpace?:
     | 'inherit'
@@ -18,4 +19,5 @@ export interface ITextStyle {
     | 'pre'
     | 'pre-line'
     | 'pre-wrap';
+  lineHeight?: string;
 }
