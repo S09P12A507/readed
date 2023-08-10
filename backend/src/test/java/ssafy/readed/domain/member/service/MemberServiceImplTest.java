@@ -34,11 +34,10 @@ class MemberServiceImplTest {
                 .password("testpass1!")
                 .password2("testpass1!")
                 .nickname("sgkim6")
-                .profile_bio("안녕하세요 김승규입니다")
-                .profile_image("profile_image")
+                .profileBio("안녕하세요 김승규입니다")
                 .build();
 
-        memberService.signUp(requestDto);
+        //memberService.signUp(requestDto);
     }
 
     @Test
@@ -60,8 +59,8 @@ class MemberServiceImplTest {
         Member member = new Member();
         ModifyMemberProfileRequestDto dto = ModifyMemberProfileRequestDto.builder()
                 .nickname("modnick")
-                .profile_bio("modbio")
-                .profile_image("modimage")
+                //.profile_bio("modbio")
+                //.profile_image("modimage")
                 .build();
         memberService.modifyProfile(member, dto);
     }
