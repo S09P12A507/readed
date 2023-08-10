@@ -63,10 +63,10 @@ class MemberServiceImplTest {
                 .profile_bio("modbio")
                 .profile_image("modimage")
                 .build();
-        memberService.modifyProfile(1L, member, dto);
+        memberService.modifyProfile(member, dto);
     }
 
-    void comment(){
+    void comment() {
         int page = 500;
         int star = 4;
         Member member;

@@ -14,12 +14,14 @@ public class SelectMemberResponseDto {
     private Long id;
     private String email;
     private String name;
+    private Boolean isValid;
 
     @Builder
-    public SelectMemberResponseDto(Long id, String email, String name) {
+    public SelectMemberResponseDto(Long id, String email, String name, Boolean isValid) {
         this.id = id;
         this.email = email;
         this.name = name;
+        this.isValid = isValid;
     }
 
     public static SelectMemberResponseDto from(Member member) {

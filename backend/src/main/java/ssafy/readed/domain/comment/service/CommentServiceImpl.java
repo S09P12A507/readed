@@ -52,13 +52,17 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public List<CommentResponseDto> getMemberCommentList(Long memberId, Member member) {
-        return checkLikeList(commentRepository.findAllByMemberId(memberId), member);
+
+        if (memberId == null) {
+            return checkLikeList(commentRepository.findAllByMember_Id(member.getId()), member);
+        }
+        return checkLikeList(commentRepository.findAllByMember_Id(memberId), member);
     }
 
     @Override
     @Transactional
     public List<CommentResponseDto> getBookCommentList(Long bookId, Member member) {
-        return checkLikeList(commentRepository.findAllByBookId(bookId), member);
+        return checkLikeList(commentRepository.findAllByBook_Id(bookId), member);
     }
 
     @Override

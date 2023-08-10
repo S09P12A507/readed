@@ -45,11 +45,9 @@ public class CommentController {
         return JsonResponse.ok("코멘트 1개를 불러왔습니다.", commentResponseDto);
     }
 
-    @GetMapping(value = "/members/{member-id}")
-    public ResponseEntity<?> getMemberCommentList(@PathVariable(name = "member-id") Long memberId,
-            @AuthenticationPrincipal Member member) {
-        List<CommentResponseDto> commentList = commentService.getMemberCommentList(memberId,
-                member);
+    @GetMapping(value = "/members")
+    public ResponseEntity<?> getMemberCommentList(Long id, @AuthenticationPrincipal Member member) {
+        List<CommentResponseDto> commentList = commentService.getMemberCommentList(id, member);
 
         if (commentList == null) {
             throw new GlobalRuntimeException("해당 회원의 코멘트가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);

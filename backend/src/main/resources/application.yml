@@ -36,3 +36,16 @@ spring:
         show_sql: true
       logging.level:
         org.hibernate.SQL: debug
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: http://localhost:3000/oauth/google/callback
+          kakao:
+            redirect-uri: http://localhost:3000/oauth/kakao/callback
+
+  redis:
+    host: 127.0.0.1
+    port: 6379

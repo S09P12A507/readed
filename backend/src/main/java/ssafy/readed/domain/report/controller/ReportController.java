@@ -48,9 +48,9 @@ public class ReportController {
     }
 
     @GetMapping(value = "/members")
-    public ResponseEntity<?> getReportList(Long memberId,
+    public ResponseEntity<?> getReportList(Long id,
             @AuthenticationPrincipal Member member) {
-        List<ReportResponseDto> reportList = reportService.getReportList(memberId, member);
+        List<ReportResponseDto> reportList = reportService.getReportList(id, member);
 
         if (reportList == null) {
             throw new GlobalRuntimeException("독후감이 하나도 존재하지 않습니다.", HttpStatus.BAD_REQUEST);

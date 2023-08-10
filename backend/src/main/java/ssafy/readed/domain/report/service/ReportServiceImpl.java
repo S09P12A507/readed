@@ -28,12 +28,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional
     public List<ReportResponseDto> getReportList(Long memberId, Member member) {
-        try {
-            authCheck(memberId, member);
-        } catch (GlobalRuntimeException e) {
-            if (e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
-                throw e;
-            }
+        if (memberId != null && !memberId.equals(member.getId())) {
             return ReportToReportResponseDto(reportRepository.findPublicReportByMemberId(memberId));
         }
         return ReportToReportResponseDto(reportRepository.findAllByMemberId(memberId));
@@ -86,7 +81,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private void authCheck(Long memberId, Member member) {
-        if (memberService.selectMember(memberId).getId() == null) {
+        if (!memberService.selectMember(memberId).getIsValid()) {
             throw new GlobalRuntimeException("해당 id의 사용자가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 

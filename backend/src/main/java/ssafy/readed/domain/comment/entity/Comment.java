@@ -21,7 +21,6 @@ import ssafy.readed.global.entity.BaseEntity;
 @NoArgsConstructor
 public class Comment extends BaseEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -44,18 +43,15 @@ public class Comment extends BaseEntity {
 
     private Boolean isSpoiler;
 
-    private Boolean isValid;
-
     @Builder
     public Comment(Member member, Book book, String commentContent, Long rating, Long likeCount,
-            Boolean isSpoiler, Boolean isValid) {
+            Boolean isSpoiler) {
         this.member = member;
         this.book = book;
         this.commentContent = commentContent;
         this.rating = rating;
         this.likeCount = likeCount;
         this.isSpoiler = isSpoiler;
-        this.isValid = isValid;
     }
 
     public void update(CommentRequestDto requestDto) {
