@@ -165,7 +165,7 @@ function Signup() {
         password1,
         password2,
       };
-      localStorage.setItem('signupData', JSON.stringify(formData));
+      sessionStorage.setItem('signupData', JSON.stringify(formData));
 
       axios
         .post('https://i9a507.p.ssafy.io/api/auth/send-email', { email })
@@ -248,7 +248,7 @@ function Signup() {
         error={InvalidName}
       />
       <Grid container alignItems="center">
-        <Grid item xs={10.2}>
+        <Grid item xs={9.7}>
           <SignupForm
             label="*이메일"
             variant="outlined"
@@ -353,7 +353,8 @@ function Signup() {
         variant="contained"
         style={{
           position: 'absolute',
-          minWidth: 'var(--screen-size-mobile)',
+          maxWidth: 'var(--screen-size-mobile)',
+          width: '100%',
           left: '0',
           bottom: '0',
           background: 'var(--primary-dark)',

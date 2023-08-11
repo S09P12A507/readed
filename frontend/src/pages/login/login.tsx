@@ -95,12 +95,9 @@ function Login() {
       })
       .then(response => {
         const receivedToken: Tokens = response.data.data;
-
         if (receivedToken) {
           const AToken = receivedToken.accessToken;
           const RToken = receivedToken.refreshToken;
-          console.log(AToken);
-          console.log(RToken);
           if (AToken && RToken) {
             dispatch(setTokens(AToken, RToken));
           }

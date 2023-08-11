@@ -27,7 +27,8 @@ const ModalSendButton = styled(Button)`
 
 const ModalContentContainer = styled.div`
   background-color: white;
-  width: var(--screen-size-mobile);
+  max-width: var(--screen-size-mobile);
+  width: 100%;
   height: 100vh;
 `;
 

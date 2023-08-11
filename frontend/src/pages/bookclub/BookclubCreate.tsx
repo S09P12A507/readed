@@ -317,7 +317,8 @@ function BookclubCreate() {
         variant="contained"
         style={{
           position: 'absolute',
-          width: 'var(--screen-size-mobile)',
+          maxWidth: 'var(--screen-size-mobile)',
+          width: '100%',
           bottom: '0',
           left: '0',
           background: '#4B8346',
@@ -341,8 +342,9 @@ function BookclubCreate() {
             display: 'grid',
             height: '100%',
             backgroundColor: 'white',
-            minWidth: 'var(--screen-size-mobile)',
+            // minWidth: 'var(--screen-size-mobile)',
             maxWidth: 'var(--screen-size-mobile)',
+            width: '100%',
             overflow: 'auto',
           }}>
           <ModalUpper>

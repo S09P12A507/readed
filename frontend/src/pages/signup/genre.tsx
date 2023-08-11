@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 // import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import GenreButton from '../../components/common/button/GenreButton';
 
 const Title = styled.div`
   padding-top: 10%;
@@ -29,13 +29,7 @@ const Start = styled(Button)`
 
 const GenreButtonContainer = styled.div`
   display: flex;
-  justify-content: left;
   flex-wrap: wrap;
-`;
-const Genrebutton = styled(Button)`
-  display: flex;
-  /* width: 150px; */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
 interface NameData {
@@ -55,12 +49,6 @@ function Genre() {
     window.location.href = '/';
   };
 
-  const navigate = useNavigate();
-
-  const handleGenreClick = (genre: string) => {
-    navigate(`/genre/${genre}`);
-  };
-
   return (
     <>
       <Title>회원 가입 완료!</Title>
@@ -70,92 +58,17 @@ function Genre() {
       <Info>· 어떤 장르의 책이었나요? </Info>
       <br />
       <GenreButtonContainer>
-        <Genrebutton
-          onClick={() => handleGenreClick('mystery')}
-          endIcon={<ArrowForwardIosIcon />}
-          style={{
-            backgroundColor: '#F7DB6A',
-            borderRadius: '100px',
-            color: 'black',
-            margin: '10px',
-            fontWeight: 'bold',
-            paddingLeft: '4%',
-            paddingRight: '4%',
-          }}>
-          추리/미스테리
-        </Genrebutton>
-        <Genrebutton
-          onClick={() => handleGenreClick('romance')}
-          endIcon={<ArrowForwardIosIcon />}
-          style={{
-            backgroundColor: '#F7DB6A',
-            borderRadius: '100px',
-            color: 'black',
-            margin: '10px',
-            fontWeight: 'bold',
-            paddingLeft: '4%',
-            paddingRight: '4%',
-          }}>
-          일상/로맨스
-        </Genrebutton>
-        <Genrebutton
-          onClick={() => handleGenreClick('poem')}
-          endIcon={<ArrowForwardIosIcon />}
-          style={{
-            backgroundColor: '#F7DB6A',
-            borderRadius: '100px',
-            color: 'black',
-            margin: '10px',
-            fontWeight: 'bold',
-            paddingLeft: '4%',
-            paddingRight: '4%',
-          }}>
-          에세이/시
-        </Genrebutton>
-        <Genrebutton
-          onClick={() => handleGenreClick('develop')}
-          endIcon={<ArrowForwardIosIcon />}
-          style={{
-            backgroundColor: '#F7DB6A',
-            borderRadius: '100px',
-            color: 'black',
-            margin: '10px',
-            fontWeight: 'bold',
-            paddingLeft: '4%',
-            paddingRight: '4%',
-          }}>
-          자기계발
-        </Genrebutton>
-        <Genrebutton
-          onClick={() => handleGenreClick('social')}
-          endIcon={<ArrowForwardIosIcon />}
-          style={{
-            backgroundColor: '#F7DB6A',
-            borderRadius: '100px',
-            color: 'black',
-            margin: '10px',
-            fontWeight: 'bold',
-            paddingLeft: '4%',
-            paddingRight: '4%',
-          }}>
-          사회/경제
-        </Genrebutton>
-        <Genrebutton
-          onClick={() => handleGenreClick('science')}
-          endIcon={<ArrowForwardIosIcon />}
-          style={{
-            backgroundColor: '#F7DB6A',
-            borderRadius: '100px',
-            color: 'black',
-            margin: '10px',
-            fontWeight: 'bold',
-            paddingLeft: '4%',
-            paddingRight: '4%',
-          }}>
-          과학
-        </Genrebutton>
+        <GenreButton genres={0} content="종교" />
+        <GenreButton genres={1} content="과학" />
+        <GenreButton genres={2} content="자기계발" />
+        <GenreButton genres={3} content="역사" />
+        <GenreButton genres={4} content="경제" />
+        <GenreButton genres={5} content="만화" />
+        <GenreButton genres={6} content="추리소설" />
+        <GenreButton genres={7} content="판타지" />
+        <GenreButton genres={8} content="문학" />
+        <GenreButton genres={9} content="에세이" />
       </GenreButtonContainer>
-      {/* </> */}
       <Start
         variant="contained"
         onClick={handleSignUp}

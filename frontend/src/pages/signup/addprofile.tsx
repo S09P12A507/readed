@@ -91,7 +91,7 @@ interface SignUpData {
 }
 
 function Addprofile() {
-  const storedData = localStorage.getItem('signupData');
+  const storedData = sessionStorage.getItem('signupData');
   const signUpData: SignUpData = storedData
     ? (JSON.parse(storedData) as SignUpData)
     : {
@@ -191,19 +191,19 @@ function Addprofile() {
       .then(() => {
         setMessage('회원 가입에 성공했습니다.');
         setShowAlert(true);
-        window.location.href = '/genre';
       })
       .catch(error => {
         console.error('회원가입 실패:', error);
       });
+
+    if (message === '회원 가입에 성공했습니다.') {
+      sessionStorage.removeItem('signupData');
+      window.location.href = '/genre';
+    }
   };
 
   const handleAlertClose = () => {
     setShowAlert(false);
-
-    if (message === '정회원 가입에 성공했습니다.') {
-      window.location.href = '/genre';
-    }
   };
   return (
     <>
@@ -244,7 +244,7 @@ function Addprofile() {
 
       <p>* 닉네임 입력(필수)</p>
       <Grid container alignItems="center">
-        <Grid item xs={10.2}>
+        <Grid item xs={9.7}>
           <IntroduceForm
             label="다른사람에게 보일 이름이에요"
             variant="outlined"
@@ -293,7 +293,8 @@ function Addprofile() {
         onClick={handleSignUp}
         style={{
           position: 'absolute',
-          minWidth: 'var(--screen-size-mobile)',
+          maxWidth: 'var(--screen-size-mobile)',
+          width: '100%',
           left: '0',
           bottom: '0',
           background: 'var(--primary-dark)',

@@ -88,13 +88,13 @@ function BookDetail() {
   const handleOpenModal = () => {
     setIsModalOpen(true);
     setInputText('');
-    setRatingValue(0);
+    // setRatingValue(0);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setInputText('');
-    setRatingValue(0);
+    // setRatingValue(0);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

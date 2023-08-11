@@ -5,6 +5,9 @@ import { Button, TextField, Switch } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Divider from '@mui/material/Divider';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import AlertsModal from '../../components/common/alert/Alert';
 
 const CloseButton = styled(Button)`
   position: absolute;
@@ -47,18 +50,30 @@ function Report() {
   const [isPageLoaded, setIsPageLoaded] = useState(true);
   const [MemberName] = useState<string>(signUpData.MemberName || '');
   const [bookCovers, setBookCovers] = useState<string[]>([]);
+  const [titles, setTitles] = useState('');
   const [inputText, setInputText] = useState('');
   const [isPublic, setIsPublic] = useState(true);
   const { bookId } = useParams();
   const bookname = bookId as string;
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const token: string | null = useSelector(
+    (state: RootState) => state.auth.accessToken,
+  );
 
   const navigate = useNavigate();
+
   const handleClose = () => {
     navigate(-1);
   };
 
   const handlePublicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsPublic(event.target.checked);
+  };
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitles(event.target.value);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,8 +85,39 @@ function Report() {
     setInputText(inputValue);
   };
 
+  const handleAlertClose = () => {
+    setShowAlert(false);
+  };
+
   const handleSaveButton = () => {
-    console.log('Input Text:', inputText);
+    const formData = {
+      title: titles,
+      content: inputText,
+      isPublic,
+    };
+
+    if (token) {
+      axios
+        .post('http://localhost:8080/api/report/1', formData, {
+          headers: {
+            'X-READED-ACCESSTOKEN': `${token}`,
+          },
+        })
+        .then(() => {
+          setMessage('정상적으로 등록되었습니다!');
+          setShowAlert(true);
+        })
+        .catch(() => {
+          setMessage('잠시 후 다시 시도해주세요!');
+          setShowAlert(true);
+        });
+    }
+
+    if (message === '정상적으로 등록되었습니다!') {
+      navigate(-1);
+    }
+    console.log(inputText);
+    console.log(titles);
     console.log(MemberName);
     console.log(bookCovers);
   };
@@ -115,6 +161,8 @@ function Report() {
       </Header>
       <Divider />
       <Title
+        value={titles}
+        onChange={handleTitleChange}
         variant="standard"
         placeholder="제목"
         style={{ width: '100%', height: '60px' }}
@@ -142,6 +190,11 @@ function Report() {
         InputProps={{
           disableUnderline: true,
         }}
+      />
+      <AlertsModal
+        open={showAlert}
+        onClose={handleAlertClose}
+        message={message}
       />
     </div>
   );

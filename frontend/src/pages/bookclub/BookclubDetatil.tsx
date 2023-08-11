@@ -74,7 +74,7 @@ function BookClubDetail() {
         }}>
         <CardMedia
           component="img"
-          sx={{ width: 151 }}
+          sx={{ width: 130 }}
           src={testimg}
           style={{ margin: '5%' }}
         />
@@ -83,7 +83,6 @@ function BookClubDetail() {
           <h2>북클럽 제목임</h2>
           <h4>잡화점 용의자의 나미야</h4>
           <Info>
-            {' '}
             <Infodetail>
               <CalendarTodayIcon />
               <p style={{ marginLeft: '5px' }}>2099.12.31</p>
@@ -137,7 +136,8 @@ function BookClubDetail() {
         variant="contained"
         style={{
           position: 'absolute',
-          width: 'var(--screen-size-mobile)',
+          maxWidth: 'var(--screen-size-mobile)',
+          width: '100%',
           bottom: '0',
           left: '0',
           background: '#4B8346',

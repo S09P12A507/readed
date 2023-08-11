@@ -170,6 +170,7 @@ function Genrebook() {
           maxWidth: 'var(--screen-size-mobile)',
           width: '100%',
           bottom: '0',
+          left: '0',
           background: '#4B8346',
           color: 'white',
         }}>

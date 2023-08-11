@@ -72,7 +72,7 @@ interface SignUpData {
 }
 
 function Emailcheck() {
-  const storedData = localStorage.getItem('signupData');
+  const storedData = sessionStorage.getItem('signupData');
   const signUpData: SignUpData = storedData
     ? (JSON.parse(storedData) as SignUpData)
     : {

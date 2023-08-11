@@ -87,20 +87,19 @@ function Bookclub() {
         {Array.from({ length: 10 }).map(() => (
           <Card
             onClick={() => handleBookClubClick(1)}
-            sx={{ display: 'flex', margin: '3%' }}
+            sx={{ display: 'flex', margin: '2%' }}
             key={Math.random()}>
             <CardMedia
               component="img"
-              sx={{ width: 151 }}
+              sx={{ width: 130 }}
               src={testimg}
               style={{ margin: '5%' }}
             />
             <CardContent sx={{ flex: '1 0 auto' }}>
-              <h5> 공개 모임일걸?</h5>
+              <h6> 공개 모임일걸?</h6>
               <h2>북클럽 제목임</h2>
-              <h4>잡화점 용의자의 나미야</h4>
+              <h5>잡화점 용의자의 나미야</h5>
               <Info>
-                {' '}
                 <Infodetail>
                   <CalendarTodayIcon />
                   <p style={{ marginLeft: '5px' }}>2099.12.31</p>

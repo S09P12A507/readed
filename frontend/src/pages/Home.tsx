@@ -96,7 +96,7 @@ function Home() {
               role="button"
               tabIndex={0}
               key={item.isbn}
-              style={{ width: 130 }}
+              style={{ width: 100 }}
               onClick={() => handlebookDetail(item.title)}>
               <img src={item.thumbnail} alt={item.title} />
               {item.title}
