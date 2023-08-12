@@ -1,12 +1,16 @@
-// import styled from 'styled-components';
+import styled from 'styled-components';
 
 import ProfileChangeTabs from '../../components/profile/tabs/ProfileChangeTab/ProfileChangeTab';
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
+
 function ProfileChange() {
   return (
-    <div>
+    <Container>
       <ProfileChangeTabs />
-    </div>
+    </Container>
   );
 }
 

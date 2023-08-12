@@ -10,6 +10,10 @@ import Divider from '@mui/material/Divider';
 import testimg from '../../assets/img/test.jpg';
 import BackButton from '../../components/common/button/BackButton';
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
+
 const CreateButton = styled(Button)`
   color: #7aa874;
 `;
@@ -56,7 +60,7 @@ function BookClubDetail() {
   };
 
   return (
-    <div>
+    <Container>
       <Header>
         <BackButton />
         <Link to="/bookclub/create">
@@ -146,7 +150,7 @@ function BookClubDetail() {
         onClick={handleSubmit}>
         북클럽 시작하기
       </StartButtonContainer>
-    </div>
+    </Container>
   );
 }
 

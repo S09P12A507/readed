@@ -5,6 +5,10 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 // import axios from 'axios';
 import GenreButton from '../../components/common/button/GenreButton';
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
+
 const Title = styled.div`
   padding-top: 10%;
   font-size: 2.3rem;
@@ -50,7 +54,7 @@ function Genre() {
   };
 
   return (
-    <>
+    <Container>
       <Title>회원 가입 완료!</Title>
       <SubTitle>
         {MemberName} 님이 <br /> 재미있게 읽은 책들을 알려주세요!
@@ -84,7 +88,7 @@ function Genre() {
         endIcon={<ArrowForwardIosIcon />}>
         바로 시작하기
       </Start>
-    </>
+    </Container>
   );
 }
 

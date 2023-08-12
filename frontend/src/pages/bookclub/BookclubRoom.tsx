@@ -5,6 +5,10 @@ import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
+
 const Header = styled.div`
   display: flex;
   justify-content: center;
@@ -65,7 +69,7 @@ function BookclubRoom() {
   }, [videoEnabled, audioEnabled]);
 
   return (
-    <div>
+    <Container>
       <Header>
         <h2>카메라 설정</h2>
       </Header>
@@ -109,7 +113,7 @@ function BookclubRoom() {
           onClick={bookclubOut}
         />
       </Icons>
-    </div>
+    </Container>
   );
 }
 

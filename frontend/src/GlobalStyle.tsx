@@ -42,6 +42,7 @@ const GlobalStyle = createGlobalStyle`
 
     // 모바일 480px을 기준으로 합니다.
     --screen-size-mobile: 480px;
+    --padding-global: 24px;
   }
 
   html, body {

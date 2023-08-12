@@ -49,8 +49,8 @@ const MobileContainer = styled(Container)`
   max-width: var(--screen-size-mobile);
   min-height: 100vh;
   padding-top: 2.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  /* padding-left: 1.5rem;
+  padding-right: 1.5rem; */
   box-shadow:
     1px 0 16px #888,
     -1px 0 16px #888;
@@ -94,7 +94,7 @@ function App() {
     <>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <MobileContainer maxWidth="md">
+        <MobileContainer maxWidth="md" disableGutters>
           <Router>
             <Routes>
               <Route path="/login" element={<Login />} />

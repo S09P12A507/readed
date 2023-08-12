@@ -6,6 +6,10 @@ import styled from 'styled-components';
 import Alerts from '../../components/common/alert/Alert';
 import BackButton from '../../components/common/button/BackButton';
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
+
 const FormButtonContainer = styled(Button)`
   height: 50px;
 `;
@@ -205,7 +209,7 @@ function Signup() {
   };
 
   return (
-    <>
+    <Container>
       <BackButton />
       <h1>회원가입</h1>
       <h3>리디드에 오신 것을 환영합니다.</h3>
@@ -369,7 +373,7 @@ function Signup() {
         onClose={() => setShowAlert(false)}
         message={message}
       />
-    </>
+    </Container>
   );
 }
 

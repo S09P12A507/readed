@@ -11,6 +11,10 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import PeopleIcon from '@mui/icons-material/People';
 import testimg from '../../assets/img/test.jpg';
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
+
 const CreateButton = styled(Button)`
   color: #7aa874;
 `;
@@ -68,7 +72,7 @@ function Bookclub() {
   };
 
   return (
-    <div>
+    <Container>
       <Header>
         <h1>리디드 북클럽</h1>
         <Link to="/bookclub/create">
@@ -117,7 +121,7 @@ function Bookclub() {
           </Card>
         ))}
       </BookClubList>
-    </div>
+    </Container>
   );
 }
 

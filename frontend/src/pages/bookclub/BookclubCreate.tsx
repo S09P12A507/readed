@@ -23,6 +23,10 @@ import axios from 'axios';
 import Alerts from '../../components/common/alert/Alert';
 import BackButton from '../../components/common/button/BackButton';
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
+
 const Header = styled.div`
   display: flex;
   align-items: center;
@@ -207,7 +211,7 @@ function BookclubCreate() {
   }, [query]);
 
   return (
-    <>
+    <Container>
       <BackButton />
       <Header>
         <h1>북클럽 생성</h1>
@@ -397,7 +401,7 @@ function BookclubCreate() {
           ))} */}
         </div>
       </Modal>
-    </>
+    </Container>
   );
 }
 

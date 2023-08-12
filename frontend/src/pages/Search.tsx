@@ -5,7 +5,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Container = styled.div``;
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
 
 const Searched = styled.div`
   position: relative;

@@ -6,6 +6,10 @@ import axios from 'axios';
 import Alerts from '../../components/common/alert/Alert';
 import BackButton from '../../components/common/button/BackButton';
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
+
 const AuthForm = styled(TextField)`
   width: 100%;
 `;
@@ -151,7 +155,7 @@ function Emailcheck() {
   };
 
   return (
-    <>
+    <Container>
       <BackButton />
       <h1>이메일 인증</h1>
       <h3>
@@ -227,7 +231,7 @@ function Emailcheck() {
         onClose={() => setShowAlert(false)}
         message={message}
       />
-    </>
+    </Container>
   );
 }
 

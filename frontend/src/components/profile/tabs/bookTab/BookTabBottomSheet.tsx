@@ -42,11 +42,11 @@ function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
         sx: {
           maxWidth: 'var(--screen-size-mobile)',
           height: '30rem',
-          borderTopLeftRadius: 4,
-          borderTopRightRadius: 4,
+          borderTopLeftRadius: 12,
+          borderTopRightRadius: 12,
           textAlign: 'center',
-          left: 'calc((100% - var(--screen-size-mobile))/2)',
-          transform: 'translate(-50%, -50%)',
+          marginLeft: 'auto',
+          marginRight: 'auto',
         },
       }}
       anchor="bottom"

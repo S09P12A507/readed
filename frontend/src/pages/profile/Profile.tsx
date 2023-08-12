@@ -17,6 +17,10 @@ import MeatballMenu from '../../components/profile/meatballMenu/MeatballMenu';
  * @see
  */
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
+
 const HeaderTopContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -34,33 +38,20 @@ const dummyUserProfileInfo: IUserProfileInfo = {
 };
 
 function Profile() {
-  // const { isLoading, data } = useQuery<IUserProfileInfo>(
-  //   ['memberProfile'],
-  //   () => getMemberProfile(1), // 1=> store에서 현재 유저 id 가져와야 함
+  // const { data, isLoading, isError } = useQuery<IUserProfileInfo>(
+  //   ['profileCardInfo'],
+  //   getMemberProfile(memberId),
   // );
-  // const profileCardInfo: IUserProfileInfo = {
-  //   id: data?.id || 0,
-  //   nickname: data?.nickname || '',
-  //   bio: data?.bio || '',
-  //   profileImage: data?.profileImage || '',
-  //   readCount: data?.readCount || 0,
-  //   reportCount: data?.reportCount || 0,
-  //   bookClubCount: data?.bookClubCount || 0,
-  // };
   return (
-    <>
+    <Container>
       <HeaderTopContainer>
         <ReadedH2 text="내 서재" />
         <MeatballMenu />
       </HeaderTopContainer>
-      {/* {isLoading ? (
-        <ProfileCardLoading />
-      ) : (
-        <ProfileCard profileCardInfo={dummyUserProfileInfo} />
-      )} */}
+
       <ProfileCard profileCardInfo={dummyUserProfileInfo} />
       <ProfileTabs />
-    </>
+    </Container>
   );
 }
 

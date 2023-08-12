@@ -5,7 +5,9 @@ import axios from 'axios';
 import Comments from '../../components/book/Comment';
 import BackButton from '../../components/common/button/BackButton';
 
-const Container = styled.div`
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+
   flex: 1;
   overflow-y: auto;
 `;

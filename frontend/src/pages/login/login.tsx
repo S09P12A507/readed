@@ -7,11 +7,12 @@ import { setTokens } from '../../store/actions/authActions';
 import kakaologo from '../../assets/img/kakaologo.png';
 import AlertsModal from '../../components/common/alert/Alert';
 
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 0 var(--padding-global);
 `;
 
 const LoginBox = styled.input`

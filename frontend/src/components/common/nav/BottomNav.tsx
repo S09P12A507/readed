@@ -27,7 +27,7 @@ const ReadedBottomNavigation = styled(BottomNavigation)`
   width: 100vw;
   height: 5rem;
   border-top: solid 1px var(--divider);
-  opacity: 0.8;
+  opacity: 0.94;
 `;
 
 const ReadedBottomNavigationAction = styled(BottomNavigationAction)`

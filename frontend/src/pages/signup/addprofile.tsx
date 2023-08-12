@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import Alerts from '../../components/common/alert/Alert';
 import basic from '../../assets/img/non.png';
 
+const Container = styled.section`
+  padding: 0 var(--padding-global);
+`;
 const ImageContainer = styled.div`
   text-align: center;
   max-width: 500px;
@@ -206,7 +209,7 @@ function Addprofile() {
     setShowAlert(false);
   };
   return (
-    <>
+    <Container>
       <h1>거의 다 왔어요</h1>
       <h3>
         {MemberName} 님에 대해 <br /> 더 알려주세요!
@@ -308,7 +311,7 @@ function Addprofile() {
         // onClose={() => setShowAlert(false)}
         message={message}
       />
-    </>
+    </Container>
   );
 }
 
