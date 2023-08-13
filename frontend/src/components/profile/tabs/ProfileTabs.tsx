@@ -83,15 +83,25 @@ function ProfileTabs() {
         />
         {/* 독서록 탭 완성하면, tooltip과 span을 지우고 Tab의 disabled를 지운다. */}
         <Tooltip title="곧 출시 예정이에요." arrow placement="top">
-          <span style={{ width: '30.5%', textAlign: 'center' }}>
-            <Tab
+          <span
+            style={{
+              width: '30.5%',
+              textAlign: 'center',
+              fontSize: '0.875rem',
+              color: 'var(--text-disabled)',
+              marginTop: 'auto',
+              marginBottom: 'auto',
+              cursor: 'default',
+            }}>
+            {/* <Tab
               label="독서록"
               value="profile/:userId/report"
               to="report"
               component={Link}
               sx={{ width: '30.5%' }}
               disabled
-            />
+            /> */}
+            독서록
           </span>
         </Tooltip>
       </Tabs>

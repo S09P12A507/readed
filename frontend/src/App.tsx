@@ -53,8 +53,8 @@ const MobileContainer = styled(Container)`
   /* padding-left: 1.5rem;
   padding-right: 1.5rem; */
   box-shadow:
-    1px 0 16px #888,
-    -1px 0 16px #888;
+    0.0625rem 0 0.5rem var(--divider),
+    -0.0625rem 0 0.5rem var(--divider);
   /* 조건문에 var 적용이 안되므로, screen-size-mobile 수정시 min-width 부분도 수정해주세요 */
   @media screen and (min-width: 480px) {
     width: var(--screen-size-mobile);

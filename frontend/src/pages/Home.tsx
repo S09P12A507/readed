@@ -4,10 +4,10 @@ import axios from 'axios';
 // styles
 import styled from 'styled-components';
 // components
-import { Typography, Skeleton } from '@mui/material';
+import { Typography, Divider } from '@mui/material';
 import { ScrollMenu } from 'react-horizontal-scrolling-menu';
+import MainSlider from '../components/main/MainSlider';
 import ReadedFooter from '../components/common/Footer';
-// import AliceCarousel from 'react-alice-carousel';
 import BookCard from '../components/main/BookCard';
 import { LeftArrow } from '../components/main/LeftArrowButton';
 import { RightArrow } from '../components/main/RightArrowButton';
@@ -30,6 +30,7 @@ const Container = styled.section`
 const HeaderTmpWrapper = styled.header`
   padding: 0 var(--padding-global);
 
+  /* background-color: var(--primary-main); */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -67,21 +68,6 @@ const BackgroundBoxPri = styled.div`
   /* transform: translateY(-50%); */
 `;
 
-// const Box = styled.div`
-//   background-color: #4285f4;
-//   color: #ffffff;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   font-size: 36px;
-//   font-weight: bold;
-//   width: 150px;
-//   height: 200px;
-//   margin: 5px;
-//   border-radius: 10px;
-//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-// `;
-
 function Home() {
   // const items = Array.from({ length: 7 }, (_, i) => i + 1);
   const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
@@ -102,6 +88,7 @@ function Home() {
       )
       .then(response => {
         setTopten(response.data.documents);
+        // setIsTopTenLoading(false);
       })
       .catch(error => {
         console.error('Error fetching topTen:', error);
@@ -130,22 +117,24 @@ function Home() {
 
   return (
     <Container>
-      {/* 메인페이지 헤더, 우측 임시 버튼은 다 구현되면 제거 */}
+      {/* 메인페이지 헤더, 우측 임시 버튼은 다 구현되면 제거. */}
       <HeaderTmpWrapper>
-        <Typography variant="h4" color="var(--primary-main)">
+        <Typography variant="h4" color="var(--primary-light)" fontWeight="500">
           readed
         </Typography>
         <div>
-          <Link to="/login" style={{ color: 'black' }}>
+          <Link to="/login" style={{ color: 'var(--divider)' }}>
             [login→]
           </Link>
-          <Link to="/profilechange/:userId" style={{ color: 'black' }}>
+          <Link to="/profilechange/:userId" style={{ color: 'var(--divider)' }}>
             [profileChange→]
           </Link>
         </div>
       </HeaderTmpWrapper>
 
-      <Skeleton
+      <MainSlider />
+
+      {/* <Skeleton
         width="100%"
         height="30rem"
         animation="wave"
@@ -157,7 +146,7 @@ function Home() {
         }}>
         <br />
         &nbsp;&nbsp;&nbsp;&nbsp;(피드백) 조금 더 화려한 요소
-      </Skeleton>
+      </Skeleton> */}
 
       <HorizontalScrollSectionContainer>
         <Typography
@@ -167,11 +156,13 @@ function Home() {
           marginLeft="var(--padding-global)"
           marginBottom="1.5rem"
           position="relative"
-          sx={{
-            textDecoration: 'underline',
-            textDecorationStyle: 'inherit',
-            textDecorationColor: 'var(--secondary-light)',
-          }}>
+          sx={
+            {
+              // textDecoration: 'underline',
+              // textDecorationStyle: 'inherit',
+              // textDecorationColor: 'var(--secondary-light)',
+            }
+          }>
           리디드 Top 10
         </Typography>
         <BackgroundBoxPri />
@@ -179,11 +170,34 @@ function Home() {
           {topTen.map((book: IBook) => {
             return <BookCard itemId={book.isbn} key={book.isbn} book={book} />;
           })}
+          {/* 스켈레톤 로딩 */}
+          {/* {isTopTenLoading
+            ? Array.from({ length: 10 }).map((_, index) => (
+                <Skeleton
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  variant="rectangular"
+                  width="7.5rem"
+                  height="14rem"
+                  sx={{ marginRight: 10, zIndex: 11 }}
+                />
+              ))
+            : topTen.map(book => (
+                <BookCard itemId={book.isbn} key={book.isbn} book={book} />
+              ))} */}
         </ScrollMenu>
         {/* <BackgroundBox /> */}
       </HorizontalScrollSectionContainer>
 
-      {/* <Divider sx={{ width: '80%', marginLeft: 'auto', marginRight: 'auto' }} /> */}
+      <Divider
+        sx={{
+          width: '40%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          marginTop: '2rem',
+          marginBottom: '3rem',
+        }}
+      />
 
       <HorizontalScrollSectionContainer>
         <Typography
@@ -193,11 +207,13 @@ function Home() {
           marginLeft="var(--padding-global)"
           marginBottom="1.5rem"
           position="relative"
-          sx={{
-            textDecoration: 'underline',
-            textDecorationStyle: 'inherit',
-            textDecorationColor: 'var(--secondary-light)',
-          }}>
+          sx={
+            {
+              // textDecoration: 'underline',
+              // textDecorationStyle: 'inherit',
+              // textDecorationColor: 'var(--secondary-light)',
+            }
+          }>
           베스트셀러
           {/* <BackgroundBoxSec /> */}
         </Typography>
