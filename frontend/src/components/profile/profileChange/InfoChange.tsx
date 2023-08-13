@@ -90,7 +90,7 @@ function InfoChange() {
     console.log(formData);
     if (token) {
       axios
-        .patch('https://i9a507.p.ssafy.io/api/members/profile/', formData, {
+        .patch('https://i9a507.p.ssafy.io/api/members/profile', formData, {
           headers: {
             'X-READED-ACCESSTOKEN': `${token}`,
           },

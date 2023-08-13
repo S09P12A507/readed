@@ -14,7 +14,7 @@ const Container = styled.section`
   padding: 0 var(--padding-global);
 `;
 
-const CreateButton = styled(Button)`
+const ChangeButton = styled(Button)`
   color: #7aa874;
 `;
 
@@ -63,10 +63,10 @@ function BookClubDetail() {
     <Container>
       <Header>
         <BackButton />
-        <Link to="/bookclub/create">
-          <CreateButton>
+        <Link to="/bookclub/change/1">
+          <ChangeButton>
             <h3>정보 수정</h3>
-          </CreateButton>
+          </ChangeButton>
         </Link>
       </Header>
       <Box

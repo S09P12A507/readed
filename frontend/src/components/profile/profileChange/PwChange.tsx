@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { TextField, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
+import axios from 'axios';
 import CheckIcon from '@mui/icons-material/Check';
+import AlertsModal from '../../common/alert/Alert';
 
 const SignupForm = styled(TextField)`
   width: 100%;
@@ -18,6 +22,12 @@ function PwChange() {
   const [password2, setPassword2] = useState('');
   const [invalidPassword, setInvalidPassword] = useState(false);
   const [invalidPassword2, setInvalidPassword2] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const token: string | null = useSelector(
+    (state: RootState) => state.auth.accessToken,
+  );
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nowPassword = event.target.value;
@@ -49,7 +59,33 @@ function PwChange() {
       setInvalidPassword2(false);
     }
   };
+  const handleChangeConfirm = () => {
+    const formData = {
+      prevPassword: password,
+      password: password1,
+      password2: password2,
+    };
 
+    if (token && password1 === password2) {
+      axios
+        .patch('https://i9a507.p.ssafy.io/api/members/profile', formData, {
+          headers: {
+            'X-READED-ACCESSTOKEN': `${token}`,
+          },
+        })
+        .then(() => {
+          setMessage('비밀번호가 변경됐습니다.');
+          setShowAlert(true);
+        })
+        .catch(() => {
+          setMessage('현재 비밀번호가 일치하지 않습니다.');
+          setShowAlert(true);
+        });
+    } else {
+      setMessage('입력 정보를 다시 확인해주세요.');
+      setShowAlert(true);
+    }
+  };
   return (
     <div>
       <h3>새로 사용할 비밀번호를 입력해주세요</h3>
@@ -127,6 +163,7 @@ function PwChange() {
         error={invalidPassword2}
       />
       <Button
+        onClick={handleChangeConfirm}
         variant="contained"
         style={{
           maxWidth: 'var(--screen-size-mobile)',
@@ -135,9 +172,14 @@ function PwChange() {
           background: 'var(--primary-dark)',
           color: 'white',
         }}>
-        {' '}
-        확인{' '}
+        확인
       </Button>
+
+      <AlertsModal
+        open={showAlert}
+        onClose={() => setShowAlert(false)}
+        message={message}
+      />
     </div>
   );
 }

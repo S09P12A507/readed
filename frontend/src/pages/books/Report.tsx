@@ -36,20 +36,18 @@ const SwitchContainer = styled.div`
   align-items: center;
 `;
 
-interface NameData {
-  MemberName: string;
-}
+// interface NameData {
+//   MemberName: string;
+// }
 
 function Report() {
-  const storedData = localStorage.getItem('signupData');
-  const signUpData: NameData = storedData
-    ? (JSON.parse(storedData) as NameData)
-    : {
-        MemberName: '',
-      };
-  const [isPageLoaded, setIsPageLoaded] = useState(true);
-  const [MemberName] = useState<string>(signUpData.MemberName || '');
-  const [bookCovers, setBookCovers] = useState<string[]>([]);
+  // const storedData = localStorage.getItem('signupData');
+  // const signUpData: NameData = storedData
+  //   ? (JSON.parse(storedData) as NameData)
+  //   : {
+  //       MemberName: '',
+  //     };
+  // const [MemberName] = useState<string>(signUpData.MemberName || '');
   const [titles, setTitles] = useState('');
   const [inputText, setInputText] = useState('');
   const [isPublic, setIsPublic] = useState(true);
@@ -116,25 +114,7 @@ function Report() {
     if (message === '정상적으로 등록되었습니다!') {
       navigate(-1);
     }
-    console.log(inputText);
-    console.log(titles);
-    console.log(MemberName);
-    console.log(bookCovers);
   };
-
-  useEffect(() => {
-    if (isPageLoaded) {
-      axios
-        .get('http://localhost:8080/api/select')
-        .then(response => {
-          setBookCovers(response.data as string[]);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
-    setIsPageLoaded(false);
-  }, [isPageLoaded]);
 
   return (
     <div style={{ padding: '3%' }}>
@@ -148,7 +128,10 @@ function Report() {
           }}>
           닫기
         </CloseButton>
-        <h2> {bookname}</h2>
+        <h2>
+          {' '}
+          {bookname.length > 10 ? `${bookname.slice(0, 10)}...` : bookname}
+        </h2>
         <ApplyButton
           onClick={handleSaveButton}
           style={{

@@ -19,6 +19,7 @@ import BookclubCreate from './pages/bookclub/BookclubCreate';
 import BookclubDetail from './pages/bookclub/BookclubDetatil';
 import BookclubRoom from './pages/bookclub/BookclubRoom';
 import BookclubMeeting from './pages/bookclub/BookclubMeeting';
+import BookclubChange from './pages/bookclub/BookclubChange';
 import BookDetail from './pages/books/BookDetail';
 import Profilechange from './pages/profile/Profilechange';
 import Profile from './pages/profile/Profile';
@@ -106,6 +107,10 @@ function App() {
               <Route path="/oauth/google/callback" element={<Google />} />
               <Route path="/oauth/kakao/callback" element={<KaKao />} />
               <Route path="/bookclub/create" element={<BookclubCreate />} />
+              <Route
+                path="/bookclub/change/:bookclubid"
+                element={<BookclubChange />}
+              />
               <Route
                 path="/bookclub/detail/:bookclubid"
                 element={<BookclubDetail />}

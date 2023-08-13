@@ -1,16 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Rating from '@mui/material/Rating';
-import { Table, TableBody, TableRow, TableCell, Modal } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  Modal,
+  Divider,
+  Rating,
+  Card,
+  Button,
+} from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ModeIcon from '@mui/icons-material/Mode';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import ContactsIcon from '@mui/icons-material/Contacts';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import styled from 'styled-components';
-import Divider from '@mui/material/Divider';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 import Comments from '../../components/book/Comment';
 import BackButton from '../../components/common/button/BackButton';
+import AlertsModal from '../../components/common/alert/Alert';
 
 const Container = styled.div`
   display: flex;
@@ -70,12 +82,20 @@ function BookDetail() {
   const { bookId } = useParams();
   const [data, setData] = useState<Book | null>(null);
   const [ratingValue, setRatingValue] = useState<number>(0);
+  const [ratingsValue, setRatingsValue] = useState<number>(0);
   const [IsModalOpen, setIsModalOpen] = useState(false);
   const [inputText, setInputText] = useState('');
   const [textLength, setTextLength] = useState<number>(0);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
   const query = bookId as string;
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const token: string | null = useSelector(
+    (state: RootState) => state.auth.accessToken,
+  );
 
   const navigate = useNavigate();
 
@@ -94,7 +114,7 @@ function BookDetail() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setInputText('');
-    // setRatingValue(0);
+    setRatingsValue(ratingValue);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +126,54 @@ function BookDetail() {
     setInputText(inputValue);
   };
 
+  const handleToggleFavorite = () => {
+    // if (isBookmarked) {
+    //   axios
+    //     .delete('https://i9a507.p.ssafy.io/api/bookmarks/1', {
+    //       headers: {
+    //         'X-READED-ACCESSTOKEN': token,
+    //       },
+    //     })
+    //     .then(() => {
+    //       setIsBookmarked(false);
+    //     });
+    // } else {
+    //   axios
+    //     .post('https://i9a507.p.ssafy.io/api/bookmarks/1', {
+    //       headers: {
+    //         'X-READED-ACCESSTOKEN': token,
+    //       },
+    //     })
+    //     .then(() => {
+    //       setIsBookmarked(true);
+    //     });
+    // }
+    setIsBookmarked(!isBookmarked);
+  };
+
   const handleSaveButton = () => {
+    const formData = {
+      commentContent: inputText,
+      rating: ratingValue,
+    };
+
+    if (token) {
+      axios
+        .patch('https://i9a507.p.ssafy.io/api/comment/1', formData, {
+          headers: {
+            'X-READED-ACCESSTOKEN': token,
+          },
+        })
+        .then(() => {
+          setMessage('코멘트가 등록됐습니다.');
+          setShowAlert(true);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+    setMessage('코멘트가 등록됐습니다.');
+    setShowAlert(true);
     console.log('Input Text:', inputText);
     console.log('Rating:', ratingValue);
     setIsModalOpen(false);
@@ -117,9 +184,60 @@ function BookDetail() {
     newValue: number | null,
   ) => {
     if (newValue !== null) {
-      setRatingValue(newValue);
+      const formData = {
+        commentContent: null,
+        rating: ratingValue,
+      };
+
+      if (ratingValue === 0) {
+        setRatingValue(newValue);
+        axios
+          .post('https://i9a507.p.ssafy.io/api/rating', formData)
+          .then(() => {
+            setRatingsValue(newValue);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      } else {
+        setRatingValue(newValue);
+        axios
+          .patch('https://i9a507.p.ssafy.io/api/rating', formData)
+          .then(() => {
+            setRatingsValue(newValue);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
     }
   };
+
+  const handleRatingCommentChange = (
+    event: React.SyntheticEvent<Element, Event>,
+    newValue: number | null,
+  ) => {
+    if (newValue !== null) {
+      setRatingsValue(newValue);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      axios
+        .get('https://i9a507.p.ssafy.io/api/bookmarks/1', {
+          headers: {
+            'X-READED-ACCESSTOKEN': token,
+          },
+        })
+        .then(response => {
+          setIsBookmarked(response.data.isBookmarked);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  }, [token]);
 
   useEffect(() => {
     axios
@@ -172,6 +290,30 @@ function BookDetail() {
             onChange={handleRatingChange}
           />
         </Star>
+        {ratingValue > 0 && (
+          <Card
+            style={{
+              display: 'grid',
+              placeItems: 'center',
+              textAlign: 'center',
+              width: '300px',
+              margin: '2%',
+              padding: '5%',
+              border: '1px solid rgba(0, 0, 0, 0.12)',
+            }}>
+            책에 대한 한줄평을 남겨주세요!
+            <Button
+              onClick={handleOpenModal}
+              variant="contained"
+              style={{
+                background: 'var(--primary-dark)',
+                color: 'white',
+                marginTop: '10px',
+              }}>
+              코멘트 남기기
+            </Button>
+          </Card>
+        )}
         <br />
         <StyledTable>
           <TableBody>
@@ -182,8 +324,12 @@ function BookDetail() {
               <TableCell>북클럽 보기</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>
-                <FavoriteBorderIcon />
+              <TableCell onClick={handleToggleFavorite}>
+                {isBookmarked ? (
+                  <FavoriteIcon style={{ color: 'red' }} />
+                ) : (
+                  <FavoriteBorderIcon />
+                )}
               </TableCell>
               <TableCell>
                 <ModeIcon
@@ -235,26 +381,25 @@ function BookDetail() {
         <h3>대충 댓글</h3>
       </InfoContainer>
 
-      <Modal
-        open={IsModalOpen}
-        onClose={handleCloseModal}
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-        }}>
+      <Modal open={IsModalOpen} onClose={handleCloseModal}>
         <div>
           <Comments
             onClose={handleCloseModal}
             onSave={handleSaveButton}
-            handleRatingChange={handleRatingChange}
+            handleRatingChange={handleRatingCommentChange}
             handleInputChange={handleInputChange}
             textLength={textLength}
-            ratingValue={ratingValue}
+            ratingValue={ratingsValue}
             inputText={inputText}
             title={query}
           />
         </div>
       </Modal>
+      <AlertsModal
+        open={showAlert}
+        onClose={() => setShowAlert(false)}
+        message={message}
+      />
     </div>
   );
 }

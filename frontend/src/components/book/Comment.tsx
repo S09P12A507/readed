@@ -75,7 +75,7 @@ function Comments({
           <ModalCloseButton startIcon={<CloseIcon />} onClick={onClose}>
             닫기
           </ModalCloseButton>
-          <h2>{title}</h2>
+          <h2>{title.length > 10 ? `${title.slice(0, 10)}...` : title}</h2>
           <ModalSendButton onClick={onSave}>등록</ModalSendButton>
         </ModalHeaderContainer>
         <Divider />

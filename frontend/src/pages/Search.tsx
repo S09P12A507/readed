@@ -176,7 +176,11 @@ function Search() {
               key={item.isbn}
               onClick={() => handlebookDetail(item.title)}>
               <img src={item.thumbnail} alt={item.title} />
-              <p>{item.title}</p>
+              <p>
+                {item.title.length > 14
+                  ? `${item.title.slice(0, 14)}...`
+                  : item.title}
+              </p>
             </Grid>
           ))}
         </Grid>

@@ -116,7 +116,7 @@ interface Book {
   // url: string;
 }
 
-function BookclubCreate() {
+function BookclubChange() {
   const [meetingTitle, setMeetingTitle] = useState('');
   const [selectedInterval, setSelectedInterval] = useState(15);
   const [selectedpeople, setSelectedPeople] = useState(2);
@@ -225,6 +225,24 @@ function BookclubCreate() {
   };
 
   useEffect(() => {
+    axios
+      .get('http://localhost:8000/api/bookclubs/1')
+      .then(response => {
+        const bookclubData = response.data;
+        // setMeetingTitle(bookclubData.meetingTitle);
+        // setSelectedInterval(bookclubData.selectedInterval);
+        // setSelectedPeople(bookclubData.selectedpeople);
+        // SetBookclubIntro(bookclubData.bookclubIntro);
+        // setIsPublic(bookclubData.ispublic);
+        // setMeetingpw(bookclubData.meetingpw);
+        // setSelectedDate(dayjs(bookclubData.selectedDate));
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
     if (query) {
       axios
         .get<{ documents: Book[] }>(
@@ -241,7 +259,7 @@ function BookclubCreate() {
           setData(response.data.documents);
         })
         .catch(error => {
-          console.error('Error fetching data:', error);
+          console.error(error);
         });
     }
   }, [query]);
@@ -250,7 +268,7 @@ function BookclubCreate() {
     <Container>
       <BackButton />
       <Header>
-        <h1>북클럽 생성</h1>
+        <h1>북클럽 수정</h1>
       </Header>
       <CoverContainer>
         {selectedBook ? (
@@ -387,7 +405,6 @@ function BookclubCreate() {
             display: 'grid',
             height: '100%',
             backgroundColor: 'white',
-            // minWidth: 'var(--screen-size-mobile)',
             maxWidth: 'var(--screen-size-mobile)',
             width: '100%',
             overflow: 'auto',
@@ -446,4 +463,4 @@ function BookclubCreate() {
   );
 }
 
-export default BookclubCreate;
+export default BookclubChange;
