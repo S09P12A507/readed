@@ -59,6 +59,7 @@ public class ReportServiceImpl implements ReportService {
                 .isPublic(reportRequestDto.getIsPublic())
                 .build();
 
+        member.addReport(report);
         reportRepository.save(report);
     }
 

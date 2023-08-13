@@ -1,5 +1,6 @@
 package ssafy.readed.domain.auth.service;
 
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class OAuthServiceImpl implements OAuthService {
         }
 
         OAuthDetailDto detailDto = getUserDetail(socialLoginType, accessToken);
-        boolean isDuplicated = isEmailDuplicated(detailDto.getEmail());
+        boolean isDuplicated = isEmailDuplicated(detailDto.getEmail(), socialLoginType);
 
         if (!isDuplicated) {
             oAuthLoginResponseDto = OAuthLoginResponseDto.builder()
@@ -83,13 +84,22 @@ public class OAuthServiceImpl implements OAuthService {
 
 
     @Override
-    public boolean isEmailDuplicated(String email) {
+    @Transactional
+    public boolean isEmailDuplicated(String email, SocialLoginType socialLoginType) {
         Member member = memberRepository.findByEmail(email);
 
         if (member != null) {
+            checkProvider(socialLoginType, member);
             return true;
         }
         return false;
+    }
+
+    private static void checkProvider(SocialLoginType socialLoginType, Member member) {
+        if (!member.getProvider().toString().equals(socialLoginType.toString())) {
+            throw new GlobalRuntimeException(member.getProvider() + "으로 가입된 이메일입니다.",
+                    HttpStatus.CONFLICT);
+        }
     }
 
 

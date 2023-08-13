@@ -23,7 +23,7 @@ public class SelectMemberResponseDto {
         this.name = name;
         this.isValid = isValid;
     }
-
+ 
     public static SelectMemberResponseDto from(Member member) {
         return SelectMemberResponseDto.builder()
                 .id(member.getId())

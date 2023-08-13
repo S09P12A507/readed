@@ -10,7 +10,7 @@ public interface OAuthService {
 
     OAuthDetailDto getUserDetail(SocialLoginType socialLoginType, String token);
 
-    boolean isEmailDuplicated(String email);
+    boolean isEmailDuplicated(String email, SocialLoginType socialLoginType);
 
 
 }

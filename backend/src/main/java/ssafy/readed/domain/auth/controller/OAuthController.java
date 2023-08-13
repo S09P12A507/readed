@@ -31,9 +31,9 @@ public class OAuthController {
                 request.getCode());
 
         if (oauthResponseDto.getToken() == null) {
-            return JsonResponse.ok("회원가입을 위해 추가 정보가 필요한 유저입니다.", oauthResponseDto.getDetailDto());
+            return JsonResponse.ok("signup", oauthResponseDto.getDetailDto());
         } else {
-            return JsonResponse.ok("로그인 성공!", oauthResponseDto.getToken());
+            return JsonResponse.ok("login", oauthResponseDto.getToken());
         }
     }
 }
