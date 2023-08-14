@@ -4,11 +4,13 @@ package ssafy.readed.domain.bookclub.controller.dto;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.bookclub.entity.Bookclub;
 import ssafy.readed.domain.member.entity.Member;
 
 @Getter
+@NoArgsConstructor
 public class OpenBookclubRequestDto {
 
     private Long bookId;
