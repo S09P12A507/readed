@@ -1,5 +1,7 @@
 package ssafy.readed.domain.comment.service;
 
+import static ssafy.readed.domain.comment.entity.Comment.createComment;
+
 import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import ssafy.readed.domain.comment.entity.Like;
 import ssafy.readed.domain.comment.repository.CommentRepository;
 import ssafy.readed.domain.comment.repository.LikeRepository;
 import ssafy.readed.domain.member.entity.Member;
+import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 
 @Service
@@ -24,21 +27,15 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final BookRepository bookRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional
     public void saveComment(Long bookId, Member member, CommentRequestDto commentRequestDto) {
         Book book = getBook(bookId);
-
-        Comment comment = Comment.builder()
-                .member(member)
-                .book(book)
-                .commentContent(commentRequestDto.getCommentContent())
-                .rating(commentRequestDto.getRating())
-                .likeCount(0L)
-                .isSpoiler(commentRequestDto.getIsSpoiler())
-                .build();
-
+        Comment comment = createComment(member, book, commentRequestDto);
+        memberRepository.save(member);
+        
         commentRepository.save(comment);
     }
 
@@ -81,6 +78,8 @@ public class CommentServiceImpl implements CommentService {
 
         authCheckComment(member, comment);
         deleteLikeByComment(commentId);
+        comment.deleteComment(member, comment);
+        memberRepository.save(member);
 
         commentRepository.delete(comment);
     }

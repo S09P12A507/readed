@@ -54,6 +54,27 @@ public class Comment extends BaseEntity {
         this.isSpoiler = isSpoiler;
     }
 
+    public static Comment createComment(Member member, Book book,
+            CommentRequestDto commentRequestDto) {
+        Comment comment = Comment.builder()
+                .member(member)
+                .book(book)
+                .commentContent(commentRequestDto.getCommentContent())
+                .rating(commentRequestDto.getRating())
+                .likeCount(0L)
+                .isSpoiler(commentRequestDto.getIsSpoiler())
+                .build();
+
+        member.addComment(book.getPageCount(),
+                Math.toIntExact(commentRequestDto.getRating()));
+        return comment;
+    }
+
+    public static void deleteComment(Member member, Comment comment) {
+        member.deleteComment(comment.getBook().getPageCount(),
+                Math.toIntExact(comment.getRating()));
+    }
+
     public void update(CommentRequestDto requestDto) {
         this.commentContent = requestDto.getCommentContent();
         this.rating = requestDto.getRating();

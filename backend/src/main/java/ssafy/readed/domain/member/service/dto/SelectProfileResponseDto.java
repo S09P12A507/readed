@@ -1,12 +1,11 @@
 package ssafy.readed.domain.member.service.dto;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ssafy.readed.domain.member.entity.Member;
-import ssafy.readed.domain.member.entity.MemberProfileFile;
-import ssafy.readed.global.service.S3FileService;
 
 @Getter
 @NoArgsConstructor
@@ -18,10 +17,10 @@ public class SelectProfileResponseDto {
     private String profileBio;
     private String profileImage;
 
-    private int readCount;
-    private int reportCount;
-    private int bookclubCount; // 북클럽 횟수
-    private int pageCount; // 읽은 페이지 수
+    private Long readCount;
+    private Long reportCount;
+    private Long bookclubCount; // 북클럽 횟수
+    private Long pageCount; // 읽은 페이지 수
     private int star_0_count; // 별점 0점
     private int star_0p5_count; // 별점 0.5점
     private int star_1_count; // 별점 1점
@@ -37,7 +36,8 @@ public class SelectProfileResponseDto {
     @Builder
     public SelectProfileResponseDto(Long id, String nickname, String profileBio,
             String profileImage,
-            int readCount, int reportCount, int bookclubCount, int pageCount) {
+            Long readCount, Long reportCount, Long bookclubCount, Long pageCount,
+            List<Integer> starCount) {
         this.id = id;
         this.nickname = nickname;
         this.profileBio = profileBio;
@@ -46,6 +46,17 @@ public class SelectProfileResponseDto {
         this.reportCount = reportCount;
         this.bookclubCount = bookclubCount;
         this.pageCount = pageCount;
+        this.star_0_count = starCount.get(0);
+        this.star_0p5_count = starCount.get(1);
+        this.star_1_count = starCount.get(2);
+        this.star_1p5_count = starCount.get(3);
+        this.star_2_count = starCount.get(4);
+        this.star_2p5_count = starCount.get(5);
+        this.star_3_count = starCount.get(6);
+        this.star_3p5_count = starCount.get(7);
+        this.star_4_count = starCount.get(8);
+        this.star_4p5_count = starCount.get(9);
+        this.star_5_count = starCount.get(10);
     }
 
     public static SelectProfileResponseDto from(Member member, String url) {
@@ -59,6 +70,7 @@ public class SelectProfileResponseDto {
                 .reportCount(member.getReportCount())
                 .bookclubCount(member.getBookclubCount())
                 .pageCount(member.getPageCount())
+                .starCount(member.getStarCount())
                 .build();
     }
 }

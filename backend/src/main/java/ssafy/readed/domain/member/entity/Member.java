@@ -1,5 +1,21 @@
 package ssafy.readed.domain.member.entity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +26,6 @@ import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.report.entity.Report;
 import ssafy.readed.global.entity.BaseEntity;
 import ssafy.readed.global.util.IntegerArrayConverter;
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Entity
 @Getter
@@ -54,14 +65,14 @@ public class Member extends BaseEntity {
     private List<Participant> participantList = new ArrayList<>();
 
 
-    private Integer readCount = 0; // 코멘트 수
-    private Integer reportCount = 0; // 독후감 수
-    private Integer bookclubCount = 0; // 북클럽 횟수
-    private Integer pageCount = 0; // 읽은 페이지 수
+    private Long readCount = 0L; // 코멘트 수
+    private Long reportCount = 0L; // 독후감 수
+    private Long bookclubCount = 0L; // 북클럽 횟수
+    private Long pageCount = 0L; // 읽은 페이지 수
 
     @Convert(converter = IntegerArrayConverter.class)
     private List<Integer> starCount = new ArrayList<>(
-            Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //별점 갯수
+            Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)); //별점 갯수
 
     public void modify(ModifyMemberProfileRequestDto memberProfileRequestDto) {
         this.nickname = memberProfileRequestDto.getNickname();
@@ -86,10 +97,21 @@ public class Member extends BaseEntity {
         this.reportCount++;
     }
 
-    public void addComment(int page, int star) {
+    public void deleteReport(Report report) {
+        this.reportList.remove(report);
+        this.reportCount--;
+    }
+
+    public void addComment(Long page, int star) {
         this.readCount++;
         this.pageCount += page;
         this.starCount.set(star, this.starCount.get(star) + 1);
+    }
+
+    public void deleteComment(Long page, int star) {
+        this.readCount--;
+        this.pageCount -= page;
+        this.starCount.set(star, this.starCount.get(star) - 1);
     }
 
     public void saveNewProfileFile(String path, String originalFilename, String savedFilename) {
