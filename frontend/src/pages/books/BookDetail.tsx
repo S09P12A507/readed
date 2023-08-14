@@ -231,7 +231,7 @@ function BookDetail() {
           },
         })
         .then(response => {
-          setIsBookmarked(response.data.isBookmarked);
+          setIsBookmarked(response.data as boolean);
         })
         .catch(error => {
           console.error(error);

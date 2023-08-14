@@ -2,9 +2,9 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { TextField, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store/store';
 import axios from 'axios';
 import CheckIcon from '@mui/icons-material/Check';
+import { RootState } from '../../../store/store';
 import AlertsModal from '../../common/alert/Alert';
 
 const SignupForm = styled(TextField)`
@@ -63,7 +63,7 @@ function PwChange() {
     const formData = {
       prevPassword: password,
       password: password1,
-      password2: password2,
+      password2,
     };
 
     if (token && password1 === password2) {
