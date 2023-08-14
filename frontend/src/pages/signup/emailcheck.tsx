@@ -117,15 +117,6 @@ function Emailcheck() {
         setMessage('인증 번호를 다시 확인해주세요.');
         setShowAlert(true);
       });
-
-    //   const isVerified = true; // 임의로 인증이 그냥 된다고 가정
-    //   if (isVerified) {
-    //     setIsAuthenticated(true);
-    //     console.log('인증 성공');
-    //   } else {
-    //     setIsAuthenticated(false);
-    //     console.log('인증 실패');
-    //   }
   };
 
   const handleSignUp = () => {
@@ -140,13 +131,13 @@ function Emailcheck() {
   const handleSubmit = () => {
     axios
       .post('https://i9a507.p.ssafy.io/api/auth/send-email', { email })
-      .then(response => {
-        console.log('이메일이 성공적으로 보내졌습니다.');
-
-        console.log(response);
+      .then(() => {
+        setMessage('이메일이 전송됐습니다.');
+        setShowAlert(true);
       })
-      .catch(error => {
-        console.error('이메일 전송에 실패했습니다.', error);
+      .catch(() => {
+        setMessage('이메일 전송에 실패됐습니다.');
+        setShowAlert(true);
       });
   };
 

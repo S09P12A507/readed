@@ -148,14 +148,15 @@ function Addprofile() {
           setNicknameExists(true);
           setMessage('중복 확인되었습니다.');
           setShowAlert(true);
-          console.log(response);
         } else {
           setNicknameExists(false);
-          console.log('인증 실패');
+          setMessage('중복된 닉네임입니다.');
+          setShowAlert(true);
         }
       })
-      .catch(error => {
-        console.error('중복 확인 실패:', error);
+      .catch(() => {
+        setMessage('잠시 후 다시 시도해주세요.');
+        setShowAlert(true);
       });
   };
 
@@ -183,8 +184,6 @@ function Addprofile() {
     if (ProfileImage) {
       formData.append('image', ProfileImage);
     }
-    console.log(InfoData);
-
     axios
       .post('https://i9a507.p.ssafy.io/api/members/sign-up', formData, {
         headers: {
@@ -195,18 +194,18 @@ function Addprofile() {
         setMessage('회원 가입에 성공했습니다.');
         setShowAlert(true);
       })
-      .catch(error => {
-        console.error('회원가입 실패:', error);
+      .catch(() => {
+        setMessage('잠시 후 다시 시도해주세요.');
+        setShowAlert(true);
       });
-
-    if (message === '회원 가입에 성공했습니다.') {
-      sessionStorage.removeItem('signupData');
-      window.location.href = '/genre';
-    }
   };
 
   const handleAlertClose = () => {
     setShowAlert(false);
+    if (message === '회원 가입에 성공했습니다.') {
+      sessionStorage.removeItem('signupData');
+      window.location.href = '/genre';
+    }
   };
   return (
     <Container>

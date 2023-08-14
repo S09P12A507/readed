@@ -18,9 +18,9 @@ import {
   Grid,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
+import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
-import SearchIcon from '@mui/icons-material/Search';
 import { RootState } from '../../store/store';
 import Alerts from '../../components/common/alert/Alert';
 import BackButton from '../../components/common/button/BackButton';
@@ -228,7 +228,7 @@ function BookclubChange() {
     axios
       .get('http://localhost:8000/api/bookclubs/1')
       .then(() => {
-        // const bookclubData = response.data as string;
+        // const bookclubData = response.data;
         // setMeetingTitle(bookclubData.meetingTitle);
         // setSelectedInterval(bookclubData.selectedInterval);
         // setSelectedPeople(bookclubData.selectedpeople);
@@ -237,9 +237,7 @@ function BookclubChange() {
         // setMeetingpw(bookclubData.meetingpw);
         // setSelectedDate(dayjs(bookclubData.selectedDate));
       })
-      .catch(error => {
-        console.error(error);
-      });
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -258,9 +256,7 @@ function BookclubChange() {
         .then(response => {
           setData(response.data.documents);
         })
-        .catch(error => {
-          console.error(error);
-        });
+        .catch(() => {});
     }
   }, [query]);
 

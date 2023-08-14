@@ -173,13 +173,12 @@ function Signup() {
 
       axios
         .post('https://i9a507.p.ssafy.io/api/auth/send-email', { email })
-        .then(response => {
-          console.log('이메일이 성공적으로 보내졌습니다.');
+        .then(() => {
           window.location.href = '/signup/emailcheck';
-          console.log(response);
         })
-        .catch(error => {
-          console.error('이메일 전송에 실패했습니다.', error);
+        .catch(() => {
+          setMessage('이메일 전송에 실패했습니다.');
+          setShowAlert(true);
         });
     } else {
       setMessage('유효하지 않은 입력이 있습니다.');
@@ -203,8 +202,9 @@ function Signup() {
           setShowAlert(true);
         }
       })
-      .catch(error => {
-        console.error('중복 확인 실패:', error);
+      .catch(() => {
+        setMessage('잠시 후 다시 시도해주세요.');
+        setShowAlert(true);
       });
   };
 
