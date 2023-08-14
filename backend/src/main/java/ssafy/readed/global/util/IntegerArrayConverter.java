@@ -7,19 +7,19 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter
-public class LongArrayConverter implements AttributeConverter<List<Long>, String> {
+public class IntegerArrayConverter implements AttributeConverter<List<Integer>, String> {
 
     private static final String SPLIT_CHAR = ",";
 
     @Override
-    public String convertToDatabaseColumn(List<Long> attribute) {
+    public String convertToDatabaseColumn(List<Integer> attribute) {
         return attribute.stream().map(String::valueOf).collect(Collectors.joining(SPLIT_CHAR));
     }
 
     @Override
-    public List<Long> convertToEntityAttribute(String dbData) {
+    public List<Integer> convertToEntityAttribute(String dbData) {
         return Arrays.stream(dbData.split(SPLIT_CHAR))
-                .map(Long::parseLong)
+                .map(Integer::parseInt)
                 .collect(Collectors.toList());
 
     }
