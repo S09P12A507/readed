@@ -23,15 +23,34 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
+//     navigator.serviceWorker
+//       .register('./service-worker.ts', { scope: '/' })
+//       .then(registration => {
+//         console.log('Service Worker registered:', registration);
+//       })
+//       .catch(error => {
+//         console.log('Service Worker registration failed:', error);
+//       });
+//   });
+// }
+// 임시lint해제
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
-      .register('./service-worker.ts', { scope: '/' })
+      .register('./service-worker.ts')
       .then(registration => {
-        console.log('Service Worker registered:', registration);
+        console.log('SW registered', registration);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        registration.pushManager.subscribe({ userVisibleOnly: true });
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        Notification.requestPermission().then(p => {
+          console.log(p);
+        });
       })
-      .catch(error => {
-        console.log('Service Worker registration failed:', error);
+      .catch(e => {
+        console.log('SW registration failed: ', e);
       });
   });
 }

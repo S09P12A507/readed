@@ -29,7 +29,7 @@ const Button = styled.button`
   border-bottom-right-radius: 0.25rem;
   z-index: 10;
   cursor: pointer;
-  transform: translate(-100%);
+  /* transform: translate(-100% 0); */
 `;
 
 function Right({
