@@ -49,11 +49,14 @@ function useRouteMatch(patterns: readonly string[]) {
   return null;
 }
 
+// 로그인된 유저 정보(임시)
+const loginUserId = 1;
+
 function ProfileTabs() {
   const routeMatch = useRouteMatch([
-    'profile/:userId/book',
-    'profile/:userId/report',
-    'profile/:userId',
+    `profile/${loginUserId}/book`,
+    // `profile/${loginUserId}/report`,
+    `profile/${loginUserId}`,
   ]);
   const currentTab = routeMatch?.pattern?.path;
 
@@ -68,7 +71,7 @@ function ProfileTabs() {
         }}>
         <Tab
           label="통계"
-          value="profile/:userId"
+          value={`profile/${loginUserId}`}
           to=""
           component={Link}
           sx={{ width: '30.5%' }}
@@ -76,7 +79,7 @@ function ProfileTabs() {
 
         <Tab
           label="읽은 책"
-          value="profile/:userId/book"
+          value={`profile/${loginUserId}/book`}
           to="book"
           component={Link}
           sx={{ width: '30.5%' }}

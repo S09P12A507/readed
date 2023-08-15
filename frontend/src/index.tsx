@@ -12,7 +12,14 @@ import { store } from './store/store';
  * @todo 로고, favicon, 페이지별 이름 변경
  */
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+    },
+  },
+});
 
 ReactDOM.render(
   <QueryClientProvider client={queryClient}>

@@ -30,8 +30,8 @@ const ProfileCardTop = styled.div`
 `;
 
 const ParagraphWrapper = styled.div`
-  margin-left: calc((100% - 20rem) / 2);
-  margin-right: calc((100% - 20rem) / 2);
+  margin-left: calc((100% - 21rem) / 2);
+  margin-right: calc((100% - 21rem) / 2);
 `;
 
 // interface ProfileCardProps {

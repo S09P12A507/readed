@@ -48,7 +48,7 @@ function MeatballMenu() {
           'aria-labelledby': 'meatball',
         }}>
         <Link
-          to="/bookmark"
+          to="/bookmark/:userId"
           style={{ textDecoration: 'none', color: 'var(--text-primary)' }}>
           <MenuItem onClick={handleClose}>
             <Typography fontWeight={300}>읽고 싶은 책</Typography>

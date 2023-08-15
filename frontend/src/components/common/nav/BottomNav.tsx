@@ -35,7 +35,8 @@ const ReadedBottomNavigationAction = styled(BottomNavigationAction)`
   padding-bottom: 1rem;
 `;
 
-// Page Transition Animaion
+// 로그인된 유저 정보(임시)
+const loginUserId = 1;
 
 function BottomNav() {
   const [bnValue, setBNValue] = useState<number>(0);
@@ -68,7 +69,7 @@ function BottomNav() {
         <ReadedBottomNavigationAction
           label="내 서재"
           icon={<AutoStoriesIcon />}
-          onClick={() => navigate('/profile/:userId')}
+          onClick={() => navigate(`/profile/${loginUserId}`)}
         />
       </ReadedBottomNavigation>
     </>

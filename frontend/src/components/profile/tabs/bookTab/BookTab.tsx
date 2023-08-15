@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import BookTabCover from './BookTabCover';
 // hooks
 // types
-import { UserBookRead } from '../../../../interfaces/user/IUserBookRead';
+import { IUserBookRead } from '../../../../interfaces/user/IUserBookRead';
 
 /**
  * 내 서재 - 읽은 책 탭
@@ -19,7 +19,7 @@ import { UserBookRead } from '../../../../interfaces/user/IUserBookRead';
  */
 
 // 책 더미 데이터
-const dummyBookData: UserBookRead[] = [
+const dummyBookData: IUserBookRead[] = [
   {
     bookId: '1',
     bookTitle: 'title1',
@@ -212,51 +212,8 @@ const BookTabCoverList = styled.section`
   row-gap: 0.4rem;
 `;
 
-// const fetchPrivateBookComments = async (page: number) => {
-//   return axios.get<UserBookRead>('주소').then(resp => resp.data);
-// };
-
 function BookTab() {
   const bookData = dummyBookData;
-  // 유저의 책 코멘트 api 호출
-  // const getPrivateBookComment = async ({
-  //   bookId,
-  //   bookTitle,
-  //   bookCover,
-  //   userRate,
-  //   userComment,
-  // }: UserBookRead) => {
-  //   try {
-  //     const res: AxiosResponse<UserBookRead> = await axios.get('/post', {
-  //       params: {
-  //         bookId,
-  //         bookTitle,
-  //         bookCover,
-  //         userRate,
-  //         userComment,
-  //       },
-  //     });
-  //     return res.data;
-  //   } catch (error) {
-  //     console.error('패칭 오류', error);
-  //     return null;
-  //   }
-  // };
-
-  // 데이터 패칭
-  // const { data, fetchNextPage, hasNextPage, isLoading, isError } =
-  //   useInfiniteQuery(
-  //     ['page', search],
-  //     ({ pageParam = 0 }) =>
-  //       getPrivateBookComment({ page: pageParam, content: Search, view: 5 }),
-  //     {
-  //       getNextPageParam: (lastPage, allPosts) => {
-  //         return lastPage.page !== allPosts[0].totalPage
-  //           ? lastPage.page + 1
-  //           : undefined;
-  //       },
-  //     },
-  //   );
 
   return (
     <BookTabCoverList>

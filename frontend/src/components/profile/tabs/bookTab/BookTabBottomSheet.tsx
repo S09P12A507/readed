@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { SwipeableDrawer } from '@mui/material';
+import { SwipeableDrawer, Typography, Rating, Button } from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 // types
-import { UserBookRead } from '../../../../interfaces/user/IUserBookRead';
+import { IUserBookRead } from '../../../../interfaces/user/IUserBookRead';
 
 /**
  * 내 서재 - 읽은 책 탭의 책 요소
@@ -19,18 +21,37 @@ const BottomSheetContent = styled.article`
   padding: 1rem;
 `;
 
+const DataWrapper = styled.div`
+  width: 80%;
+  margin: 0.5rem 0;
+`;
+const DatumWrapper = styled.div`
+  width: 100%;
+`;
+
+const UserComment = styled(Typography)`
+  width: 100%;
+  text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+`;
+
 const noThumbnailColor = 'var(--divider)';
 
 const PrivateBookCommentCover = styled.img<{ bookCover: string }>`
   width: 6.5rem;
   aspect-ratio: 6.5/9;
-  background-color: ${props => (props.bookCover ? 'none' : noThumbnailColor)};
+  /* 임시 컬러 지정 */
+  /* img를 가져와서 background-image로 넣을 것 */
+  background-color: ${props =>
+    props.bookCover ? '#d9d9d9' : noThumbnailColor};
 `;
 
 interface BottomSheetProps {
   open: boolean;
   onClose: () => void;
-  bookRead: UserBookRead;
+  bookRead: IUserBookRead;
 }
 
 function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
@@ -57,12 +78,43 @@ function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
       disableSwipeToOpen
       ModalProps={{ keepMounted: false }}>
       <BottomSheetContent>
-        <PrivateBookCommentCover bookCover={bookCover} />
-        {bookTitle}
-        <br />
-        Rating: {userRate}
-        <br />
-        Comment: {userComment}
+        <Typography
+          fontSize="1rem"
+          fontWeight="600"
+          marginTop="0.5rem"
+          marginBottom="1rem">
+          {bookTitle}
+        </Typography>
+        <Link
+          to="/"
+          style={{
+            display: 'flex',
+            flexFlow: 'column',
+            textDecoration: 'none',
+          }}>
+          <PrivateBookCommentCover bookCover={bookCover} />
+          <Button
+            size="small"
+            endIcon={<ChevronRightIcon />}
+            sx={{ color: 'var(--text-disabled)' }}>
+            책 페이지로
+          </Button>
+        </Link>
+        <DataWrapper>
+          <DatumWrapper>
+            <Typography>내 별점</Typography>
+            <Rating
+              defaultValue={userRate}
+              precision={0.5}
+              readOnly
+              size="large"
+            />
+          </DatumWrapper>
+          <DatumWrapper>
+            <Typography>내 코멘트</Typography>
+            <UserComment>{userComment}</UserComment>
+          </DatumWrapper>
+        </DataWrapper>
       </BottomSheetContent>
     </SwipeableDrawer>
   );

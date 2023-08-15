@@ -1,4 +1,4 @@
-export interface UserBookRead {
+export interface IUserBookRead {
   bookId: string;
   bookTitle: string;
   bookCover: string;
