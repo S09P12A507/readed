@@ -17,7 +17,7 @@ function GoogleLogin() {
       const authorizationCode = urlParams.get('code');
       console.log('인가 코드:', authorizationCode);
       if (authorizationCode) {
-        const apiUrl = 'http://localhost:8081/api/auth/google';
+        const apiUrl = 'https://i9a507.p.ssafy.io/api/auth/google';
 
         axios
           .post<{ data: Tokens }>(apiUrl, {

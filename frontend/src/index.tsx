@@ -12,14 +12,7 @@ import { store } from './store/store';
  * @todo 로고, favicon, 페이지별 이름 변경
  */
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <QueryClientProvider client={queryClient}>
@@ -43,24 +36,24 @@ ReactDOM.render(
 //   });
 // }
 // 임시lint해제
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('./service-worker.ts')
-      .then(registration => {
-        console.log('SW registered', registration);
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        registration.pushManager.subscribe({ userVisibleOnly: true });
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        Notification.requestPermission().then(p => {
-          console.log(p);
-        });
-      })
-      .catch(e => {
-        console.log('SW registration failed: ', e);
-      });
-  });
-}
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
+//     navigator.serviceWorker
+//       .register('./service-worker.ts')
+//       .then(registration => {
+//         console.log('SW registered', registration);
+//         // eslint-disable-next-line @typescript-eslint/no-floating-promises
+//         registration.pushManager.subscribe({ userVisibleOnly: true });
+//         // eslint-disable-next-line @typescript-eslint/no-floating-promises
+//         Notification.requestPermission().then(p => {
+//           console.log(p);
+//         });
+//       })
+//       .catch(e => {
+//         console.log('SW registration failed: ', e);
+//       });
+//   });
+// }
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -69,7 +69,7 @@ function Comments({
   title,
 }: ModalProps) {
   return (
-    <div>
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
       <ModalContentContainer>
         <ModalHeaderContainer>
           <ModalCloseButton startIcon={<CloseIcon />} onClick={onClose}>

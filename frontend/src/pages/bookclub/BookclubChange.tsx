@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
@@ -101,19 +102,22 @@ const StyledInputBase = styled(InputBase)`
 `;
 
 interface Book {
-  // id: string;
-  authors: string[];
-  contents: string;
-  // datetime: string;
-  isbn: string;
-  // price: number;
-  // publisher: string;
-  // sale_price: number;
-  // status: string;
-  thumbnail: string;
+  bookId: number;
+  coverImage: string;
+  bookTitle: string;
+}
+
+interface BookClub {
   title: string;
-  // translators: string[];
-  // url: string;
+  booktitle: string;
+  contexts: string;
+  coverImage: string;
+  time: Date;
+  duration: number;
+  participant_count: number;
+  is_public: boolean;
+  meeting_password: string;
+  book: Book;
 }
 
 function BookclubChange() {
@@ -130,8 +134,8 @@ function BookclubChange() {
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState<string>('');
   const [data, setData] = useState<Book[]>([]);
-  const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const { bookclubId } = useParams();
 
   const token: string | null = useSelector(
     (state: RootState) => state.auth.accessToken,
@@ -191,7 +195,7 @@ function BookclubChange() {
       const formData = {
         bookclub_name: meetingTitle,
         bookclub_content: bookclubIntro,
-        book_id: selectedBook.title,
+        book_id: selectedBook.bookId,
         bookclub_time: selectedDate.toDate(),
         participant_count: selectedpeople,
         is_public: isPublic,
@@ -199,13 +203,13 @@ function BookclubChange() {
       };
       if (token) {
         axios
-          .post('https://i9a507.p.ssafy.io/api/bookclubs', formData, {
+          .patch('https://i9a507.p.ssafy.io/api/bookclubs', formData, {
             headers: {
               'X-READED-ACCESSTOKEN': `${token}`,
             },
           })
           .then(() => {
-            setMessage('정상적으로 등록되었습니다!');
+            setMessage('정상적으로 수정되었습니다!');
             setShowAlert(true);
           })
           .catch(() => {
@@ -219,23 +223,26 @@ function BookclubChange() {
   const handleAlertClose = () => {
     setShowAlert(false);
 
-    if (message === '정상적으로 등록되었습니다!') {
+    if (message === '정상적으로 수정되었습니다!') {
       window.location.href = '/bookclub';
     }
   };
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/api/bookclubs/1')
-      .then(() => {
-        // const bookclubData = response.data;
-        // setMeetingTitle(bookclubData.meetingTitle);
-        // setSelectedInterval(bookclubData.selectedInterval);
-        // setSelectedPeople(bookclubData.selectedpeople);
-        // SetBookclubIntro(bookclubData.bookclubIntro);
-        // setIsPublic(bookclubData.ispublic);
-        // setMeetingpw(bookclubData.meetingpw);
-        // setSelectedDate(dayjs(bookclubData.selectedDate));
+      .get<{ data: BookClub }>(
+        `https://i9a507.p.ssafy.io/api/bookclubs/${bookclubId}`,
+      )
+      .then(response => {
+        const bookclubData = response.data.data;
+        setMeetingTitle(bookclubData.title);
+        setSelectedInterval(bookclubData.duration);
+        setSelectedPeople(bookclubData.participant_count);
+        SetBookclubIntro(bookclubData.contexts);
+        setIsPublic(bookclubData.is_public);
+        setMeetingpw(bookclubData.meeting_password);
+        setSelectedDate(dayjs(bookclubData.time));
+        setSelectedBook(bookclubData.book);
       })
       .catch(() => {});
   }, []);
@@ -244,14 +251,7 @@ function BookclubChange() {
     if (query) {
       axios
         .get<{ documents: Book[] }>(
-          `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
-            query,
-          )}`,
-          {
-            headers: {
-              Authorization: `KakaoAK ${apikey}`,
-            },
-          },
+          `https://i9a507.p.ssafy.io/search?kw=${encodeURIComponent(query)}`,
         )
         .then(response => {
           setData(response.data.documents);
@@ -269,8 +269,8 @@ function BookclubChange() {
       <CoverContainer>
         {selectedBook ? (
           <img
-            src={selectedBook.thumbnail}
-            alt={selectedBook.title}
+            src={selectedBook.coverImage}
+            alt={selectedBook.bookTitle}
             onClick={handleFindBook}
           />
         ) : (
@@ -284,7 +284,7 @@ function BookclubChange() {
             +
           </FindBook>
         )}
-        <h3>{selectedBook ? selectedBook.title : '책을 선택해주세요'}</h3>
+        <h3>{selectedBook ? selectedBook.bookTitle : '책을 선택해주세요'}</h3>
       </CoverContainer>
       <ContentContainer>
         <h4> 모임 제목</h4>
@@ -433,26 +433,13 @@ function BookclubChange() {
               <Grid
                 item
                 xs={3.8}
-                key={item.isbn}
+                key={item.bookId}
                 onClick={() => handleSelectdBook(item)}>
-                <img src={item.thumbnail} alt={item.title} />
-                <p>{item.title}</p>
+                <img src={item.coverImage} alt={item.bookTitle} />
+                <p>{item.bookTitle}</p>
               </Grid>
             ))}
           </Grid>
-          {/* {data.map((item: Book) => (
-            <div key={item.isbn}>
-              <img
-                src={item.thumbnail}
-                alt={item.title}
-                onClick={() => handleSelectdBook(item)}
-              />
-              <h2>{item.title}</h2>
-              <p>{item.contents}</p>
-              <p>{item.isbn}</p>
-              <p>{item.authors}</p>
-            </div>
-          ))} */}
         </div>
       </Modal>
     </Container>

@@ -69,13 +69,11 @@ const StyledTable = styled(Table)`
 `;
 
 interface Book {
-  authors: string[];
+  author: string[];
   publisher: string;
-  translators: string;
   contents: string;
-  isbn: string;
-  thumbnail: string;
-  title: string;
+  coverImage: string;
+  bookTitle: string;
 }
 
 function BookDetail() {
@@ -87,8 +85,6 @@ function BookDetail() {
   const [inputText, setInputText] = useState('');
   const [textLength, setTextLength] = useState<number>(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
-
-  const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
   const query = bookId as string;
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState('');
@@ -108,7 +104,7 @@ function BookDetail() {
   const handleOpenModal = () => {
     setIsModalOpen(true);
     setInputText('');
-    // setRatingValue(0);
+    setRatingValue(ratingValue);
   };
 
   const handleCloseModal = () => {
@@ -127,28 +123,27 @@ function BookDetail() {
   };
 
   const handleToggleFavorite = () => {
-    // if (isBookmarked) {
-    //   axios
-    //     .delete('https://i9a507.p.ssafy.io/api/bookmarks/1', {
-    //       headers: {
-    //         'X-READED-ACCESSTOKEN': token,
-    //       },
-    //     })
-    //     .then(() => {
-    //       setIsBookmarked(false);
-    //     });
-    // } else {
-    //   axios
-    //     .post('https://i9a507.p.ssafy.io/api/bookmarks/1', {
-    //       headers: {
-    //         'X-READED-ACCESSTOKEN': token,
-    //       },
-    //     })
-    //     .then(() => {
-    //       setIsBookmarked(true);
-    //     });
-    // }
-    setIsBookmarked(!isBookmarked);
+    if (isBookmarked) {
+      axios
+        .delete('https://i9a507.p.ssafy.io/api/bookmarks/1', {
+          headers: {
+            'X-READED-ACCESSTOKEN': token,
+          },
+        })
+        .then(() => {
+          setIsBookmarked(false);
+        });
+    } else {
+      axios
+        .post('https://i9a507.p.ssafy.io/api/bookmarks/1', {
+          headers: {
+            'X-READED-ACCESSTOKEN': token,
+          },
+        })
+        .then(() => {
+          setIsBookmarked(true);
+        });
+    }
   };
 
   const handleSaveButton = () => {
@@ -168,14 +163,8 @@ function BookDetail() {
           setMessage('코멘트가 등록됐습니다.');
           setShowAlert(true);
         })
-        .catch(error => {
-          console.error(error);
-        });
+        .catch(() => {});
     }
-    setMessage('코멘트가 등록됐습니다.');
-    setShowAlert(true);
-    console.log('Input Text:', inputText);
-    console.log('Rating:', ratingValue);
     setIsModalOpen(false);
   };
 
@@ -196,9 +185,7 @@ function BookDetail() {
           .then(() => {
             setRatingsValue(newValue);
           })
-          .catch(error => {
-            console.error(error);
-          });
+          .catch(() => {});
       } else {
         setRatingValue(newValue);
         axios
@@ -206,9 +193,7 @@ function BookDetail() {
           .then(() => {
             setRatingsValue(newValue);
           })
-          .catch(error => {
-            console.error(error);
-          });
+          .catch(() => {});
       }
     }
   };
@@ -233,33 +218,22 @@ function BookDetail() {
         .then(response => {
           setIsBookmarked(response.data as boolean);
         })
-        .catch(error => {
-          console.error(error);
-        });
+        .catch(() => {});
     }
   }, [token]);
 
   useEffect(() => {
     axios
       .get<{ documents: Book[] }>(
-        `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
-          query,
-        )}`,
-        {
-          headers: {
-            Authorization: `KakaoAK ${apikey}`,
-          },
-        },
+        `https://i9a507.p.ssafy.io/api/books/${bookId}`,
       )
       .then(response => {
         if (response.data.documents.length > 0) {
           setData(response.data.documents[0]);
         }
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, [query]);
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     setTextLength(inputText.length);
@@ -273,11 +247,9 @@ function BookDetail() {
     <div>
       <BackButton />
       <Container>
-        <BookImage src={data.thumbnail} alt={data.title} />
-        <h2>{data.title}</h2>
-        <h5>
-          {data.authors} 지음 | {data.translators} 옮김
-        </h5>
+        <BookImage src={data.coverImage} alt={data.bookTitle} />
+        <h2>{data.bookTitle}</h2>
+        <h5>{data.author} 지음 | ??? 옮김</h5>
         <h5> {data.publisher}</h5>
         <br />
         <h6>읽은 책을 평가해주세요</h6>
@@ -367,9 +339,16 @@ function BookDetail() {
       <Divider />
       <InfoContainer>
         <h3>저자 / 역자</h3>
-        <h2>(대충 사진) {data.authors}</h2>
+        <h2>
+          <img
+            src={'a'}
+            alt={`프로필 이미지`}
+            style={{ width: '40px', height: '40px', marginRight: '5px' }}
+          />{' '}
+          저자이름
+        </h2>
         <p>저자</p>
-        <h2>(대충 사진) {data.translators}</h2>
+        <h2>(대충 사진)</h2>
         <p>역자</p>
       </InfoContainer>
       <Divider />

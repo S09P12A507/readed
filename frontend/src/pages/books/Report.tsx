@@ -36,18 +36,7 @@ const SwitchContainer = styled.div`
   align-items: center;
 `;
 
-// interface NameData {
-//   MemberName: string;
-// }
-
 function Report() {
-  // const storedData = localStorage.getItem('signupData');
-  // const signUpData: NameData = storedData
-  //   ? (JSON.parse(storedData) as NameData)
-  //   : {
-  //       MemberName: '',
-  //     };
-  // const [MemberName] = useState<string>(signUpData.MemberName || '');
   const [titles, setTitles] = useState('');
   const [inputText, setInputText] = useState('');
   const [isPublic, setIsPublic] = useState(true);
@@ -96,9 +85,9 @@ function Report() {
 
     if (token) {
       axios
-        .post('http://localhost:8080/api/report/1', formData, {
+        .post(`https://i9a507.p.ssafy.io/api/report/${bookId}`, formData, {
           headers: {
-            'X-READED-ACCESSTOKEN': `${token}`,
+            'X-READED-ACCESSTOKEN': token,
           },
         })
         .then(() => {
@@ -129,7 +118,6 @@ function Report() {
           닫기
         </CloseButton>
         <h2>
-          {' '}
           {bookname.length > 10 ? `${bookname.slice(0, 10)}...` : bookname}
         </h2>
         <ApplyButton

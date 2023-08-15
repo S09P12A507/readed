@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,7 +10,7 @@ import CardContent from '@mui/material/CardContent';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import PeopleIcon from '@mui/icons-material/People';
-import testimg from '../../assets/img/test.jpg';
+import axios from 'axios';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -64,12 +65,36 @@ const Infodetail = styled.div`
   margin: 2%;
 `;
 
+interface BookClub {
+  id: number;
+  title: string;
+  booktitle: string;
+  contexts: string;
+  coverImage: string;
+  time: Date;
+  duration: number;
+  participant_count: number;
+  participants: [];
+  is_public: boolean;
+}
+
 function Bookclub() {
+  const [data, setData] = useState<BookClub[]>([]);
+
   const navigate = useNavigate();
 
-  const handleBookClubClick = (bookClubId: number) => {
+  const handleBookClubClick = (bookClubId: string) => {
     navigate(`/bookclub/detail/${bookClubId}`);
   };
+
+  useEffect(() => {
+    axios
+      .get<{ data: BookClub[] }>(`https://i9a507.p.ssafy.io/api/bookclubs`)
+      .then(response => {
+        setData(response.data.data);
+      })
+      .catch(() => {});
+  });
 
   return (
     <Container>
@@ -88,33 +113,49 @@ function Bookclub() {
         <StyledInputBase placeholder="관심있는 북클럽을 검색해보세요" />
       </Search>
       <BookClubList>
-        {Array.from({ length: 10 }).map(() => (
+        {data.map((bookclub: BookClub) => (
           <Card
-            onClick={() => handleBookClubClick(1)}
+            onClick={() => handleBookClubClick('a')}
             sx={{ display: 'flex', margin: '2%' }}
-            key={Math.random()}>
+            key={bookclub.id}>
             <CardMedia
               component="img"
               sx={{ width: 130 }}
-              src={testimg}
+              src={bookclub.coverImage}
               style={{ margin: '5%' }}
             />
             <CardContent sx={{ flex: '1 0 auto' }}>
-              <h6> 공개 모임일걸?</h6>
-              <h2>북클럽 제목임</h2>
-              <h5>잡화점 용의자의 나미야</h5>
+              <h6>{bookclub.is_public ? '공개' : '비공개'}</h6>
+              <h2>{bookclub.title}</h2>
+              <h5>{bookclub.booktitle}</h5>
               <Info>
                 <Infodetail>
                   <CalendarTodayIcon />
-                  <p style={{ marginLeft: '5px' }}>2099.12.31</p>
+                  <p> {new Date(bookclub.time).toLocaleDateString('ko-KR')} </p>
                 </Infodetail>
                 <Infodetail>
                   <ScheduleIcon />
-                  <p> 01:00~23:59</p>
+                  <p>
+                    {' '}
+                    {new Date(bookclub.time).toLocaleTimeString('en-US', {
+                      hour12: false,
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                    ~
+                    {new Date(
+                      bookclub.time.getTime() + bookclub.duration,
+                    ).toLocaleTimeString('en-US', {
+                      hour12: false,
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
                 </Infodetail>
                 <Infodetail>
                   <PeopleIcon />
-                  <p>2명 / 669957명</p>
+                  {bookclub.participants.length}명 /{' '}
+                  {bookclub.participant_count}명
                 </Infodetail>
               </Info>
             </CardContent>

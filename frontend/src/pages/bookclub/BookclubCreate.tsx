@@ -101,19 +101,9 @@ const StyledInputBase = styled(InputBase)`
 `;
 
 interface Book {
-  // id: string;
-  authors: string[];
-  contents: string;
-  // datetime: string;
-  isbn: string;
-  // price: number;
-  // publisher: string;
-  // sale_price: number;
-  // status: string;
-  thumbnail: string;
-  title: string;
-  // translators: string[];
-  // url: string;
+  bookId: number;
+  coverImage: string;
+  bookTitle: string;
 }
 
 function BookclubCreate() {
@@ -130,7 +120,6 @@ function BookclubCreate() {
   const [showModal, setShowModal] = useState(false);
   const [query, setQuery] = useState<string>('');
   const [data, setData] = useState<Book[]>([]);
-  const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   const token: string | null = useSelector(
@@ -191,7 +180,7 @@ function BookclubCreate() {
       const formData = {
         bookclub_name: meetingTitle,
         bookclub_content: bookclubIntro,
-        book_id: selectedBook.title,
+        book_id: selectedBook.bookTitle,
         bookclub_time: selectedDate.toDate(),
         participant_count: selectedpeople,
         is_public: isPublic,
@@ -228,21 +217,12 @@ function BookclubCreate() {
     if (query) {
       axios
         .get<{ documents: Book[] }>(
-          `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
-            query,
-          )}`,
-          {
-            headers: {
-              Authorization: `KakaoAK ${apikey}`,
-            },
-          },
+          `https://i9a507.p.ssafy.io/search?kw=${encodeURIComponent(query)}`,
         )
         .then(response => {
           setData(response.data.documents);
         })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
+        .catch(() => {});
     }
   }, [query]);
 
@@ -255,8 +235,8 @@ function BookclubCreate() {
       <CoverContainer>
         {selectedBook ? (
           <img
-            src={selectedBook.thumbnail}
-            alt={selectedBook.title}
+            src={selectedBook.coverImage}
+            alt={selectedBook.bookTitle}
             onClick={handleFindBook}
           />
         ) : (
@@ -270,7 +250,7 @@ function BookclubCreate() {
             +
           </FindBook>
         )}
-        <h3>{selectedBook ? selectedBook.title : '책을 선택해주세요'}</h3>
+        <h3>{selectedBook ? selectedBook.bookTitle : '책을 선택해주세요'}</h3>
       </CoverContainer>
       <ContentContainer>
         <h4> 모임 제목</h4>
@@ -387,7 +367,6 @@ function BookclubCreate() {
             display: 'grid',
             height: '100%',
             backgroundColor: 'white',
-            // minWidth: 'var(--screen-size-mobile)',
             maxWidth: 'var(--screen-size-mobile)',
             width: '100%',
             overflow: 'auto',
@@ -420,26 +399,13 @@ function BookclubCreate() {
               <Grid
                 item
                 xs={3.8}
-                key={item.isbn}
+                key={item.bookId}
                 onClick={() => handleSelectdBook(item)}>
-                <img src={item.thumbnail} alt={item.title} />
-                <p>{item.title}</p>
+                <img src={item.coverImage} alt={item.bookTitle} />
+                <p>{item.bookTitle}</p>
               </Grid>
             ))}
           </Grid>
-          {/* {data.map((item: Book) => (
-            <div key={item.isbn}>
-              <img
-                src={item.thumbnail}
-                alt={item.title}
-                onClick={() => handleSelectdBook(item)}
-              />
-              <h2>{item.title}</h2>
-              <p>{item.contents}</p>
-              <p>{item.isbn}</p>
-              <p>{item.authors}</p>
-            </div>
-          ))} */}
         </div>
       </Modal>
     </Container>

@@ -1,7 +1,4 @@
-// 해당 파일 한정으로 eslint 일부를 해제합니다.
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable prefer-regex-literals */
+/* eslint-disable */
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
@@ -54,8 +51,7 @@ registerRoute(
     // Return true to signal that we want to use the handler.
     return true;
   },
-  // createHandlerBoundToURL(`${process.env.PUBLIC_URL}/index.html`),
-  createHandlerBoundToURL(`./index.html`),
+  createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html'),
 );
 
 // An example runtime caching route for requests that aren't handled by the

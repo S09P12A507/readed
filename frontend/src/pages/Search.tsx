@@ -32,11 +32,10 @@ const StyledInputBase = styled(InputBase)`
 `;
 
 interface Book {
-  authors: string[];
-  contents: string;
-  isbn: string;
-  thumbnail: string;
-  title: string;
+  bookId: number;
+  author: string[];
+  coverImage: string;
+  bookTitle: string;
 }
 
 function escapeRegExp(string: string): string {
@@ -63,28 +62,20 @@ function Search() {
   const [data, setData] = useState<Book[]>([]);
   const [suggestquery, setSuggestQuery] = useState<string>('');
   const [suggestions, setSuggestions] = useState<Book[]>([]);
-  const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
 
   useEffect(() => {
     setData([]);
     if (suggestquery) {
       axios
         .get<{ documents: Book[] }>(
-          `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
+          `https://i9a507.p.ssafy.io/search?kw=${encodeURIComponent(
             suggestquery,
           )}`,
-          {
-            headers: {
-              Authorization: `KakaoAK ${apikey}`,
-            },
-          },
         )
         .then(response => {
           setSuggestions(response.data.documents);
         })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
+        .catch(() => {});
     } else {
       setSuggestions([]);
     }
@@ -94,28 +85,19 @@ function Search() {
     if (query) {
       axios
         .get<{ documents: Book[] }>(
-          `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
-            query,
-          )}`,
-          {
-            headers: {
-              Authorization: `KakaoAK ${apikey}`,
-            },
-          },
+          `https://i9a507.p.ssafy.io/search?kw=${encodeURIComponent(query)}`,
         )
         .then(response => {
           setSuggestions([]);
           setData(response.data.documents);
         })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
+        .catch(() => {});
     }
   }, [query]);
 
   const navigate = useNavigate();
 
-  const handlebookDetail = (bookId: string) => {
+  const handlebookDetail = (bookId: number) => {
     navigate(`/book/${bookId}`);
   };
 
@@ -153,15 +135,15 @@ function Search() {
             }}>
             {suggestions.map(suggestion => (
               <div
-                key={suggestion.title}
+                key={suggestion.bookTitle}
                 onClick={() => {
-                  handlebookDetail(suggestion.title);
+                  handlebookDetail(suggestion.bookId);
                 }}
                 role="button"
                 tabIndex={0}
                 style={{ cursor: 'pointer' }}>
                 <span>
-                  {highlightMatchingText(suggestion.title, suggestquery)}
+                  {highlightMatchingText(suggestion.bookTitle, suggestquery)}
                 </span>
               </div>
             ))}
@@ -173,13 +155,13 @@ function Search() {
             <Grid
               item
               xs={4}
-              key={item.isbn}
-              onClick={() => handlebookDetail(item.title)}>
-              <img src={item.thumbnail} alt={item.title} />
+              key={item.bookId}
+              onClick={() => handlebookDetail(item.bookId)}>
+              <img src={item.coverImage} alt={item.bookTitle} />
               <p>
-                {item.title.length > 14
-                  ? `${item.title.slice(0, 14)}...`
-                  : item.title}
+                {item.bookTitle.length > 14
+                  ? `${item.bookTitle.slice(0, 14)}...`
+                  : item.bookTitle}
               </p>
             </Grid>
           ))}

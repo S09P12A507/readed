@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Box, Grid } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,7 +9,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import PeopleIcon from '@mui/icons-material/People';
 import Divider from '@mui/material/Divider';
-import testimg from '../../assets/img/test.jpg';
+import axios from 'axios';
 import BackButton from '../../components/common/button/BackButton';
 
 const Container = styled.section`
@@ -48,29 +50,71 @@ const StartButtonContainer = styled(Button)`
   height: 50px;
 `;
 
-function BookClubDetail() {
-  const navigate = useNavigate();
+interface BookClub {
+  title: string;
+  booktitle: string;
+  contexts: string;
+  coverImage: string;
+  time: Date;
+  duration: number;
+  participant_count: number;
+  participants: [];
+  is_public: boolean;
+}
 
-  const handleBookClubClick = (bookClubId: number) => {
-    navigate(`/bookclub/detail/${bookClubId}`);
+function BookClubDetail() {
+  const { bookclubId } = useParams();
+  const [data, setData] = useState<BookClub | null>(null);
+  let date = '';
+  let start = '';
+  let end = '';
+  if (data?.time) {
+    const year = data?.time.getFullYear();
+    const month = (data.time.getMonth() + 1).toString().padStart(2, '0');
+    const day = data?.time.getDate().toString().padStart(2, '0');
+    const hours = data?.time.getHours().toString().padStart(2, '0');
+    const minutes = data?.time.getMinutes().toString().padStart(2, '0');
+    const endTime = new Date(data.time);
+    endTime.setMinutes(endTime.getMinutes() + data?.duration);
+    const endhours = endTime.getHours().toString().padStart(2, '0');
+    const endminutes = endTime.getMinutes().toString().padStart(2, '0');
+    date = `${year}.${month}.${day}`;
+    start = `${hours}:${minutes}`;
+    end = `${endhours}:${endminutes}`;
+  }
+
+  const navigate = useNavigate();
+  const handleBookClubChange = (bookclubId: number) => {
+    navigate(`/bookclub/detail/${bookclubId}`);
   };
 
   const handleSubmit = () => {
-    window.location.href = '/bookclub/waiting/Namiya';
+    window.location.href = `/bookclub/waiting/${bookclubId}`;
   };
+
+  useEffect(() => {
+    axios
+      .get<{ data: BookClub }>(
+        `https://i9a507.p.ssafy.io/api/bookclubs/${bookclubId}`,
+      )
+      .then(response => {
+        setData(response.data.data);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <Container>
       <Header>
         <BackButton />
-        <Link to="/bookclub/change/1">
+        <Link to={`/bookclub/change/${bookclubId}`}>
           <ChangeButton>
             <h3>정보 수정</h3>
           </ChangeButton>
         </Link>
       </Header>
       <Box
-        onClick={() => handleBookClubClick(1)}
+        onClick={() => handleBookClubChange(1)}
         sx={{
           display: 'flex',
           border: 'none',
@@ -79,25 +123,30 @@ function BookClubDetail() {
         <CardMedia
           component="img"
           sx={{ width: 130 }}
-          src={testimg}
+          src={data?.coverImage}
           style={{ margin: '5%' }}
         />
         <CardContent sx={{ flex: '1 0 auto' }}>
-          <h5> 공개 모임일걸?</h5>
-          <h2>북클럽 제목임</h2>
-          <h4>잡화점 용의자의 나미야</h4>
+          <h5> {data?.is_public ? '공개' : '비공개'}</h5>
+          <h2> {data?.title}</h2>
+          <h4> {data?.booktitle}</h4>
           <Info>
             <Infodetail>
               <CalendarTodayIcon />
-              <p style={{ marginLeft: '5px' }}>2099.12.31</p>
+              <p> {date}</p>
             </Infodetail>
             <Infodetail>
               <ScheduleIcon />
-              <p> 01:00~23:59</p>
+              <p>
+                {' '}
+                {start}~{end}
+              </p>
             </Infodetail>
             <Infodetail>
               <PeopleIcon />
-              <p>2명 / 669957명</p>
+              <p>
+                {data?.participants.length}명 / {data?.participant_count}명
+              </p>
             </Infodetail>
           </Info>
         </CardContent>
@@ -106,17 +155,7 @@ function BookClubDetail() {
       <Introduce>
         <h2>북클럽 소개</h2>
         <br />
-        <h4>
-          우리 북클럽은 잡화점 용의자의 나미야를 읽고 누가 범인인지 토론합니다.
-          시간은 저녁에 해요. 사람은 많을수록 좋아요. 내일 진행하구요 우리
-          북클럽은 잡화점 용의자의 나미야를 읽고 누가 범인인지 토론합니다.
-          시간은 저녁에 해요. 사람은 많을수록 좋아요. 내일 진행하구요우리
-          북클럽은 잡화점 용의자의 나미야를 읽고 누가 범인인지 토론합니다.
-          시간은 저녁에 해요. 사람은 많을수록 좋아요. 내일 진행하구요우리
-          북클럽은 잡화점 용의자의 나미야를 읽고 누가 범인인지 토론합니다.
-          시간은 저녁에 해요. 사람은 많을수록 좋아요. 내일 진행하구요 범인을
-          잡아봅시다
-        </h4>
+        <h4>{data?.contexts}</h4>
         <Divider sx={{ marginTop: '5%', marginBottom: '5%' }} />
       </Introduce>
       <Members>
