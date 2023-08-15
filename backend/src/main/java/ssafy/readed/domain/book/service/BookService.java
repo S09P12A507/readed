@@ -11,4 +11,6 @@ public interface BookService {
     BookDetailResponseDto getDetail(Long bookId);
 
     List<BookBriefResponseDto> getBestsellerList(BestsellerRequestDto bestsellerRequestDto);
+
+    List<BookBriefResponseDto> searchBookByTitle(String keyword);
 }

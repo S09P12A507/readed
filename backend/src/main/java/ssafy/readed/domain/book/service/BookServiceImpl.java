@@ -54,4 +54,13 @@ public class BookServiceImpl implements BookService {
                     return BookBriefResponseDto.from(book, s3Url);
                 }).toList();
     }
+
+    @Override
+    public List<BookBriefResponseDto> searchBookByTitle(String keyword) {
+        List<Book> bookList = bookRepository.findByTitleContainingIgnoreCase(keyword);
+        return bookList.stream().map(book -> {
+            BookCoverFile bookCoverFile = book.getBookCoverFile();
+            return BookBriefResponseDto.from(book, s3FileService.getS3Url(bookCoverFile.getSavedPath(), bookCoverFile.getSavedFilename()));
+        }).toList();
+    }
 }
