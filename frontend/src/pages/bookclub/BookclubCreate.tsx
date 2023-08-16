@@ -218,13 +218,18 @@ function BookclubCreate() {
       axios
         .get<{ documents: Book[] }>(
           `https://i9a507.p.ssafy.io/search?kw=${encodeURIComponent(query)}`,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          },
         )
         .then(response => {
           setData(response.data.documents);
         })
         .catch(() => {});
     }
-  }, [query]);
+  }, [query, token]);
 
   return (
     <Container>

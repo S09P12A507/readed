@@ -5,16 +5,10 @@ import Video from './Video';
 interface SessionProps {
   subscriber: Subscriber;
   sessionId: string;
-  // leaveSession: () => void;
   publisher: Publisher;
 }
 
-function Session({
-  subscriber,
-  sessionId,
-  // leaveSession,
-  publisher,
-}: SessionProps) {
+function Session({ subscriber, sessionId, publisher }: SessionProps) {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
 
   useEffect(() => {
@@ -23,12 +17,21 @@ function Session({
     }
   }, [subscriber]);
 
+  const adjustGridPlacement = (subscriberCount: number) => {
+    if (subscriberCount <= 1) {
+      return 'center';
+    }
+    return 'normal';
+  };
+
   const renderSubscribers = () => {
+    const gridPlacement = adjustGridPlacement(subscribers.length);
+
     return (
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: subscribers.length === 2 ? '1fr 1fr' : '1fr 1fr',
+          gridTemplateColumns: gridPlacement === 'center' ? '1fr' : '1fr 1fr',
           gap: '20px',
         }}>
         <div>
@@ -39,6 +42,7 @@ function Session({
             <Video streamManager={subscriberItem} />
           </div>
         ))}
+        {subscribers.length}
       </div>
     );
   };

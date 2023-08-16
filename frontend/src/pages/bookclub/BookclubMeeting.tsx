@@ -7,6 +7,7 @@ import {
   Subscriber,
 } from 'openvidu-browser';
 import axios, { AxiosError } from 'axios';
+import { Divider } from '@mui/material';
 import Form from '../../components/bookclub/Form';
 import Session from '../../components/bookclub/Session';
 import LeaveIcon from '../../components/bookclub/LeaveIcon';
@@ -19,7 +20,20 @@ const Container = styled.section`
 
 const Icons = styled.div`
   display: flex;
+  position: absolute;
+  left: 0;
+  bottom: 3rem;
   justify-content: space-evenly;
+  max-width: var(--screen-size-mobile);
+  width: 100%;
+`;
+
+const Line = styled(Divider)`
+  position: absolute;
+  left: 0;
+  bottom: 10rem;
+  max-width: var(--screen-size-mobile);
+  width: 100%;
 `;
 
 function BookclubMeeting() {
@@ -28,6 +42,8 @@ function BookclubMeeting() {
   const [subscriber, setSubscriber] = useState<Subscriber | null>(null);
   const [publisher, setPublisher] = useState<Publisher | null>(null);
   const [OV, setOV] = useState<OpenVidu | null>(null);
+  const [isSoundOn, setIsSoundOn] = useState<boolean>(true);
+  const [isVideoOn, setIsVideoOn] = useState<boolean>(true);
 
   const OPENVIDU_SERVER_URL = `https://${window.location.hostname}:5443`;
   const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
@@ -57,7 +73,9 @@ function BookclubMeeting() {
       if (currentVideoState !== undefined) {
         publisher
           .publishVideo(!currentVideoState)
-          .then(() => {})
+          .then(() => {
+            setIsVideoOn(!isVideoOn);
+          })
           .catch(() => {});
       }
     }
@@ -71,6 +89,7 @@ function BookclubMeeting() {
 
       if (currentSoundState !== undefined) {
         publisher.publishAudio(!currentSoundState);
+        setIsSoundOn(!isSoundOn);
       }
     }
   };
@@ -96,6 +115,18 @@ function BookclubMeeting() {
 
   useEffect(() => {
     if (session === '') return;
+
+    session.on('streamDestroyed', event => {
+      if (subscriber && event.stream.streamId === subscriber.stream.streamId) {
+        setSubscriber(null);
+        console.log(subscriber);
+      }
+    });
+  }, [subscriber, session]);
+
+  useEffect(() => {
+    if (session === '') return;
+
     session.on('streamCreated', event => {
       const subscribers = session.subscribe(event.stream, '');
       setSubscriber(subscribers);
@@ -203,15 +234,15 @@ function BookclubMeeting() {
         {session && (
           <Session
             sessionId={sessionId}
-            // leaveSession={leaveSession}
             publisher={publisher as Publisher}
             subscriber={subscriber as Subscriber}
           />
         )}
+        <Line />
         <Icons>
+          <VideoIcon toggleVideo={toggleVideo} isVideoOn={isVideoOn} />
+          <VoiceIcon toggleVoice={toggleSound} isVoiceOn={isSoundOn} />
           <LeaveIcon />
-          <VideoIcon toggleVideo={toggleVideo} />
-          <VoiceIcon toggleVoice={toggleSound} />
         </Icons>
       </>
     </Container>

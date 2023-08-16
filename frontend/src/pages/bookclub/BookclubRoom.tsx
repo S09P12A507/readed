@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
+import LeaveIcon from '../../components/bookclub/LeaveIcon';
+import VoiceIcon from '../../components/bookclub/VoiceIcon';
+import VideoIcon from '../../components/bookclub/VideoIcon';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -46,10 +46,6 @@ function BookclubRoom() {
     setAudioEnabled(prevState => !prevState);
   };
 
-  const bookclubOut = () => {
-    window.location.href = '/bookclub/detail/2:';
-  };
-
   const handlestart = () => {
     window.location.href = '/bookclub/2';
   };
@@ -88,30 +84,9 @@ function BookclubRoom() {
         시작하기
       </Button>
       <Icons>
-        <VideocamIcon
-          style={{
-            fontSize: '4rem',
-            backgroundColor: '#d9d9d9',
-            borderRadius: '50%',
-          }}
-          onClick={toggleVideo}
-        />
-        <KeyboardVoiceIcon
-          style={{
-            fontSize: '4rem',
-            backgroundColor: '#d9d9d9',
-            borderRadius: '50%',
-          }}
-          onClick={toggleAudio}
-        />
-        <LogoutIcon
-          style={{
-            fontSize: '4rem',
-            backgroundColor: '#d9d9d9',
-            borderRadius: '50%',
-          }}
-          onClick={bookclubOut}
-        />
+        <VideoIcon toggleVideo={toggleVideo} isVideoOn={videoEnabled} />
+        <VoiceIcon toggleVoice={toggleAudio} isVoiceOn={audioEnabled} />
+        <LeaveIcon />
       </Icons>
     </Container>
   );

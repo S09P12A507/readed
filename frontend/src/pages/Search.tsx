@@ -4,6 +4,8 @@ import { Grid, InputBase } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -33,9 +35,9 @@ const StyledInputBase = styled(InputBase)`
 
 interface Book {
   bookId: number;
-  author: string[];
   coverImage: string;
   bookTitle: string;
+  avgRating: string;
 }
 
 function escapeRegExp(string: string): string {
@@ -63,14 +65,23 @@ function Search() {
   const [suggestquery, setSuggestQuery] = useState<string>('');
   const [suggestions, setSuggestions] = useState<Book[]>([]);
 
+  const token: string | null = useSelector(
+    (state: RootState) => state.auth.accessToken,
+  );
+
   useEffect(() => {
     setData([]);
     if (suggestquery) {
       axios
         .get<{ documents: Book[] }>(
-          `https://i9a507.p.ssafy.io/search?kw=${encodeURIComponent(
+          `https://i9a507.p.ssafy.io/api/search?kw=${encodeURIComponent(
             suggestquery,
           )}`,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          },
         )
         .then(response => {
           setSuggestions(response.data.documents);
@@ -79,7 +90,7 @@ function Search() {
     } else {
       setSuggestions([]);
     }
-  }, [suggestquery]);
+  }, [suggestquery, token]);
 
   useEffect(() => {
     if (query) {
