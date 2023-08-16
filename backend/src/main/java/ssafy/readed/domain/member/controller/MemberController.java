@@ -34,6 +34,7 @@ public class MemberController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestPart SignUpRequestDto requestDto, @RequestPart
     MultipartFile image) {
+        log.info(requestDto.getEmail());
         memberService.signUp(requestDto, image);
         return JsonResponse.ok("회원가입 성공!");
     }
