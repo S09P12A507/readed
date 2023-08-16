@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, TextField, Switch } from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Divider from '@mui/material/Divider';
 import { useSelector } from 'react-redux';
@@ -36,12 +36,22 @@ const SwitchContainer = styled.div`
   align-items: center;
 `;
 
+interface Book {
+  author: string[];
+  publisher: string[];
+  contents: string;
+  coverImage: string;
+  bookTitle: string;
+}
+
 function Report() {
   const [titles, setTitles] = useState('');
   const [inputText, setInputText] = useState('');
   const [isPublic, setIsPublic] = useState(true);
   const { bookId } = useParams();
-  const bookname = bookId as string;
+  const location = useLocation();
+  const bookTitle = (location.state as Book)?.bookTitle;
+
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -74,6 +84,9 @@ function Report() {
 
   const handleAlertClose = () => {
     setShowAlert(false);
+    if (message === '정상적으로 등록되었습니다!') {
+      navigate(-1);
+    }
   };
 
   const handleSaveButton = () => {
@@ -86,7 +99,7 @@ function Report() {
     if (token) {
       axios
         .post(
-          `https://i9a507.p.ssafy.io/api/report/${bookId as string}`,
+          `https://i9a507.p.ssafy.io/api/reports/${bookId as string}`,
           formData,
           {
             headers: {
@@ -103,10 +116,6 @@ function Report() {
           setShowAlert(true);
         });
     }
-
-    if (message === '정상적으로 등록되었습니다!') {
-      navigate(-1);
-    }
   };
 
   return (
@@ -122,7 +131,7 @@ function Report() {
           닫기
         </CloseButton>
         <h2>
-          {bookname.length > 10 ? `${bookname.slice(0, 10)}...` : bookname}
+          {bookTitle.length > 10 ? `${bookTitle.slice(0, 10)}...` : bookTitle}
         </h2>
         <ApplyButton
           onClick={handleSaveButton}

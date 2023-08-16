@@ -15,7 +15,6 @@ function GoogleLogin() {
     const handleCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const authorizationCode = urlParams.get('code');
-      console.log('인가 코드:', authorizationCode);
       if (authorizationCode) {
         const apiUrl = 'https://i9a507.p.ssafy.io/api/auth/google';
 
@@ -29,17 +28,16 @@ function GoogleLogin() {
             if (receivedToken) {
               const AToken = receivedToken.accessToken;
               const RToken = receivedToken.refreshToken;
-              console.log(AToken);
-              console.log(RToken);
+
               if (AToken && RToken) {
                 dispatch(setTokens(AToken, RToken));
               }
             }
-            console.log(receivedToken);
-            window.location.href = '/signup/addprofile';
+            console.log(response);
+            // window.location.href = '/signup/addprofile';
           })
           .catch(() => {
-            window.location.href = '/';
+            // window.location.href = '/';
           });
       }
     };

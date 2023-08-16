@@ -68,7 +68,7 @@ const Infodetail = styled.div`
 `;
 
 interface BookClub {
-  id: number;
+  roomId: number;
   title: string;
   booktitle: string;
   contexts: string;
@@ -90,22 +90,25 @@ function Bookclub() {
 
   const navigate = useNavigate();
 
-  const handleBookClubClick = (bookClubId: string) => {
-    navigate(`/bookclub/detail/${bookClubId}`);
+  const handleBookClubClick = (bookclubId: number) => {
+    navigate(`/bookclub/detail/${bookclubId}`);
   };
 
   useEffect(() => {
-    axios
-      .get<{ data: BookClub[] }>(`https://i9a507.p.ssafy.io/api/bookclubs`, {
-        headers: {
-          'X-READED-ACCESSTOKEN': token,
-        },
-      })
-      .then(response => {
-        setData(response.data.data);
-      })
-      .catch(() => {});
-  });
+    if (token) {
+      axios
+        .get<{ data: BookClub[] }>('https://i9a507.p.ssafy.io/api/bookclubs', {
+          headers: {
+            'X-READED-ACCESSTOKEN': token,
+          },
+        })
+        .then(response => {
+          console.log(response.data.data);
+          setData(response.data.data);
+        })
+        .catch(() => {});
+    }
+  }, [token]);
 
   return (
     <Container>
@@ -127,9 +130,9 @@ function Bookclub() {
       <BookClubList>
         {data.map((bookclub: BookClub) => (
           <Card
-            onClick={() => handleBookClubClick('a')}
+            onClick={() => handleBookClubClick(bookclub.roomId)}
             sx={{ display: 'flex', margin: '2%' }}
-            key={bookclub.id}>
+            key={bookclub.roomId}>
             <CardMedia
               component="img"
               sx={{ width: 130 }}
@@ -137,7 +140,7 @@ function Bookclub() {
               style={{ margin: '5%' }}
             />
             <CardContent sx={{ flex: '1 0 auto' }}>
-              <h6>{bookclub.is_public ? '공개' : '비공개'}</h6>
+              <h6>{bookclub.is_public ? '비공개' : '공개'}</h6>
               <h2>{bookclub.title}</h2>
               <h5>{bookclub.booktitle}</h5>
               <Info>
@@ -167,6 +170,7 @@ function Bookclub() {
                 </Infodetail>
               </Info>
             </CardContent>
+            {bookclub.booktitle}
           </Card>
         ))}
       </BookClubList>

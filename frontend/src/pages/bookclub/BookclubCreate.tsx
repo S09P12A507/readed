@@ -187,7 +187,9 @@ function BookclubCreate() {
         isPublic,
         password: meetingpw,
       };
+
       if (token) {
+        console.log(token);
         axios
           .post('https://i9a507.p.ssafy.io/api/bookclubs', formData, {
             headers: {

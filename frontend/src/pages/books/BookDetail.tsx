@@ -23,6 +23,9 @@ import { RootState } from '../../store/store';
 import Comments from '../../components/book/Comment';
 import BackButton from '../../components/common/button/BackButton';
 import AlertsModal from '../../components/common/alert/Alert';
+import aladinLogo from '../../assets/img/aladin.jpg';
+import kyoboLogo from '../../assets/img/Kyobo.png';
+import yes24Logo from '../../assets/img/yes24.png';
 
 const Container = styled.div`
   display: flex;
@@ -44,6 +47,23 @@ const Star = styled.div`
   display: flex;
   justify-content: center;
   font-size: 1.8rem;
+`;
+
+const Circle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 100%;
+  border: rgba(0, 0, 0, 0.6) 2px solid;
+  margin-right: 1rem;
+  cursor: pointer;
+`;
+
+const BuyIcon = styled.div`
+  display: flex;
+  margin-top: 1rem;
 `;
 
 const StyledTable = styled(Table)`
@@ -71,9 +91,24 @@ const StyledTable = styled(Table)`
 interface Book {
   author: string[];
   publisher: string[];
-  contents: string;
+  bookDescription: string;
   coverImage: string;
   bookTitle: string;
+  isBookmarkChecked: boolean;
+  link: {
+    ebook: {
+      aladinUrl: string | null;
+      kyoboUrl: string | null;
+      yes24Url: string | null;
+      ridiUrl: string | null;
+      millieUrl: string | null;
+    };
+    offline: {
+      aladinUrl: string | null;
+      kyoboUrl: string | null;
+      yes24Url: string | null;
+    };
+  };
 }
 
 function BookDetail() {
@@ -85,7 +120,6 @@ function BookDetail() {
   const [inputText, setInputText] = useState('');
   const [textLength, setTextLength] = useState<number>(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const query = bookId as string;
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -96,8 +130,10 @@ function BookDetail() {
   const navigate = useNavigate();
 
   const handleReport = () => {
-    if (bookId) {
-      navigate(`/report/${bookId}`);
+    if (data) {
+      navigate(`/report/${bookId as string}`, {
+        state: { bookTitle: data.bookTitle },
+      });
     }
   };
 
@@ -113,6 +149,24 @@ function BookDetail() {
     setRatingsValue(ratingValue);
   };
 
+  const handleAladin = () => {
+    if (data && data.link.offline.aladinUrl) {
+      window.open(data.link.offline.aladinUrl, '_blank');
+    }
+  };
+
+  const handlekyobo = () => {
+    if (data && data.link.offline.kyoboUrl) {
+      window.open(data.link.offline.kyoboUrl, '_blank');
+    }
+  };
+
+  const handleyes24 = () => {
+    if (data && data.link.offline.yes24Url) {
+      window.open(data.link.offline.yes24Url, '_blank');
+    }
+  };
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
 
@@ -123,28 +177,37 @@ function BookDetail() {
   };
 
   const handleToggleFavorite = () => {
-    if (isBookmarked) {
-      axios
-        .delete(`https://i9a507.p.ssafy.io/api/bookmarks/${bookId as string}`, {
-          headers: {
-            'X-READED-ACCESSTOKEN': token,
-          },
-        })
-        .then(() => {
-          setIsBookmarked(false);
-        })
-        .catch(() => {});
-    } else {
-      axios
-        .post(`https://i9a507.p.ssafy.io/api/bookmarks/${bookId as string}`, {
-          headers: {
-            'X-READED-ACCESSTOKEN': token,
-          },
-        })
-        .then(() => {
-          setIsBookmarked(true);
-        })
-        .catch(() => {});
+    if (token) {
+      if (isBookmarked) {
+        axios
+          .delete(
+            `https://i9a507.p.ssafy.io/api/bookmarks/${bookId as string}`,
+            {
+              headers: {
+                'X-READED-ACCESSTOKEN': token,
+              },
+            },
+          )
+          .then(() => {
+            setIsBookmarked(false);
+          })
+          .catch(() => {});
+      } else {
+        axios
+          .post(
+            `https://i9a507.p.ssafy.io/api/bookmarks/${bookId as string}`,
+            {},
+            {
+              headers: {
+                'X-READED-ACCESSTOKEN': token,
+              },
+            },
+          )
+          .then(() => {
+            setIsBookmarked(true);
+          })
+          .catch(() => {});
+      }
     }
   };
 
@@ -233,17 +296,6 @@ function BookDetail() {
     if (token) {
       console.log(token);
       axios
-        .get(`https://i9a507.p.ssafy.io/api/bookmarks/${bookId as string}`, {
-          headers: {
-            'X-READED-ACCESSTOKEN': token,
-          },
-        })
-        .then(response => {
-          setIsBookmarked(response.data as boolean);
-        })
-        .catch(() => {});
-
-      axios
         .get<{ data: Book }>(
           `https://i9a507.p.ssafy.io/api/books/${bookId as string}`,
           {
@@ -253,8 +305,10 @@ function BookDetail() {
           },
         )
         .then(response => {
-          console.log(response.data.data);
           setData(response.data.data);
+          setIsBookmarked(response.data.data.isBookmarkChecked);
+          console.log(response.data.data);
+          console.log(response.data.data.link.offline);
         })
         .catch(error => {
           console.log(error);
@@ -355,13 +409,44 @@ function BookDetail() {
         <h3> e- book</h3>
         <p style={{ fontSize: '2rem' }}> ○ ○ ○ ○ ○</p>
         <br />
-        <h3> 구매처</h3>
-        <p style={{ fontSize: '2rem' }}> ○ ○ ○</p>
+        <h2> 구매처</h2>
+        <BuyIcon>
+          {data && data.link.offline.aladinUrl && (
+            <Circle>
+              <img
+                style={{ width: '3rem' }}
+                src={aladinLogo}
+                alt="aladin"
+                onClick={handleAladin}
+              />
+            </Circle>
+          )}
+          {data && data.link.offline.kyoboUrl && (
+            <Circle>
+              <img
+                style={{ width: '3rem' }}
+                src={kyoboLogo}
+                alt="kyobo"
+                onClick={handlekyobo}
+              />
+            </Circle>
+          )}
+          {data && data.link.offline.yes24Url && (
+            <Circle>
+              <img
+                style={{ width: '3rem' }}
+                src={yes24Logo}
+                alt="yes24"
+                onClick={handleyes24}
+              />
+            </Circle>
+          )}
+        </BuyIcon>
       </InfoContainer>
       <Divider />
       <InfoContainer>
         <h3>책 소개</h3>
-        <p> {data.contents}</p>
+        <p> {data.bookDescription}</p>
       </InfoContainer>
       <Divider />
       <InfoContainer>
@@ -390,7 +475,7 @@ function BookDetail() {
             textLength={textLength}
             ratingValue={ratingsValue}
             inputText={inputText}
-            title={query}
+            title={data.bookTitle}
           />
         </div>
       </Modal>
