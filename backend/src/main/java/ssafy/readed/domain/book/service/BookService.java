@@ -1,6 +1,5 @@
 package ssafy.readed.domain.book.service;
 
-import ssafy.readed.domain.book.controller.dto.BestsellerRequestDto;
 import ssafy.readed.domain.book.service.dto.BookBriefResponseDto;
 import ssafy.readed.domain.book.service.dto.BookDetailResponseDto;
 
@@ -10,7 +9,7 @@ public interface BookService {
 
     BookDetailResponseDto getDetail(Long bookId);
 
-    List<BookBriefResponseDto> getBestsellerList(BestsellerRequestDto bestsellerRequestDto);
+    List<BookBriefResponseDto> getBestsellerList(Integer year, Integer month, Integer week);
 
     List<BookBriefResponseDto> searchBookByTitle(String keyword);
 }

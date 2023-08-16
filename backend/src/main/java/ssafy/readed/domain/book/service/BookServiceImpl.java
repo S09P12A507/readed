@@ -4,7 +4,6 @@ package ssafy.readed.domain.book.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ssafy.readed.domain.book.controller.dto.BestsellerRequestDto;
 import ssafy.readed.domain.book.entity.*;
 import ssafy.readed.domain.book.repository.BestsellerBookRepository;
 import ssafy.readed.domain.book.repository.BestsellerRepository;
@@ -44,8 +43,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookBriefResponseDto> getBestsellerList(BestsellerRequestDto bestsellerRequestDto) {
-        List<BestsellerBook> bestsellerBookList = bestsellerBookRepository.findTop10(bestsellerRequestDto.getYear(), bestsellerRequestDto.getMonth(), bestsellerRequestDto.getWeek());
+    public List<BookBriefResponseDto> getBestsellerList(Integer year, Integer month, Integer week) {
+        List<BestsellerBook> bestsellerBookList = bestsellerBookRepository.findTop10(year, month, week);
 
         return bestsellerBookList.stream()
                 .map(BestsellerBook::getBook)
