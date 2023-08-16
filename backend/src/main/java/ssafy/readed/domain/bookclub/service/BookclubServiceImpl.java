@@ -162,6 +162,9 @@ public class BookclubServiceImpl implements BookclubService {
 
     @Override
     public List<BookclubResponseDto> getBookclubList() {
+        for (Bookclub value : bookclubMap.values()) {
+            log.info("bookclub ID : "+value.getId().toString());
+        }
         List<BookclubResponseDto> list = new ArrayList<>();
         for (Bookclub bookclub : bookclubMap.values()) {
             String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
