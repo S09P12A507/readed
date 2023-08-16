@@ -53,7 +53,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = Member.builder()
                 .name(requestDto.getName())
                 .email(requestDto.getEmail())
-                .provider(Provider.DEFAULT)
+                .provider(Provider.valueOf(requestDto.getSocialLoginType()))
                 .nickname(requestDto.getNickname())
                 .profileBio(requestDto.getProfileBio())
                 .password(password)
