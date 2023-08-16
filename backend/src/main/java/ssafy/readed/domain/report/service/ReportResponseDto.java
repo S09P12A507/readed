@@ -22,7 +22,7 @@ public class ReportResponseDto {
     private Long memberId;
     private String memberNickname;
 
-    public static ReportResponseDto from(Report report) {
+    public static ReportResponseDto from(Report report, String s3Url) {
         return ReportResponseDto.builder()
                 .id(report.getId())
                 .title(report.getReportTitle())
@@ -30,6 +30,7 @@ public class ReportResponseDto {
                 .isPublic(report.getIsPublic())
                 .bookId(report.getBook().getId())
                 .bookTitle(report.getBook().getTitle())
+                .bookCover(s3Url)
                 .memberId(report.getMember().getId())
                 .memberNickname(report.getMember().getNickname())
                 .build();

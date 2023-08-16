@@ -14,6 +14,7 @@ import ssafy.readed.domain.report.controller.dto.ReportRequestDto;
 import ssafy.readed.domain.report.entity.Report;
 import ssafy.readed.domain.report.repository.ReportRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
+import ssafy.readed.global.service.S3FileService;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,7 @@ public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
     private final BookRepository bookRepository;
     private final MemberService memberService;
+    private final S3FileService s3FileService;
 
 
     @Override
@@ -41,7 +43,8 @@ public class ReportServiceImpl implements ReportService {
         if (!report.getIsPublic()) {
             authCheck(report.getMember().getId(), member);
         }
-        return ReportResponseDto.from(report);
+        return ReportResponseDto.from(report,
+                s3FileService.getS3Url(report.getBook().getBookCoverFile()));
     }
 
     @Override
@@ -103,8 +106,10 @@ public class ReportServiceImpl implements ReportService {
         );
     }
 
-    private static List<ReportResponseDto> ReportToReportResponseDto(List<Report> reports) {
-        return reports.stream().map(ReportResponseDto::from).toList();
+    private List<ReportResponseDto> ReportToReportResponseDto(List<Report> reports) {
+        return reports.stream().map(report -> ReportResponseDto
+                        .from(report, s3FileService.getS3Url(report.getBook().getBookCoverFile())))
+                .toList();
     }
 
 
