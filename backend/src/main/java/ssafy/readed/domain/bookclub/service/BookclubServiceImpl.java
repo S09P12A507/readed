@@ -169,11 +169,11 @@ public class BookclubServiceImpl implements BookclubService {
     }
 
     @Override
-    public BookclubResponseDto getBookclubDetail(Long bookClubId) {
+    public BookclubResponseDto getBookclubDetail(Long roomId) {
         List<MemberDto> memberDtoList = new ArrayList<>();
-        Bookclub bookclub = getBookclub(bookClubId);
+        Bookclub bookclub = bookclubMap.get(roomId);
         String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
-        List<Member> curMemberList = memberList.get(bookclub.getId());
+        List<Member> curMemberList = memberList.get(roomId);
         for (Member member : curMemberList) {
             MemberDto memberDto = MemberDto.builder()
                     .memberId(member.getId())
