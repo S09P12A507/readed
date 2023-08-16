@@ -26,6 +26,8 @@ import AlertsModal from '../../components/common/alert/Alert';
 import aladinLogo from '../../assets/img/aladin.jpg';
 import kyoboLogo from '../../assets/img/Kyobo.png';
 import yes24Logo from '../../assets/img/yes24.png';
+import ridiLogo from '../../assets/img/Ridi.png';
+import miliLogo from '../../assets/img/millie.png';
 
 const Container = styled.div`
   display: flex;
@@ -56,14 +58,17 @@ const Circle = styled.div`
   width: 4.5rem;
   height: 4.5rem;
   border-radius: 100%;
-  border: rgba(0, 0, 0, 0.6) 2px solid;
+  border: var(--divider) 1px solid;
   margin-right: 1rem;
   cursor: pointer;
 `;
 
-const BuyIcon = styled.div`
+const LogoIcon = styled.div`
   display: flex;
   margin-top: 1rem;
+  margin-bottom: 1rem;
+  height: 5rem;
+  align-items: center;
 `;
 
 const StyledTable = styled(Table)`
@@ -149,6 +154,36 @@ function BookDetail() {
     setRatingsValue(ratingValue);
   };
 
+  const handleBuyAladin = () => {
+    if (data && data.link.ebook.aladinUrl) {
+      window.open(data.link.ebook.aladinUrl, '_blank');
+    }
+  };
+
+  const handleBuykyobo = () => {
+    if (data && data.link.ebook.kyoboUrl) {
+      window.open(data.link.ebook.kyoboUrl, '_blank');
+    }
+  };
+
+  const handleBuyyes24 = () => {
+    if (data && data.link.ebook.yes24Url) {
+      window.open(data.link.ebook.yes24Url, '_blank');
+    }
+  };
+
+  const handleBuymili = () => {
+    if (data && data.link.ebook.millieUrl) {
+      window.open(data.link.ebook.millieUrl, '_blank');
+    }
+  };
+
+  const handleBuyridi = () => {
+    if (data && data.link.ebook.ridiUrl) {
+      window.open(data.link.ebook.ridiUrl, '_blank');
+    }
+  };
+
   const handleAladin = () => {
     if (data && data.link.offline.aladinUrl) {
       window.open(data.link.offline.aladinUrl, '_blank');
@@ -166,6 +201,20 @@ function BookDetail() {
       window.open(data.link.offline.yes24Url, '_blank');
     }
   };
+
+  const hasEbookLinks =
+    data &&
+    (data.link.ebook.aladinUrl ||
+      data.link.ebook.kyoboUrl ||
+      data.link.ebook.yes24Url ||
+      data.link.ebook.millieUrl ||
+      data.link.ebook.ridiUrl);
+
+  const hasBuybookLinks =
+    data &&
+    (data.link.offline.aladinUrl ||
+      data.link.offline.kyoboUrl ||
+      data.link.offline.yes24Url);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
@@ -214,7 +263,7 @@ function BookDetail() {
   const handleSaveButton = () => {
     const formData = {
       commentContent: inputText,
-      rating: ratingValue,
+      rating: ratingsValue * 2,
     };
 
     if (token) {
@@ -294,7 +343,6 @@ function BookDetail() {
 
   useEffect(() => {
     if (token) {
-      console.log(token);
       axios
         .get<{ data: Book }>(
           `https://i9a507.p.ssafy.io/api/books/${bookId as string}`,
@@ -307,8 +355,6 @@ function BookDetail() {
         .then(response => {
           setData(response.data.data);
           setIsBookmarked(response.data.data.isBookmarkChecked);
-          console.log(response.data.data);
-          console.log(response.data.data.link.offline);
         })
         .catch(error => {
           console.log(error);
@@ -407,41 +453,103 @@ function BookDetail() {
       <Divider />
       <InfoContainer>
         <h3> e- book</h3>
-        <p style={{ fontSize: '2rem' }}> ○ ○ ○ ○ ○</p>
-        <br />
-        <h2> 구매처</h2>
-        <BuyIcon>
-          {data && data.link.offline.aladinUrl && (
-            <Circle>
-              <img
-                style={{ width: '3rem' }}
-                src={aladinLogo}
-                alt="aladin"
-                onClick={handleAladin}
-              />
-            </Circle>
-          )}
-          {data && data.link.offline.kyoboUrl && (
-            <Circle>
-              <img
-                style={{ width: '3rem' }}
-                src={kyoboLogo}
-                alt="kyobo"
-                onClick={handlekyobo}
-              />
-            </Circle>
-          )}
-          {data && data.link.offline.yes24Url && (
-            <Circle>
-              <img
-                style={{ width: '3rem' }}
-                src={yes24Logo}
-                alt="yes24"
-                onClick={handleyes24}
-              />
-            </Circle>
-          )}
-        </BuyIcon>
+        {hasEbookLinks ? (
+          <LogoIcon>
+            {data && data.link.ebook.aladinUrl && (
+              <Circle>
+                <img
+                  style={{ width: '3rem' }}
+                  src={aladinLogo}
+                  alt="aladin"
+                  onClick={handleBuyAladin}
+                />
+              </Circle>
+            )}
+            {data && data.link.ebook.kyoboUrl && (
+              <Circle>
+                <img
+                  style={{ width: '3rem' }}
+                  src={kyoboLogo}
+                  alt="kyobo"
+                  onClick={handleBuykyobo}
+                />
+              </Circle>
+            )}
+            {data && data.link.ebook.yes24Url && (
+              <Circle>
+                <img
+                  style={{ width: '3rem' }}
+                  src={yes24Logo}
+                  alt="yes24"
+                  onClick={handleBuyyes24}
+                />
+              </Circle>
+            )}
+            {data && data.link.ebook.millieUrl && (
+              <Circle>
+                <img
+                  style={{ width: '3rem' }}
+                  src={miliLogo}
+                  alt="mili"
+                  onClick={handleBuymili}
+                />
+              </Circle>
+            )}
+            {data && data.link.ebook.ridiUrl && (
+              <Circle>
+                <img
+                  style={{ width: '3rem' }}
+                  src={ridiLogo}
+                  alt="ridi"
+                  onClick={handleBuyridi}
+                />
+              </Circle>
+            )}
+          </LogoIcon>
+        ) : (
+          <LogoIcon>
+            <h2>E북이 아직 없어요😥</h2>
+          </LogoIcon>
+        )}
+        <h3> 구매처</h3>
+        {hasBuybookLinks ? (
+          <LogoIcon>
+            {data && data.link.offline.aladinUrl && (
+              <Circle>
+                <img
+                  style={{ width: '3rem' }}
+                  src={aladinLogo}
+                  alt="aladin"
+                  onClick={handleAladin}
+                />
+              </Circle>
+            )}
+            {data && data.link.offline.kyoboUrl && (
+              <Circle>
+                <img
+                  style={{ width: '3rem' }}
+                  src={kyoboLogo}
+                  alt="kyobo"
+                  onClick={handlekyobo}
+                />
+              </Circle>
+            )}
+            {data && data.link.offline.yes24Url && (
+              <Circle>
+                <img
+                  style={{ width: '3rem' }}
+                  src={yes24Logo}
+                  alt="yes24"
+                  onClick={handleyes24}
+                />
+              </Circle>
+            )}
+          </LogoIcon>
+        ) : (
+          <LogoIcon>
+            <h2>구매처가 없는 책이에요😥</h2>
+          </LogoIcon>
+        )}
       </InfoContainer>
       <Divider />
       <InfoContainer>

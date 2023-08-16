@@ -91,6 +91,7 @@ interface SignUpData {
   email: string;
   password1: string;
   password2: string;
+  socialLoginType: string;
 }
 
 function Addprofile() {
@@ -102,12 +103,15 @@ function Addprofile() {
         email: '',
         password1: '',
         password2: '',
+        socialLoginType: 'DEFAULT',
       };
   const [MemberName] = useState<string>(signUpData.MemberName || '');
   const [email] = useState<string>(signUpData.email || '');
   const [password1] = useState<string>(signUpData.password1 || '');
   const [password2] = useState<string>(signUpData.password2 || '');
-
+  const [socialLoginType] = useState<string>(
+    signUpData.socialLoginType || 'DEFAULT',
+  );
   const [ProfileImage, setprofileimage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
@@ -173,6 +177,7 @@ function Addprofile() {
       password2,
       nickname,
       profileBio: ProfileBio,
+      socialLoginType,
     };
 
     const InfoDataJson = JSON.stringify(InfoData);

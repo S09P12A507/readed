@@ -89,8 +89,7 @@ function isPasswordValid(password: string): boolean {
 }
 
 const isNameValid = (name: string) => {
-  const nameRegex = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,}$/;
-  return nameRegex.test(name);
+  return name.length >= 2;
 };
 
 function Signup() {
@@ -239,7 +238,7 @@ function Signup() {
           if (isNameValid(MemberName)) {
             return '사용가능한 이름입니다.';
           }
-          return '2글자 이상의 한글 이름을 입력해주세요.';
+          return '2글자 이상의 이름을 입력해주세요.';
         })()}
         InputProps={{
           style: {
