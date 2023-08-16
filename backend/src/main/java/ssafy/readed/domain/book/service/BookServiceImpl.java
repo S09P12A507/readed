@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ssafy.readed.domain.book.controller.dto.BestsellerRequestDto;
 import ssafy.readed.domain.book.entity.*;
+import ssafy.readed.domain.book.repository.BestsellerBookRepository;
 import ssafy.readed.domain.book.repository.BestsellerRepository;
 import ssafy.readed.domain.book.repository.BookRepository;
 import ssafy.readed.domain.book.service.dto.BookAuthorResponseDto;
@@ -22,6 +23,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BestsellerRepository bestsellerRepository;
+    private final BestsellerBookRepository bestsellerBookRepository;
     private final S3FileService s3FileService;
 
     private final String PATH = "image/book/cover";
@@ -43,21 +45,18 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookBriefResponseDto> getBestsellerList(BestsellerRequestDto bestsellerRequestDto) {
-        Bestseller bestseller = bestsellerRepository.findByYearAndMonthAndWeek(bestsellerRequestDto.getYear(), bestsellerRequestDto.getMonth(), bestsellerRequestDto.getWeek())
-                .orElseThrow(() -> new GlobalRuntimeException("해당하는 베스트셀러 목록이 없습니다.", HttpStatus.BAD_REQUEST));
+        List<BestsellerBook> bestsellerBookList = bestsellerBookRepository.findTop10(bestsellerRequestDto.getYear(), bestsellerRequestDto.getMonth(), bestsellerRequestDto.getWeek());
 
-        return bestseller.getBestsellerBookList().stream()
-                .limit(10)
+        return bestsellerBookList.stream()
                 .map(BestsellerBook::getBook)
-                .map(book -> {
-                    String s3Url = s3FileService.getS3Url(book.getBookCoverFile());
-                    return BookBriefResponseDto.from(book, s3Url);
-                }).toList();
+                .map(book ->
+                        BookBriefResponseDto.from(book, s3FileService.getS3Url(book.getBookCoverFile()))
+                ).toList();
     }
 
     @Override
     public List<BookBriefResponseDto> searchBookByTitle(String keyword) {
-        List<Book> bookList = bookRepository.findByTitleContainingIgnoreCase(keyword);
+        List<Book> bookList = bookRepository.findTop30ByTitleContainingIgnoreCase(keyword);
         return bookList.stream().map(book -> {
             BookCoverFile bookCoverFile = book.getBookCoverFile();
             return BookBriefResponseDto.from(book, s3FileService.getS3Url(bookCoverFile));

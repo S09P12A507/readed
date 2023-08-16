@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.book.entity.BookCode;
 import ssafy.readed.domain.book.entity.Publisher;
+import ssafy.readed.global.util.ItemType;
+import ssafy.readed.global.util.UrlConverter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -35,7 +36,7 @@ public class BookDetailResponseDto {
     private Long star_5_count;
     private LinkResponseDto link;
     private PublisherResponseDto publisher;
-    private List<BookAuthorResponseDto> author = new ArrayList<>();
+    private List<BookAuthorResponseDto> author;
 
     public static BookDetailResponseDto from(Book book, String coverImageS3Url, String publisherS3Url, List<BookAuthorResponseDto> bookAuthorResponseDtoList) {
 
@@ -44,17 +45,17 @@ public class BookDetailResponseDto {
 
         LinkResponseDto linkDto = LinkResponseDto.builder()
                 .offline(OfflineLinkResponseDto.builder()
-                        .aladinUrl(bookCode.getAladinId())
-                        .kyoboUrl(bookCode.getKyoboId())
-                        .yes24Url(bookCode.getYes24Id())
+                        .aladinUrl(UrlConverter.getLinkUrl(ItemType.ALADIN, bookCode.getAladinId()))
+                        .kyoboUrl(UrlConverter.getLinkUrl(ItemType.KYOBO, bookCode.getKyoboId()))
+                        .yes24Url(UrlConverter.getLinkUrl(ItemType.YES24, bookCode.getYes24Id()))
                         .build()
                 )
                 .ebook(EbookLinkResponseDto.builder()
-                        .aladinUrl(bookCode.getEAladinId())
-                        .kyoboUrl(bookCode.getEKyoboId())
-                        .yes24Url(bookCode.getEYes24Id())
-                        .ridiUrl(bookCode.getERidiId())
-                        .millieUrl(bookCode.getEMillieId())
+                        .aladinUrl(UrlConverter.getLinkUrl(ItemType.E_ALADIN, bookCode.getEAladinId()))
+                        .kyoboUrl(UrlConverter.getLinkUrl(ItemType.E_KYOBO, bookCode.getEKyoboId()))
+                        .yes24Url(UrlConverter.getLinkUrl(ItemType.E_YES24, bookCode.getEYes24Id()))
+                        .ridiUrl(UrlConverter.getLinkUrl(ItemType.E_RIDI, bookCode.getERidiId()))
+                        .millieUrl(UrlConverter.getLinkUrl(ItemType.E_MILLIE, bookCode.getEMillieId()))
                         .build()
                 ).build();
 
@@ -64,7 +65,7 @@ public class BookDetailResponseDto {
                 .publisherLogo(publisherS3Url)
                 .build();
 
-        BookDetailResponseDto bookDetailResponseDto = BookDetailResponseDto.builder()
+        return BookDetailResponseDto.builder()
                 .bookId(book.getId())
                 .bookTitle(book.getTitle())
                 .bookDescription(book.getDescription())
@@ -83,11 +84,8 @@ public class BookDetailResponseDto {
                 .star_5_count(book.getStar_5_count())
                 .link(linkDto)
                 .publisher(publisherDto)
+                .author(bookAuthorResponseDtoList)
                 .build();
-
-        bookAuthorResponseDtoList.forEach(bookDetailResponseDto.getAuthor()::add);
-
-        return bookDetailResponseDto;
     }
 }
 

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    List<Book> findByTitleContainingIgnoreCase(String keyword);
+    List<Book> findTop30ByTitleContainingIgnoreCase(String keyword);
 }
