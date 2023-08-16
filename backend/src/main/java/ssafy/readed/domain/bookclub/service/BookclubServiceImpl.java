@@ -219,7 +219,7 @@ public class BookclubServiceImpl implements BookclubService {
 
 
     private boolean isFull(Long bookclubId) {
-        Integer maxMember = getBookclub(bookclubId).getParticipantCount();
+        Integer maxMember = bookclubMap.get(bookclubId).getParticipantCount();
         return maxMember <= memberList.get(bookclubId).size();
     }
 
