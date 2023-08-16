@@ -91,6 +91,7 @@ public class BookclubServiceImpl implements BookclubService {
                     .build();
             String token = session.createConnection(connectionProperties).getToken();
 
+
             if(isEnrolled(member.getId())){
                 throw new GlobalRuntimeException("이미 다른 방에 들어가 있습니다.",HttpStatus.CONFLICT);
             }
@@ -111,7 +112,7 @@ public class BookclubServiceImpl implements BookclubService {
 //            findMember.getBookclubList().add(bookclub);
 
             sessionMap.put(bookclubId, session);
-            tokenMap.put(member.getId(), token);
+            tokenMap.put(member.getId(), session.getSessionId());
             memberList.put(bookclubId, new ArrayList<>());
             memberList.get(bookclubId).add(findMember);
             bookclubId++;
@@ -147,7 +148,7 @@ public class BookclubServiceImpl implements BookclubService {
 
             memberList.get(bookclubId).add(member);
 
-            tokenMap.put(member.getId(), token);
+            tokenMap.put(member.getId(), sessionMap.get(bookclubId).getSessionId());
 
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             e.printStackTrace();
