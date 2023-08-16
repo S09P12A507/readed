@@ -18,7 +18,6 @@ public class OpenBookclubRequestDto {
     private String title;
     private String description;
     private LocalDateTime startTime;
-    private LocalDateTime endTime;
     private Integer duration;
     private Integer maxMember;
     private boolean isPublic;
@@ -33,7 +32,6 @@ public class OpenBookclubRequestDto {
         this.title = title;
         this.description = description;
         this.startTime = startTime;
-        this.endTime = endTime;
         this.maxMember = maxMember;
         this.isPublic = isPublic;
         this.password = password;
@@ -46,7 +44,7 @@ public class OpenBookclubRequestDto {
                 .bookclubContent(this.description)
                 .startTime(this.startTime)
                 .duration(this.duration)
-                .endTime(this.endTime)
+                .endTime(this.startTime.plusMinutes(this.duration))
                 .participantCount(this.maxMember)
                 .isPublic(this.isPublic)
                 .bookclubPassword(this.password)
