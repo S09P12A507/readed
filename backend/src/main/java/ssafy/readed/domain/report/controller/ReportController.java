@@ -48,8 +48,7 @@ public class ReportController {
     }
 
     @GetMapping(value = "/members")
-    public ResponseEntity<?> getReportList(Long id,
-            @AuthenticationPrincipal Member member) {
+    public ResponseEntity<?> getReportList(Long id, @AuthenticationPrincipal Member member) {
         List<ReportResponseDto> reportList = reportService.getReportList(id, member);
 
         if (reportList == null) {
