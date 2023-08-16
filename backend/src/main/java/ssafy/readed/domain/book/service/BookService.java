@@ -15,4 +15,6 @@ public interface BookService {
     List<BookBriefResponseDto> searchBookByTitle(String keyword);
 
     List<BookBriefResponseDto> getReadedTopTen();
+
+    List<BookBriefResponseDto> getRecommendBooks(Integer genreId);
 }

@@ -42,4 +42,9 @@ public class BookController {
     public ResponseEntity<BaseResponse<List<BookBriefResponseDto>>> getReadedTopTen() {
         return JsonResponse.ok("리디드 Top10 가져오기 성공", bookService.getReadedTopTen());
     }
+
+    @GetMapping("/recommend/{genre-id}")
+    public ResponseEntity<BaseResponse<List<BookBriefResponseDto>>> getRecommendBooks(@PathVariable("genre-id") Integer genreId) {
+        return JsonResponse.ok("추천 장르 100권 가져오기 성공", bookService.getRecommendBooks(genreId));
+    }
 }

@@ -26,6 +26,7 @@ public class BookServiceImpl implements BookService {
     private final BookmarkService bookmarkService;
     private final S3FileService s3FileService;
 
+
     @Override
     public BookDetailResponseDto getDetail(Long bookId, Member member) {
         Book book = bookRepository.findById(bookId).orElseThrow(
@@ -71,6 +72,14 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookBriefResponseDto> getReadedTopTen() {
         return bookRepository.findReadedTop10().stream()
+                .map(book ->
+                        BookBriefResponseDto.from(book, s3FileService.getS3Url(book.getBookCoverFile())))
+                .toList();
+    }
+
+    @Override
+    public List<BookBriefResponseDto> getRecommendBooks(Integer genreId) {
+        return bookRepository.findBooksByRecommendGenre(GenreMapper.getGenre(genreId)).stream()
                 .map(book ->
                         BookBriefResponseDto.from(book, s3FileService.getS3Url(book.getBookCoverFile())))
                 .toList();
