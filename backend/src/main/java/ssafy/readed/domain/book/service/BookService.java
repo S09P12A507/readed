@@ -1,9 +1,10 @@
 package ssafy.readed.domain.book.service;
 
-import java.util.List;
 import ssafy.readed.domain.book.service.dto.BookBriefResponseDto;
 import ssafy.readed.domain.book.service.dto.BookDetailResponseDto;
 import ssafy.readed.domain.member.entity.Member;
+
+import java.util.List;
 
 public interface BookService {
 
@@ -12,4 +13,6 @@ public interface BookService {
     List<BookBriefResponseDto> getBestsellerList(Integer year, Integer month, Integer week);
 
     List<BookBriefResponseDto> searchBookByTitle(String keyword);
+
+    List<BookBriefResponseDto> getReadedTopTen();
 }

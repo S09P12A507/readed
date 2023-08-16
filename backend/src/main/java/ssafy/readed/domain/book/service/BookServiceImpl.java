@@ -1,17 +1,11 @@
 package ssafy.readed.domain.book.service;
 
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ssafy.readed.domain.book.entity.AuthorProfileFile;
-import ssafy.readed.domain.book.entity.BestsellerBook;
-import ssafy.readed.domain.book.entity.Book;
-import ssafy.readed.domain.book.entity.BookCoverFile;
-import ssafy.readed.domain.book.entity.Publisher;
+import ssafy.readed.domain.book.entity.*;
 import ssafy.readed.domain.book.repository.BestsellerBookRepository;
-import ssafy.readed.domain.book.repository.BestsellerRepository;
 import ssafy.readed.domain.book.repository.BookRepository;
 import ssafy.readed.domain.book.service.dto.BookAuthorResponseDto;
 import ssafy.readed.domain.book.service.dto.BookBriefResponseDto;
@@ -21,17 +15,16 @@ import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 import ssafy.readed.global.service.S3FileService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
-    private final BestsellerRepository bestsellerRepository;
     private final BestsellerBookRepository bestsellerBookRepository;
     private final BookmarkService bookmarkService;
     private final S3FileService s3FileService;
-
-    private final String PATH = "image/book/cover";
 
     @Override
     public BookDetailResponseDto getDetail(Long bookId, Member member) {
@@ -73,5 +66,13 @@ public class BookServiceImpl implements BookService {
             BookCoverFile bookCoverFile = book.getBookCoverFile();
             return BookBriefResponseDto.from(book, s3FileService.getS3Url(bookCoverFile));
         }).toList();
+    }
+
+    @Override
+    public List<BookBriefResponseDto> getReadedTopTen() {
+        return bookRepository.findReadedTop10().stream()
+                .map(book ->
+                        BookBriefResponseDto.from(book, s3FileService.getS3Url(book.getBookCoverFile())))
+                .toList();
     }
 }

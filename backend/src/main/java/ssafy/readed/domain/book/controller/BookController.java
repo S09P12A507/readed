@@ -1,6 +1,5 @@
 package ssafy.readed.domain.book.controller;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +13,8 @@ import ssafy.readed.domain.book.service.dto.BookDetailResponseDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.global.response.BaseResponse;
 import ssafy.readed.global.response.JsonResponse;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,5 +36,10 @@ public class BookController {
         List<BookBriefResponseDto> bestsellerDtoList = bookService.getBestsellerList(year, month,
                 week);
         return JsonResponse.ok("베스트셀러 10권 가져오기 성공", bestsellerDtoList);
+    }
+
+    @GetMapping("/topten")
+    public ResponseEntity<BaseResponse<List<BookBriefResponseDto>>> getReadedTopTen() {
+        return JsonResponse.ok("리디드 Top10 가져오기 성공", bookService.getReadedTopTen());
     }
 }
