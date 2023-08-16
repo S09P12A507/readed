@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,12 @@ import ssafy.readed.domain.bookclub.entity.Participant;
 import ssafy.readed.domain.bookclub.repository.BookclubRepository;
 import ssafy.readed.domain.bookclub.repository.ParticipantRepository;
 import ssafy.readed.domain.bookclub.service.dto.BookclubResponseDto;
+import ssafy.readed.domain.bookclub.service.dto.MemberDto;
 import ssafy.readed.domain.bookclub.service.dto.OpenBookclubResponseDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
+import ssafy.readed.global.service.S3FileService;
 
 @Service
 public class BookclubServiceImpl implements BookclubService {
@@ -43,29 +46,34 @@ public class BookclubServiceImpl implements BookclubService {
 
     ParticipantRepository participantRepository;
 
+    S3FileService s3FileService;
+
     private Map<Long, List<Member>> memberList; //각 방의 멤버 리스트
 
     private Map<Long, Session> sessionMap; // roomId -> Session
 
     private Map<Long, String> tokenMap;
 
+    private Map<Long, Bookclub> bookclubMap;
     private String url;
     private String secret;
     private OpenVidu openVidu;
 
     public BookclubServiceImpl(BookclubRepository bookclubRepository, BookRepository bookRepository,
-            MemberRepository memberRepository, ParticipantRepository participantRepository,
+            MemberRepository memberRepository, ParticipantRepository participantRepository, S3FileService s3FileService,
             @Value("${openvidu.url}") String url, @Value("${openvidu.secret}") String secret) {
         this.bookclubRepository = bookclubRepository;
         this.bookRepository = bookRepository;
         this.memberRepository = memberRepository;
         this.participantRepository = participantRepository;
+        this.s3FileService = s3FileService;
         this.url = url;
         this.secret = secret;
         this.openVidu = new OpenVidu(this.url, this.secret);
         this.memberList = new ConcurrentHashMap<>();
         this.sessionMap = new ConcurrentHashMap<>();
         this.tokenMap = new ConcurrentHashMap<>();
+        this.bookclubMap = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -94,7 +102,7 @@ public class BookclubServiceImpl implements BookclubService {
 
             Bookclub bookclub = requestDto.toEntity(findMember,findBook);
 
-//            bookclubRepository.save(bookclub);
+            bookclubMap.put(bookclub.getId(), bookclub);
 //            participantRepository.save(
 //                    Participant.builder().member(findMember).bookclub(bookclub).build());
 //            findMember.getBookclubList().add(bookclub);
@@ -147,18 +155,48 @@ public class BookclubServiceImpl implements BookclubService {
 
     @Override
     public List<BookclubResponseDto> getBookclubList() {
-        return bookclubRepository.findAllByIsFinished(false).stream().map(BookclubResponseDto::from).toList();
+        List<BookclubResponseDto> list = new ArrayList<>();
+        for (Bookclub bookclub : bookclubMap.values()) {
+            String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
+            list.add(BookclubResponseDto.from(bookclub,url,null));
+        }
+
+        return list;
     }
 
     @Override
     public BookclubResponseDto getBookclubDetail(Long bookClubId) {
-        return BookclubResponseDto.from(getBookclub(bookClubId));
+        List<MemberDto> memberDtoList = new ArrayList<>();
+        Bookclub bookclub = getBookclub(bookClubId);
+        String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
+        List<Member> curMemberList = memberList.get(bookclub.getId());
+        for (Member member : curMemberList) {
+            MemberDto memberDto = MemberDto.builder()
+                    .memberId(member.getId())
+                    .memberNickname(member.getNickname())
+                    .memberProfileImage(s3FileService.getS3Url(member.getMemberProfileFile()))
+                    .build();
+            memberDtoList.add(memberDto);
+        }
+        return BookclubResponseDto.from(bookclub,url,memberDtoList);
     }
 
     @Override
     public List<BookclubResponseDto> getMyBookclubList(Member member) {
-        return bookclubRepository.selectParticipantsByMemeberIdFetchJoin(member.getId()).stream()
-                .map(Participant::getBookclub).map(BookclubResponseDto::from).toList();
+        List<BookclubResponseDto> dtoList = new ArrayList<>();
+
+        List<Participant> participants = bookclubRepository.selectParticipantsByMemeberIdFetchJoin(
+                member.getId());
+        List<Bookclub> list = participants.stream()
+                .map(Participant::getBookclub).toList();
+
+        for (Bookclub bookclub : list) {
+            String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
+            BookclubResponseDto dto = BookclubResponseDto.from(bookclub, url, null);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 
 
