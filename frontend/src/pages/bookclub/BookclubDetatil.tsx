@@ -9,6 +9,8 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import PeopleIcon from '@mui/icons-material/People';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 import BackButton from '../../components/common/button/BackButton';
 
 const Container = styled.section`
@@ -51,35 +53,27 @@ const StartButtonContainer = styled(Button)`
 
 interface BookClub {
   title: string;
-  booktitle: string;
-  contexts: string;
-  coverImage: string;
-  time: Date;
-  duration: number;
-  participant_count: number;
-  participants: [];
+  bookTitle: string;
+  context: string;
+  bookCoverImageUrl: string;
+  startTime: Date;
+  endTime: Date;
+  participantCount: number;
+  memberList: {
+    memberNickname: string;
+    memberProfileImage: string;
+  }[];
   is_public: boolean;
 }
 
 function BookClubDetail() {
+  const token: string | null = useSelector(
+    (state: RootState) => state.auth.accessToken,
+  );
+
   const { bookclubId } = useParams();
   const [data, setData] = useState<BookClub | null>(null);
-  let date = '';
-  let start = '';
-  const end = '';
-  if (data?.time) {
-    const year = data?.time.getFullYear();
-    const month = (data.time.getMonth() + 1).toString().padStart(2, '0');
-    const day = data?.time.getDate().toString().padStart(2, '0');
-    const hours = data?.time.getHours().toString().padStart(2, '0');
-    const minutes = data?.time.getMinutes().toString().padStart(2, '0');
-    // const endTime = new Date(data.time.getTime() + data?.duration);
-    // const endhours = endTime.getHours().toString().padStart(2, '0');
-    // const endminutes = endTime.getMinutes().toString().padStart(2, '0');
-    date = `${year}.${month}.${day}`;
-    start = `${hours}:${minutes}`;
-    // end = `${endhours}:${endminutes}`;
-  }
+  const [remainingTime, setRemainingTime] = useState<number | null>(null);
 
   const navigate = useNavigate();
   const handleBookClubChange = () => {
@@ -87,19 +81,62 @@ function BookClubDetail() {
   };
 
   const handleSubmit = () => {
-    window.location.href = `/bookclub/waiting/${bookclubId as string}`;
+    if (token) {
+      axios
+        .get<{ data: BookClub }>(
+          `https://i9a507.p.ssafy.io/api/bookclubs/join/${
+            bookclubId as string
+          }`,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          },
+        )
+        .then(() => {})
+        .catch(() => {});
+    }
   };
 
   useEffect(() => {
-    axios
-      .get<{ data: BookClub }>(
-        `https://i9a507.p.ssafy.io/api/bookclubs/${bookclubId as string}`,
-      )
-      .then(response => {
-        setData(response.data.data);
-      })
-      .catch(() => {});
-  }, [bookclubId]);
+    if (token) {
+      axios
+        .get<{ data: BookClub }>(
+          `https://i9a507.p.ssafy.io/api/bookclubs/${bookclubId as string}`,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          },
+        )
+        .then(response => {
+          setData(response.data.data);
+        })
+        .catch(() => {});
+    }
+  }, [bookclubId, token]);
+
+  useEffect(() => {
+    if (data) {
+      const endTime = new Date(data.endTime);
+      setInterval(() => {
+        const currentTime = new Date();
+        const timeDiff = endTime.getTime() - currentTime.getTime();
+        setRemainingTime(timeDiff);
+      }, 1000);
+    }
+  }, [data]);
+
+  const formatTime = (timeInSeconds: number) => {
+    const day = Math.floor(timeInSeconds / 86400);
+    const hours = Math.floor(timeInSeconds / 3600 - day * 24);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+
+    return `${day}일 ${hours}시 ${minutes
+      .toString()
+      .padStart(2, '0')}분 ${seconds.toString().padStart(2, '0')}초`;
+  };
 
   return (
     <Container>
@@ -121,29 +158,54 @@ function BookClubDetail() {
         <CardMedia
           component="img"
           sx={{ width: 130 }}
-          src={data?.coverImage}
+          src={data?.bookCoverImageUrl}
           style={{ margin: '5%' }}
         />
         <CardContent sx={{ flex: '1 0 auto' }}>
-          <h5> {data?.is_public ? '공개' : '비공개'}</h5>
-          <h2> {data?.title}</h2>
-          <h4> {data?.booktitle}</h4>
+          <h5> {data?.is_public ? '비공개' : '공개'}</h5>
+          <h2 style={{ wordWrap: 'break-word' }}>
+            {data && data?.title && data?.title.length > 20
+              ? `${data?.title.slice(0, 20)}...`
+              : data?.title}
+          </h2>
+          <h4>
+            {' '}
+            {data && data?.bookTitle && data?.bookTitle.length > 10
+              ? `${data?.bookTitle.slice(0, 16)}...`
+              : data?.bookTitle}
+          </h4>
           <Info>
             <Infodetail>
               <CalendarTodayIcon />
-              <p> {date}</p>
-            </Infodetail>
-            <Infodetail>
-              <ScheduleIcon />
               <p>
-                {' '}
-                {start}~{end}
+                {data?.startTime &&
+                  new Date(data?.startTime).toLocaleDateString('ko-KR')}
               </p>
             </Infodetail>
+            {data?.startTime && data?.endTime && (
+              <Infodetail>
+                <ScheduleIcon />
+                <p>
+                  {new Date(data.startTime).toLocaleTimeString('ko-KR', {
+                    timeZone: 'Asia/Seoul',
+                    hour12: false,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}{' '}
+                  ~{' '}
+                  {new Date(data.endTime).toLocaleTimeString('ko-KR', {
+                    timeZone: 'Asia/Seoul',
+                    hour12: false,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </p>
+              </Infodetail>
+            )}
             <Infodetail>
               <PeopleIcon />
               <p>
-                {data?.participants.length}명 / {data?.participant_count}명
+                {data?.memberList.length}명 / {data?.participantCount}명
               </p>
             </Infodetail>
           </Info>
@@ -153,24 +215,31 @@ function BookClubDetail() {
       <Introduce>
         <h2>북클럽 소개</h2>
         <br />
-        <h4>{data?.contexts}</h4>
+        <h4>{data?.context}</h4>
         <Divider sx={{ marginTop: '5%', marginBottom: '5%' }} />
       </Introduce>
       <Members>
-        <h2>멤버</h2>
+        <h2 style={{ marginBottom: '1rem' }}>멤버</h2>
         <Grid container alignItems="center">
-          <Grid item xs={6}>
-            (대충프로필사진) 코난
-          </Grid>
-          <Grid item xs={6}>
-            (대충프로필사진) 남도일
-          </Grid>
-          <Grid item xs={6}>
-            (대충프로필사진) 김전일
-          </Grid>
-          <Grid item xs={6}>
-            (대충프로필사진) 셜록홈즈
-          </Grid>
+          {data?.memberList.map(member => (
+            <Grid
+              item
+              xs={6}
+              style={{ display: 'flex', alignItems: 'center' }}
+              key={member.memberNickname}>
+              <img
+                src={member.memberProfileImage}
+                alt={`${member.memberNickname} 이미지`}
+                style={{
+                  width: '4rem',
+                  height: '4rem',
+                  borderRadius: '100%',
+                  marginRight: '1rem',
+                }}
+              />
+              {member.memberNickname}
+            </Grid>
+          ))}
         </Grid>
       </Members>
       <StartButtonContainer
@@ -185,7 +254,11 @@ function BookClubDetail() {
           color: 'white',
         }}
         onClick={handleSubmit}>
-        북클럽 시작하기
+        {remainingTime !== null && remainingTime > 0
+          ? `북클럽 참여하기 (${formatTime(
+              Math.floor(remainingTime / 1000),
+            )} 남음)`
+          : '북클럽 참여하기'}
       </StartButtonContainer>
     </Container>
   );

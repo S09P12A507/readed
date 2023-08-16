@@ -28,6 +28,7 @@ import kyoboLogo from '../../assets/img/Kyobo.png';
 import yes24Logo from '../../assets/img/yes24.png';
 import ridiLogo from '../../assets/img/Ridi.png';
 import miliLogo from '../../assets/img/millie.png';
+import non from '../../assets/img/Nan.png';
 
 const Container = styled.div`
   display: flex;
@@ -37,6 +38,7 @@ const Container = styled.div`
 
 const InfoContainer = styled.div`
   padding: 1rem;
+  display: grid;
 `;
 
 const BookImage = styled.img`
@@ -71,6 +73,16 @@ const LogoIcon = styled.div`
   align-items: center;
 `;
 
+const Authors = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+`;
+
+const AuthorsInfo = styled.div`
+  display: grid;
+`;
+
 const StyledTable = styled(Table)`
   border-collapse: separate;
   border-spacing: 0;
@@ -94,7 +106,11 @@ const StyledTable = styled(Table)`
 `;
 
 interface Book {
-  author: string[];
+  author: {
+    authorName: string;
+    authorRole: string;
+    authorProfileImage: string;
+  }[];
   publisher: string[];
   bookDescription: string;
   coverImage: string;
@@ -269,7 +285,7 @@ function BookDetail() {
     if (token) {
       axios
         .patch(
-          `https://i9a507.p.ssafy.io/api/comments/${bookId as string}`,
+          `https://i9a507.p.ssafy.io/api/comments/books/${bookId as string}`,
           formData,
           {
             headers: {
@@ -278,6 +294,7 @@ function BookDetail() {
           },
         )
         .then(() => {
+          setRatingValue(ratingsValue);
           setMessage('코멘트가 등록됐습니다.');
           setShowAlert(true);
         })
@@ -293,7 +310,7 @@ function BookDetail() {
     if (newValue !== null) {
       const formData = {
         commentContent: null,
-        rating: ratingValue,
+        rating: newValue * 2,
       };
 
       if (ratingValue === 0) {
@@ -316,7 +333,7 @@ function BookDetail() {
         setRatingValue(newValue);
         axios
           .patch(
-            `https://i9a507.p.ssafy.io/api/comments/${bookId as string}`,
+            `https://i9a507.p.ssafy.io/api/comments/books/${bookId as string}`,
             formData,
             {
               headers: {
@@ -355,6 +372,7 @@ function BookDetail() {
         .then(response => {
           setData(response.data.data);
           setIsBookmarked(response.data.data.isBookmarkChecked);
+          console.log(response.data.data);
         })
         .catch(error => {
           console.log(error);
@@ -370,14 +388,24 @@ function BookDetail() {
     return <div>로--딩--중!...</div>;
   }
 
+  const translator = Object.values(data.author).find(
+    author => author.authorRole === '옮긴이',
+  );
+
+  const mainAuthor = Object.values(data.author).find(
+    author => author.authorRole === '지은이',
+  );
+
   return (
     <div>
       <BackButton />
       <Container>
         <BookImage src={data.coverImage} alt={data.bookTitle} />
         <h2>{data.bookTitle}</h2>
-        <h5>??? 지음 | ??? 옮김</h5>
-        {/* <h5> {data.publisher}</h5> */}
+        <Authors>
+          {mainAuthor && <h5>{mainAuthor?.authorName} 지음 |&nbsp; </h5>}
+          {translator && <h5>{translator?.authorName} 옮김</h5>}
+        </Authors>
         <br />
         <h6>읽은 책을 평가해주세요</h6>
         <Star>
@@ -425,7 +453,7 @@ function BookDetail() {
             <TableRow>
               <TableCell onClick={handleToggleFavorite}>
                 {isBookmarked ? (
-                  <FavoriteIcon style={{ color: 'red' }} />
+                  <FavoriteIcon style={{ color: '#FF6D75' }} />
                 ) : (
                   <FavoriteBorderIcon />
                 )}
@@ -452,7 +480,7 @@ function BookDetail() {
       <br />
       <Divider />
       <InfoContainer>
-        <h3> e- book</h3>
+        <h3> e-book</h3>
         {hasEbookLinks ? (
           <LogoIcon>
             {data && data.link.ebook.aladinUrl && (
@@ -508,7 +536,7 @@ function BookDetail() {
           </LogoIcon>
         ) : (
           <LogoIcon>
-            <h2>E북이 아직 없어요😥</h2>
+            <h2>e북이 아직 없어요😥</h2>
           </LogoIcon>
         )}
         <h3> 구매처</h3>
@@ -558,11 +586,54 @@ function BookDetail() {
       </InfoContainer>
       <Divider />
       <InfoContainer>
-        <h3>저자 / 역자</h3>
-        <h2>저자이름</h2>
-        <p>저자</p>
-        <h2>(대충 사진)</h2>
-        <p>역자</p>
+        <h3 style={{ marginBottom: '0.75rem' }}>저자 / 역자</h3>
+        <Authors>
+          <img
+            src={mainAuthor?.authorProfileImage}
+            alt="저자"
+            style={{
+              width: '4rem',
+              height: '4rem',
+              borderRadius: '0.5rem',
+              marginRight: '1rem',
+            }}
+          />
+          <AuthorsInfo>
+            <h5>저자</h5>
+            {mainAuthor?.authorName}
+          </AuthorsInfo>
+        </Authors>
+        {translator && (
+          <Authors>
+            {translator.authorProfileImage ? (
+              <img
+                src={translator?.authorProfileImage}
+                alt="역자"
+                style={{
+                  width: '4rem',
+                  height: '4rem',
+                  borderRadius: '0.5rem',
+                  marginRight: '1rem',
+                }}
+              />
+            ) : (
+              <img
+                src={non}
+                alt="역자"
+                style={{
+                  width: '4rem',
+                  height: '4rem',
+                  borderRadius: '0.5rem',
+                  marginRight: '1rem',
+                }}
+              />
+            )}
+            <AuthorsInfo>
+              <h5>역자</h5>
+              {translator?.authorName}
+            </AuthorsInfo>
+          </Authors>
+        )}
       </InfoContainer>
       <Divider />
       <InfoContainer>

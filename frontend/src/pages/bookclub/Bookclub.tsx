@@ -70,13 +70,14 @@ const Infodetail = styled.div`
 interface BookClub {
   roomId: number;
   title: string;
-  booktitle: string;
+  bookTitle: string;
   contexts: string;
-  coverImage: string;
-  time: Date;
+  bookCoverImageUrl: string;
+  startTime: Date;
+  endTime: Date;
   duration: number;
-  participant_count: number;
-  participants: [];
+  participantCount: number;
+  memberList: [];
   is_public: boolean;
   meetingpw: string;
 }
@@ -136,41 +137,60 @@ function Bookclub() {
             <CardMedia
               component="img"
               sx={{ width: 130 }}
-              src={bookclub.coverImage}
+              src={bookclub.bookCoverImageUrl}
               style={{ margin: '5%' }}
             />
             <CardContent sx={{ flex: '1 0 auto' }}>
               <h6>{bookclub.is_public ? '비공개' : '공개'}</h6>
               <h2>{bookclub.title}</h2>
-              <h5>{bookclub.booktitle}</h5>
+              <h5>
+                {bookclub.bookTitle.length > 10
+                  ? `${bookclub.bookTitle.slice(0, 10)}...`
+                  : bookclub.bookTitle}
+              </h5>
               <Info>
                 <Infodetail>
                   <CalendarTodayIcon />
-                  <p> {new Date(bookclub.time).toLocaleDateString('ko-KR')} </p>
+                  <p>
+                    {' '}
+                    {new Date(bookclub.startTime).toLocaleDateString(
+                      'ko-KR',
+                    )}{' '}
+                  </p>
                 </Infodetail>
-                {bookclub.time && (
+                {bookclub.startTime && bookclub.endTime && (
                   <Infodetail>
                     <ScheduleIcon />
                     <p>
-                      {/* {new Date(
-                        bookclub.time.getTime() + bookclub.duration,
-                      ).toLocaleTimeString('en-US', {
+                      {new Date(bookclub.startTime).toLocaleTimeString(
+                        'ko-KR',
+                        {
+                          timeZone: 'Asia/Seoul',
+                          hour12: false,
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        },
+                      )}{' '}
+                      ~{' '}
+                      {new Date(bookclub.endTime).toLocaleTimeString('ko-KR', {
+                        timeZone: 'Asia/Seoul',
                         hour12: false,
                         hour: '2-digit',
                         minute: '2-digit',
-                      })} */}
+                      })}
                     </p>
                   </Infodetail>
                 )}
 
                 <Infodetail>
                   <PeopleIcon />
-                  {bookclub.participants && bookclub.participants.length}명 /{' '}
-                  {bookclub.participant_count}명
+                  {bookclub.memberList
+                    ? `${bookclub.memberList.length}명 / `
+                    : '1명 / '}
+                  {bookclub.participantCount}명
                 </Infodetail>
               </Info>
             </CardContent>
-            {bookclub.booktitle}
           </Card>
         ))}
       </BookClubList>

@@ -112,7 +112,7 @@ function App() {
                 element={<BookclubChange />}
               />
               <Route
-                path="/bookclub/detail/:bookclubid"
+                path="/bookclub/detail/:bookclubId"
                 element={<BookclubDetail />}
               />
               <Route
