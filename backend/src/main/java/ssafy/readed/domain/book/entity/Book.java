@@ -29,7 +29,7 @@ public class Book extends BaseEntity {
 
     private String subtitle;
 
-    @Column(name = "book_description")
+    @Column(name = "book_description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "book_toc")
