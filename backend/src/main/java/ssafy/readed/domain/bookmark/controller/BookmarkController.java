@@ -20,7 +20,7 @@ import ssafy.readed.global.response.JsonResponse;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/bookmarks")
+@RequestMapping("/api/bookmarks")
 @CrossOrigin("*")
 public class BookmarkController {
 
