@@ -1,5 +1,6 @@
 package ssafy.readed.domain.book.service.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,8 +10,6 @@ import ssafy.readed.domain.book.entity.BookCode;
 import ssafy.readed.domain.book.entity.Publisher;
 import ssafy.readed.global.util.ItemType;
 import ssafy.readed.global.util.UrlConverter;
-
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -37,8 +36,11 @@ public class BookDetailResponseDto {
     private LinkResponseDto link;
     private PublisherResponseDto publisher;
     private List<BookAuthorResponseDto> author;
+    private Boolean isBookmarkChecked;
 
-    public static BookDetailResponseDto from(Book book, String coverImageS3Url, String publisherS3Url, List<BookAuthorResponseDto> bookAuthorResponseDtoList) {
+    public static BookDetailResponseDto from(Book book, String coverImageS3Url,
+            String publisherS3Url, List<BookAuthorResponseDto> bookAuthorResponseDtoList,
+            Boolean isBookmarkChecked) {
 
         BookCode bookCode = book.getBookCode();
         Publisher publisher = book.getPublisher();
@@ -51,11 +53,13 @@ public class BookDetailResponseDto {
                         .build()
                 )
                 .ebook(EbookLinkResponseDto.builder()
-                        .aladinUrl(UrlConverter.getLinkUrl(ItemType.E_ALADIN, bookCode.getEAladinId()))
+                        .aladinUrl(
+                                UrlConverter.getLinkUrl(ItemType.E_ALADIN, bookCode.getEAladinId()))
                         .kyoboUrl(UrlConverter.getLinkUrl(ItemType.E_KYOBO, bookCode.getEKyoboId()))
                         .yes24Url(UrlConverter.getLinkUrl(ItemType.E_YES24, bookCode.getEYes24Id()))
                         .ridiUrl(UrlConverter.getLinkUrl(ItemType.E_RIDI, bookCode.getERidiId()))
-                        .millieUrl(UrlConverter.getLinkUrl(ItemType.E_MILLIE, bookCode.getEMillieId()))
+                        .millieUrl(
+                                UrlConverter.getLinkUrl(ItemType.E_MILLIE, bookCode.getEMillieId()))
                         .build()
                 ).build();
 
@@ -85,6 +89,7 @@ public class BookDetailResponseDto {
                 .link(linkDto)
                 .publisher(publisherDto)
                 .author(bookAuthorResponseDtoList)
+                .isBookmarkChecked(isBookmarkChecked)
                 .build();
     }
 }

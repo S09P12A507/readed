@@ -52,7 +52,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     @Transactional
     public void deleteBookmark(Long bookId, Member member) {
         Member findMember = memberService.getMember(member.getId());
-        Bookmark bookmark = bookmarkRepository.selectBookmarkByBookId(bookId, findMember.getId());
+        Bookmark bookmark = getBookmark(bookId, findMember.getId());
 
         findMember.deleteBookmark(bookmark.getId());
         bookmarkRepository.deleteById(bookmark.getId());
@@ -66,13 +66,18 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         for (DeleteBookmarkListRequestDto requestDto : requestDtoList) {
             if (!requestDto.getIsChecked()) {
-                Bookmark bookmark = bookmarkRepository.selectBookmarkByBookId(
-                        requestDto.getBookId(), findMember.getId());
+                Bookmark bookmark = getBookmark(requestDto.getBookId(), findMember.getId());
 
                 findMember.deleteBookmark(bookmark.getId());
                 bookmarkRepository.deleteById(bookmark.getId());
             }
         }
+    }
+
+    @Override
+    @Transactional
+    public Bookmark getBookmark(Long bookId, Long memberId) {
+        return bookmarkRepository.selectBookmarkByBookId(bookId, memberId);
     }
 
     private Book getBook(Long bookId) {
@@ -85,4 +90,6 @@ public class BookmarkServiceImpl implements BookmarkService {
         return bookmarkList.stream().filter(bookmark -> bookmark.getIsChecked())
                 .map(BookmarkResponseDto::from).toList();
     }
+
+
 }
