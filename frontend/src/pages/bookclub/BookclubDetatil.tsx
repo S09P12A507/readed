@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Box, Grid } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -67,54 +66,53 @@ function BookClubDetail() {
   const [data, setData] = useState<BookClub | null>(null);
   let date = '';
   let start = '';
-  let end = '';
+  const end = '';
   if (data?.time) {
     const year = data?.time.getFullYear();
     const month = (data.time.getMonth() + 1).toString().padStart(2, '0');
     const day = data?.time.getDate().toString().padStart(2, '0');
     const hours = data?.time.getHours().toString().padStart(2, '0');
     const minutes = data?.time.getMinutes().toString().padStart(2, '0');
-    const endTime = new Date(data.time);
-    endTime.setMinutes(endTime.getMinutes() + data?.duration);
-    const endhours = endTime.getHours().toString().padStart(2, '0');
-    const endminutes = endTime.getMinutes().toString().padStart(2, '0');
+    // const endTime = new Date(data.time.getTime() + data?.duration);
+    // const endhours = endTime.getHours().toString().padStart(2, '0');
+    // const endminutes = endTime.getMinutes().toString().padStart(2, '0');
     date = `${year}.${month}.${day}`;
     start = `${hours}:${minutes}`;
-    end = `${endhours}:${endminutes}`;
+    // end = `${endhours}:${endminutes}`;
   }
 
   const navigate = useNavigate();
-  const handleBookClubChange = (bookclubId: number) => {
-    navigate(`/bookclub/detail/${bookclubId}`);
+  const handleBookClubChange = () => {
+    navigate(`/bookclub/detail/${bookclubId as string}`);
   };
 
   const handleSubmit = () => {
-    window.location.href = `/bookclub/waiting/${bookclubId}`;
+    window.location.href = `/bookclub/waiting/${bookclubId as string}`;
   };
 
   useEffect(() => {
     axios
       .get<{ data: BookClub }>(
-        `https://i9a507.p.ssafy.io/api/bookclubs/${bookclubId}`,
+        `https://i9a507.p.ssafy.io/api/bookclubs/${bookclubId as string}`,
       )
       .then(response => {
         setData(response.data.data);
       })
       .catch(() => {});
-  }, []);
+  }, [bookclubId]);
 
   return (
     <Container>
       <Header>
         <BackButton />
-        <Link to={`/bookclub/change/${bookclubId}`}>
+        <Link to={`/bookclub/change/${bookclubId as string}`}>
           <ChangeButton>
             <h3>정보 수정</h3>
           </ChangeButton>
         </Link>
       </Header>
       <Box
-        onClick={() => handleBookClubChange(1)}
+        onClick={() => handleBookClubChange()}
         sx={{
           display: 'flex',
           border: 'none',

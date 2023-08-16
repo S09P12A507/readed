@@ -85,11 +85,15 @@ function Report() {
 
     if (token) {
       axios
-        .post(`https://i9a507.p.ssafy.io/api/report/${bookId}`, formData, {
-          headers: {
-            'X-READED-ACCESSTOKEN': token,
+        .post(
+          `https://i9a507.p.ssafy.io/api/report/${bookId as string}`,
+          formData,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
           },
-        })
+        )
         .then(() => {
           setMessage('정상적으로 등록되었습니다!');
           setShowAlert(true);

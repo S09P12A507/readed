@@ -231,7 +231,7 @@ function BookclubChange() {
   useEffect(() => {
     axios
       .get<{ data: BookClub }>(
-        `https://i9a507.p.ssafy.io/api/bookclubs/${bookclubId}`,
+        `https://i9a507.p.ssafy.io/api/bookclubs/${bookclubId as string}`,
       )
       .then(response => {
         const bookclubData = response.data.data;
@@ -245,7 +245,7 @@ function BookclubChange() {
         setSelectedBook(bookclubData.book);
       })
       .catch(() => {});
-  }, []);
+  }, [bookclubId]);
 
   useEffect(() => {
     if (query) {

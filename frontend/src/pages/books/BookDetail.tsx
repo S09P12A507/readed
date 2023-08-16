@@ -132,7 +132,8 @@ function BookDetail() {
         })
         .then(() => {
           setIsBookmarked(false);
-        });
+        })
+        .catch(() => {});
     } else {
       axios
         .post('https://i9a507.p.ssafy.io/api/bookmarks/1', {
@@ -142,7 +143,8 @@ function BookDetail() {
         })
         .then(() => {
           setIsBookmarked(true);
-        });
+        })
+        .catch(() => {});
     }
   };
 
@@ -225,7 +227,7 @@ function BookDetail() {
   useEffect(() => {
     axios
       .get<{ documents: Book[] }>(
-        `https://i9a507.p.ssafy.io/api/books/${bookId}`,
+        `https://i9a507.p.ssafy.io/api/books/${bookId as string}`,
       )
       .then(response => {
         if (response.data.documents.length > 0) {
@@ -233,7 +235,7 @@ function BookDetail() {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [bookId]);
 
   useEffect(() => {
     setTextLength(inputText.length);
@@ -339,14 +341,7 @@ function BookDetail() {
       <Divider />
       <InfoContainer>
         <h3>저자 / 역자</h3>
-        <h2>
-          <img
-            src={'a'}
-            alt={`프로필 이미지`}
-            style={{ width: '40px', height: '40px', marginRight: '5px' }}
-          />{' '}
-          저자이름
-        </h2>
+        <h2>저자이름</h2>
         <p>저자</p>
         <h2>(대충 사진)</h2>
         <p>역자</p>
