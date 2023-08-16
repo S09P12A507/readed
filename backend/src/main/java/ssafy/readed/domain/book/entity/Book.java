@@ -122,4 +122,57 @@ public class Book extends BaseEntity {
         this.category = category;
         this.publisher = publisher;
     }
+
+    public void addComment(Long rating) {
+        this.commentCount++;
+        getStarCount(rating, true);
+        this.avgRating = calcAvgRating();
+    }
+
+    public void deleteComment(Long rating) {
+        this.commentCount--;
+        getStarCount(rating, false);
+        this.avgRating = calcAvgRating();
+    }
+
+    private void getStarCount(Long rating, boolean isIncrease) {
+        int add = isIncrease ? 1 : -1;
+
+        if (rating == 1) {
+            this.star_0p5_count += add;
+        } else if (rating == 2) {
+            this.star_1_count += add;
+        } else if (rating == 3) {
+            this.star_1p5_count += add;
+        } else if (rating == 4) {
+            this.star_2_count += add;
+        } else if (rating == 5) {
+            this.star_2p5_count += add;
+        } else if (rating == 6) {
+            this.star_3_count += add;
+        } else if (rating == 7) {
+            this.star_3p5_count += add;
+        } else if (rating == 8) {
+            this.star_4_count += add;
+        } else if (rating == 9) {
+            this.star_4p5_count += add;
+        } else if (rating == 10) {
+            this.star_5_count += add;
+        }
+    }
+
+    private Double calcAvgRating() {
+        return (this.star_0p5_count * 0.5 + this.star_1_count * 1 +
+                this.star_1p5_count * 1.5 + this.star_2_count * 2 +
+                this.star_2p5_count * 2.5 + this.star_3_count * 3 +
+                this.star_3p5_count * 3.5 + this.star_4_count * 4 +
+                this.star_4p5_count * 4.5 + this.star_5_count * 5) /
+                (this.star_0p5_count + this.star_1_count +
+                        this.star_1p5_count + this.star_2_count +
+                        this.star_2p5_count + this.star_3_count +
+                        this.star_3p5_count + this.star_4_count +
+                        this.star_4p5_count + this.star_5_count);
+    }
+
+
 }

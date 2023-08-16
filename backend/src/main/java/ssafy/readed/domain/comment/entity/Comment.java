@@ -67,12 +67,14 @@ public class Comment extends BaseEntity {
 
         member.addComment(book.getPageCount(),
                 Math.toIntExact(commentRequestDto.getRating()));
+        book.addComment(commentRequestDto.getRating());
         return comment;
     }
 
     public static void deleteComment(Member member, Comment comment) {
         member.deleteComment(comment.getBook().getPageCount(),
                 Math.toIntExact(comment.getRating()));
+        comment.getBook().deleteComment(comment.getRating());
     }
 
     public void update(CommentRequestDto requestDto) {
