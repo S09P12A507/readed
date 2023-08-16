@@ -72,6 +72,17 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
+    public void updateCommentByBookAndMember(Long bookId, Member member,
+            CommentRequestDto commentRequestDto) {
+
+        Comment comment = getCommentByBookAndMember(bookId, member);
+
+        authCheckComment(member, comment);
+        comment.update(commentRequestDto);
+    }
+
+    @Override
+    @Transactional
     public void deleteComment(Long commentId, Member member) {
         Comment comment = getComment(commentId);
 
@@ -114,6 +125,12 @@ public class CommentServiceImpl implements CommentService {
 
     private Comment getComment(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(
+                () -> new GlobalRuntimeException("해당 코멘트가 존재하지 않습니다", HttpStatus.BAD_REQUEST)
+        );
+    }
+
+    private Comment getCommentByBookAndMember(Long bookId, Member member) {
+        return commentRepository.findByBookAndMember(bookId, member.getId()).orElseThrow(
                 () -> new GlobalRuntimeException("해당 코멘트가 존재하지 않습니다", HttpStatus.BAD_REQUEST)
         );
     }

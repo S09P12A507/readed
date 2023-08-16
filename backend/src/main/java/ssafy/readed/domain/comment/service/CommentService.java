@@ -16,9 +16,13 @@ public interface CommentService {
 
     void updateComment(Long commentId, Member member, CommentRequestDto commentRequestDto);
 
+    void updateCommentByBookAndMember(Long bookId, Member member,
+            CommentRequestDto commentRequestDto);
+
     void deleteComment(Long commentId, Member member);
 
     void likeComment(Long commentId, Member member);
 
     void unlikeComment(Long commentId, Member member);
+
 }

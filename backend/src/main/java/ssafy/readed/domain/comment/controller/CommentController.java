@@ -74,6 +74,14 @@ public class CommentController {
         return JsonResponse.ok("코멘트가 수정되었습니다.");
     }
 
+    @PatchMapping(value = "/books/{book-id}")
+    public ResponseEntity<?> updateCommentByBook(@PathVariable(name = "book-id") Long bookId,
+            @AuthenticationPrincipal Member member,
+            @RequestBody CommentRequestDto commentRequestDto) {
+        commentService.updateCommentByBookAndMember(bookId, member, commentRequestDto);
+        return JsonResponse.ok("코멘트가 수정되었습니다.");
+    }
+
     @DeleteMapping(value = "/{comment-id}")
     public ResponseEntity<?> deleteReport(@PathVariable(name = "comment-id") Long commentId,
             @AuthenticationPrincipal Member member) {
