@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,7 @@ import ssafy.readed.global.exception.GlobalRuntimeException;
 import ssafy.readed.global.service.S3FileService;
 
 @Service
+@Slf4j
 public class BookclubServiceImpl implements BookclubService {
 
     BookclubRepository bookclubRepository;
@@ -164,6 +166,8 @@ public class BookclubServiceImpl implements BookclubService {
         for (Bookclub bookclub : bookclubMap.values()) {
             String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
             list.add(BookclubResponseDto.from(bookclub,url,null));
+            log.info("bookclub title : "+bookclub.getBookclubTitle());
+            log.info("bookclub img url : "+url);
         }
 
         return list;
