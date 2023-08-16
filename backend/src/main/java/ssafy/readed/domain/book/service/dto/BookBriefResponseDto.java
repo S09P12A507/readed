@@ -20,13 +20,16 @@ public class BookBriefResponseDto {
     private String publisher;
 
     public static BookBriefResponseDto from(Book book, String coverImageS3Url) {
+        String authorName = book.getBookAuthorList().size() != 0 ? book.getBookAuthorList().get(0).getAuthor().getKoreanName() : null;
+        String publisherName = book.getPublisher() != null ? book.getPublisher().getName() : null;
+
         return BookBriefResponseDto.builder()
                 .bookId(book.getId())
                 .bookTitle(book.getTitle())
                 .coverImage(coverImageS3Url)
                 .avgRating(book.getAvgRating())
-                .author(book.getBookAuthorList().get(0).getAuthor().getKoreanName())
-                .publisher(book.getPublisher().getName())
+                .author(authorName)
+                .publisher(publisherName)
                 .build();
     }
 }
