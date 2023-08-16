@@ -253,6 +253,11 @@ public class BookclubServiceImpl implements BookclubService {
 
         tokenMap.remove(findMember.getId());
 
+        if(curMemberList.size() == 0){
+            sessionMap.remove(bookclubId);
+            bookclubMap.remove(bookclubId);
+        }
+
     }
 
     @Override
