@@ -14,7 +14,7 @@ public interface MemberService {
 
     void signUp(SignUpRequestDto requestDto, MultipartFile image);
 
-    SelectProfileResponseDto selectProfile(Long id);
+    SelectProfileResponseDto selectProfile(Long id, Member member);
 
     Member getMember(Long id);
 

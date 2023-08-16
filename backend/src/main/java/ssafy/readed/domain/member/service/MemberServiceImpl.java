@@ -70,10 +70,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public SelectProfileResponseDto selectProfile(Long id) {
-        Member member = getMember(id);
-        String url = s3FileService.getS3Url(member.getMemberProfileFile());
-        return SelectProfileResponseDto.from(member, url);
+    public SelectProfileResponseDto selectProfile(Long id, Member member) {
+        Member findMember = (id == null) ? getMember(member.getId()) : getMember(id);
+
+        String url = s3FileService.getS3Url(findMember.getMemberProfileFile());
+        return SelectProfileResponseDto.from(findMember, url);
     }
 
     @Override

@@ -40,8 +40,8 @@ public class MemberController {
 
 
     @GetMapping("/profile")
-    public ResponseEntity<?> selectProfile(Long id) {
-        return JsonResponse.ok("멤버 프로필 조회 성공!", memberService.selectProfile(id));
+    public ResponseEntity<?> selectProfile(Long id, @AuthenticationPrincipal Member member) {
+        return JsonResponse.ok("멤버 프로필 조회 성공!", memberService.selectProfile(id, member));
     }
 
     @PatchMapping("/profile")
