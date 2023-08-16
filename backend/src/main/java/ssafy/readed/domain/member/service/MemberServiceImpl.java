@@ -12,7 +12,6 @@ import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.member.controller.dto.ModifyPasswordRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.entity.Member;
-import ssafy.readed.domain.member.entity.MemberProfileFile;
 import ssafy.readed.domain.member.entity.Password;
 import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
@@ -62,9 +61,9 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         try {
-            saveNewProfileFile(member,image);
+            saveNewProfileFile(member, image);
         } catch (IOException e) {
-            throw new GlobalRuntimeException("프로필 사진 저장 실패",HttpStatus.CONFLICT);
+            throw new GlobalRuntimeException("프로필 사진 저장 실패", HttpStatus.CONFLICT);
         }
 
         memberRepository.save(member);
@@ -75,8 +74,8 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public SelectProfileResponseDto selectProfile(Long id) {
         Member member = getMember(id);
-        String url = s3FileService.getS3Url(path,member.getMemberProfileFile().getSavedFilename());
-        return SelectProfileResponseDto.from(member,url);
+        String url = s3FileService.getS3Url(member.getMemberProfileFile());
+        return SelectProfileResponseDto.from(member, url);
     }
 
     @Override
@@ -88,9 +87,9 @@ public class MemberServiceImpl implements MemberService {
 
         try {
             saveNewProfileFile(modifiedMember, requestDto.getProfileImage());
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-            throw new GlobalRuntimeException("프로필 사진 저장 실패",HttpStatus.CONFLICT);
+            throw new GlobalRuntimeException("프로필 사진 저장 실패", HttpStatus.CONFLICT);
         }
 
         modifiedMember.modify(requestDto);

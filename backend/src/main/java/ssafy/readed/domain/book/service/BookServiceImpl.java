@@ -30,11 +30,11 @@ public class BookServiceImpl implements BookService {
     public BookDetailResponseDto getDetail(Long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new GlobalRuntimeException("해당 ID의 책이 없습니다.", HttpStatus.BAD_REQUEST));
         Publisher publisher = book.getPublisher();
-        String bookCoverImageUrl = s3FileService.getS3Url(book.getBookCoverFile().getSavedPath(), book.getBookCoverFile().getSavedFilename());
-        String publisherLogoUrl = s3FileService.getS3Url(publisher.getPublisherLogoFile().getSavedPath(), publisher.getPublisherLogoFile().getSavedFilename());
+        String bookCoverImageUrl = s3FileService.getS3Url(book.getBookCoverFile());
+        String publisherLogoUrl = s3FileService.getS3Url(publisher.getPublisherLogoFile());
         List<BookAuthorResponseDto> bookAuthorResponseDtoList = book.getBookAuthorList().stream().map(bookAuthor -> {
             AuthorProfileFile authorProfileFile = bookAuthor.getAuthor().getAuthorProfileFile();
-            String authorImageUrl = s3FileService.getS3Url(authorProfileFile.getSavedPath(), authorProfileFile.getSavedFilename());
+            String authorImageUrl = s3FileService.getS3Url(authorProfileFile);
             return BookAuthorResponseDto.from(bookAuthor, authorImageUrl);
         }).toList();
 
@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
                 .limit(10)
                 .map(BestsellerBook::getBook)
                 .map(book -> {
-                    String s3Url = s3FileService.getS3Url(book.getBookCoverFile().getSavedPath(), book.getBookCoverFile().getSavedFilename());
+                    String s3Url = s3FileService.getS3Url(book.getBookCoverFile());
                     return BookBriefResponseDto.from(book, s3Url);
                 }).toList();
     }
@@ -60,7 +60,7 @@ public class BookServiceImpl implements BookService {
         List<Book> bookList = bookRepository.findByTitleContainingIgnoreCase(keyword);
         return bookList.stream().map(book -> {
             BookCoverFile bookCoverFile = book.getBookCoverFile();
-            return BookBriefResponseDto.from(book, s3FileService.getS3Url(bookCoverFile.getSavedPath(), bookCoverFile.getSavedFilename()));
+            return BookBriefResponseDto.from(book, s3FileService.getS3Url(bookCoverFile));
         }).toList();
     }
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ssafy.readed.global.entity.File;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -30,8 +31,8 @@ public class S3FileService {
         return savedFilename;
     }
 
-    public String getS3Url(String path, String savedFilename) {
-        return amazonS3.getUrl(bucket, path + savedFilename).toString();
+    public String getS3Url(File file) {
+        return file != null ? amazonS3.getUrl(bucket, file.getSavedPath() + file.getSavedFilename()).toString() : null;
     }
 
     public void deleteImage(String filename) {

@@ -21,7 +21,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public AuthorDetailResponseDto getDetail(Long authorId) {
         Author author = authorRepository.findById(authorId).orElseThrow(() -> new GlobalRuntimeException("해당 ID의 저자가 없습니다", HttpStatus.NOT_FOUND));
-        String s3Url = s3FileService.getS3Url(author.getAuthorProfileFile().getSavedPath(), author.getAuthorProfileFile().getSavedFilename());
+        String s3Url = s3FileService.getS3Url(author.getAuthorProfileFile());
         return AuthorDetailResponseDto.from(author, s3Url);
     }
 }
