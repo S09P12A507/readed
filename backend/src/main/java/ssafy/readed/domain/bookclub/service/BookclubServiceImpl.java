@@ -59,6 +59,8 @@ public class BookclubServiceImpl implements BookclubService {
     private String secret;
     private OpenVidu openVidu;
 
+    private Long bookclubId;
+
     public BookclubServiceImpl(BookclubRepository bookclubRepository, BookRepository bookRepository,
             MemberRepository memberRepository, ParticipantRepository participantRepository, S3FileService s3FileService,
             @Value("${openvidu.url}") String url, @Value("${openvidu.secret}") String secret) {
@@ -74,6 +76,7 @@ public class BookclubServiceImpl implements BookclubService {
         this.sessionMap = new ConcurrentHashMap<>();
         this.tokenMap = new ConcurrentHashMap<>();
         this.bookclubMap = new ConcurrentHashMap<>();
+        this.bookclubId = 1L;
     }
 
     @Override
@@ -102,15 +105,16 @@ public class BookclubServiceImpl implements BookclubService {
 
             Bookclub bookclub = requestDto.toEntity(findMember,findBook);
 
-            bookclubMap.put(bookclub.getId(), bookclub);
+            bookclubMap.put(bookclubId, bookclub);
 //            participantRepository.save(
 //                    Participant.builder().member(findMember).bookclub(bookclub).build());
 //            findMember.getBookclubList().add(bookclub);
 
-            sessionMap.put(bookclub.getId(), session);
+            sessionMap.put(bookclubId, session);
             tokenMap.put(member.getId(), token);
-            memberList.put(bookclub.getId(), new ArrayList<>());
-            memberList.get(bookclub.getId()).add(findMember);
+            memberList.put(bookclubId, new ArrayList<>());
+            memberList.get(bookclubId).add(findMember);
+            bookclubId++;
 
         } catch (Exception e) {
             e.printStackTrace();
