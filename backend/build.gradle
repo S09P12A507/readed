@@ -45,7 +45,9 @@ dependencies {
 // https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
     implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.28.0'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
+    implementation 'com.google.code.gson:gson:2.9.0'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    
 }
 
 tasks.named('test') {
