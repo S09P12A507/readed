@@ -15,6 +15,7 @@ import ssafy.readed.domain.bookmark.service.dto.BookmarkResponseDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.service.MemberService;
 import ssafy.readed.global.exception.GlobalRuntimeException;
+import ssafy.readed.global.service.S3FileService;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final BookRepository bookRepository;
     private final MemberService memberService;
+    private final S3FileService s3FileService;
 
     @Override
     @Transactional
@@ -85,10 +87,13 @@ public class BookmarkServiceImpl implements BookmarkService {
                 () -> new GlobalRuntimeException("해당 id의 책이 존재하지 않습니다.", HttpStatus.BAD_REQUEST));
     }
 
-    private static List<BookmarkResponseDto> BookmarkToBookmarkResponseDto(
+    private List<BookmarkResponseDto> BookmarkToBookmarkResponseDto(
             List<Bookmark> bookmarkList) {
         return bookmarkList.stream().filter(bookmark -> bookmark.getIsChecked())
-                .map(BookmarkResponseDto::from).toList();
+                .map(bookmark -> BookmarkResponseDto
+                        .from(bookmark,
+                                s3FileService.getS3Url(bookmark.getBook().getBookCoverFile())))
+                .toList();
     }
 
 

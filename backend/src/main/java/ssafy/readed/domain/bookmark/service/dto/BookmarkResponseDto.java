@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ssafy.readed.domain.book.entity.BookCoverFile;
 import ssafy.readed.domain.bookmark.entity.Bookmark;
 
 @Getter
@@ -14,12 +13,12 @@ import ssafy.readed.domain.bookmark.entity.Bookmark;
 public class BookmarkResponseDto {
 
     Long id;
-    BookCoverFile bookCover;
+    String bookCover;
 
-    public static BookmarkResponseDto from(Bookmark bookmark) {
+    public static BookmarkResponseDto from(Bookmark bookmark, String s3Url) {
         return BookmarkResponseDto.builder()
                 .id(bookmark.getId())
-                .bookCover(bookmark.getBook().getBookCoverFile())
+                .bookCover(s3Url)
                 .build();
     }
 }
