@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import namiyaImg from '../../assets/img/mainSlider/1/namiya.png';
 import nightSkyImg from '../../assets/img/mainSlider/1/nightsky.jpg';
@@ -6,7 +7,10 @@ import nightSkyImg from '../../assets/img/mainSlider/1/nightsky.jpg';
 /**
  * @author 박성준
  * @todo 모바일 사이즈에 따라 배너 디자인이 달라짐...
+ * @todo 누르면 해당 책 상세페이지로
  */
+
+const Container = styled.div``;
 
 const Background = styled.div`
   position: absolute;
@@ -35,8 +39,9 @@ const Item = styled.div`
 `;
 
 function MainSliderItem1() {
+  const navigate = useNavigate();
   return (
-    <>
+    <Container onClick={() => navigate('/')}>
       <Typography
         variant="h5"
         position="absolute"
@@ -72,7 +77,7 @@ function MainSliderItem1() {
         </Typography>
       </Background>
       <Item />
-    </>
+    </Container>
   );
 }
 

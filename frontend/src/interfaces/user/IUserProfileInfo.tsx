@@ -5,5 +5,5 @@ export interface IUserProfileInfo {
   profileImage: string;
   readCount: number;
   reportCount: number;
-  bookClubCount: number;
+  bookclubCount: number;
 }

@@ -4,7 +4,8 @@ import { Card, CardContent, CardMedia, CardActionArea } from '@mui/material';
 // styles
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 // types
-import { IBook } from '../../interfaces/book/IBook';
+import { IMainBook } from '../../apis/book/BookBestSellerAPI';
+// import { IBook } from '../../interfaces/book/IBook';
 
 /** 메인페이지 책 카드
  * @author 박성준
@@ -37,10 +38,10 @@ const BookAuthor = styled.span`
   -webkit-box-orient: vertical;
 `;
 
-function BookCard({ book, itemId }: { book: IBook; itemId: string }) {
-  const { authors, thumbnail, title } = book;
+function BookCard({ book, itemId }: { book: IMainBook; itemId: string }) {
+  const { author, coverImage, bookTitle } = book;
   // 임시로 책 제목을 통해 책의 상세로 들어간다. 추후 책 isbn으로 넘어가도록 해야 할 듯.
-  const bookLink = `/book/${encodeURIComponent(title)}`;
+  const bookLink = `/book/${encodeURIComponent(bookTitle)}`;
   return (
     <Card
       id={itemId}
@@ -57,8 +58,8 @@ function BookCard({ book, itemId }: { book: IBook; itemId: string }) {
         <CardActionArea sx={{ height: '100%' }}>
           <CardMedia
             component="img"
-            image={thumbnail}
-            alt={title}
+            image={coverImage}
+            alt={bookTitle}
             sx={{
               borderRadius: '0.25rem',
               boxShadow: '2',
@@ -73,8 +74,8 @@ function BookCard({ book, itemId }: { book: IBook; itemId: string }) {
               flexFlow: 'column',
               justifyContent: 'space-between',
             }}>
-            <BookTitle>{title}</BookTitle>
-            <BookAuthor>{authors}</BookAuthor>
+            <BookTitle>{bookTitle}</BookTitle>
+            <BookAuthor>{author}</BookAuthor>
           </CardContent>
         </CardActionArea>
       </Link>

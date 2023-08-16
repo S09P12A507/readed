@@ -1,9 +1,13 @@
+// import { useMutation } from '@tanstack/react-query';
 import { useState, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Menu, MenuItem, Typography } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+// import { delLogout } from '../../../apis/member/MemberLogout';
+// import { useAccessToken } from '../../../hooks/useAccessToken';
+// import { useRefreshToken } from '../../../hooks/useRefreshToken';
 
 /**
  * @author 박성준
@@ -16,7 +20,16 @@ const Container = styled.div`
     cursor: pointer;
   }
 `;
+// async function handleLogout(
+//   accessToken: string | null,
+//   refreshToken: string | null,
+// ) {
+//   await delLogout(accessToken, refreshToken);
+// }
+
 function MeatballMenu() {
+  // const accessToken = useAccessToken();
+  // const refreshToken = useRefreshToken();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -61,7 +74,10 @@ function MeatballMenu() {
             <Typography fontWeight={300}>개인 설정</Typography>
           </MenuItem>
         </Link>
-        <Link to="/" style={{ textDecoration: 'none' }}>
+        <Link
+          // onClick={() => handleLogout(accessToken, refreshToken)}
+          to="/login"
+          style={{ textDecoration: 'none' }}>
           <MenuItem onClick={handleClose} color="warning">
             <Typography
               fontWeight={300}

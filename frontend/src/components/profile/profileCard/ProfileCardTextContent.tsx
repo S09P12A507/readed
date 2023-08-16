@@ -44,16 +44,16 @@ function ProfileCardTextContent({
   nickname,
   readCount,
   reportCount,
-  bookClubCount,
+  bookclubCount,
 }: {
   nickname: IUserProfileInfo['nickname'];
   readCount: IUserProfileInfo['readCount'];
   reportCount: IUserProfileInfo['reportCount'];
-  bookClubCount: IUserProfileInfo['bookClubCount'];
+  bookclubCount: IUserProfileInfo['bookclubCount'];
 }) {
   const readCountString: string = readCount.toString();
   const reportCountString: string = reportCount.toString();
-  const bookClubCountString: string = bookClubCount.toString();
+  const bookClubCountString: string = bookclubCount.toString();
   return (
     <ProfileTextContentWrapper>
       <NicknameWrapper>

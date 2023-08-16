@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+
 // styles
 import styled from 'styled-components';
 // components
@@ -12,15 +12,18 @@ import BookCard from '../components/main/BookCard';
 import { LeftArrow } from '../components/main/LeftArrowButton';
 import { RightArrow } from '../components/main/RightArrowButton';
 import 'react-alice-carousel/lib/alice-carousel.css';
-// types
-import { IBook } from '../interfaces/book/IBook';
+// types & apis
+// import { IBook } from '../interfaces/book/IBook';
+import { IMainBook, getBestSeller } from '../apis/book/BookBestSellerAPI';
+import { getTopTen } from '../apis/book/BookTopTenAPI';
+// hooks
+import { useAccessToken } from '../hooks/useAccessToken';
 
 /** 메인 페이지
  * @author 김보석, 박성준
  * @todo 하루종일 "임시코드"라 불렸던 것들을 리팩토링
  * @todo 처음 데이터를 불러오는 동안 스켈레톤 로딩
  * @todo 수평 스크롤 오른쪽 화살표는 호버해도 잘 안나옴
- * @todo 리디드 Top10 부분, 최상단에는 조금 더 화려한 요소를 넣는 게 좋아 보임.
  */
 
 const Container = styled.section`
@@ -50,14 +53,6 @@ const HorizontalScrollSectionContainer = styled.article`
   }
 `;
 
-// const BackgroundBoxSec = styled.div`
-//   position: absolute;
-//   width: 100%;
-//   height: 0.3rem;
-//   background-color: var(--secondary-light);
-//   z-index: -1;
-//   transform: translateY(-50%);
-// `;
 const BackgroundBoxPri = styled.div`
   position: absolute;
   top: 40%;
@@ -69,51 +64,63 @@ const BackgroundBoxPri = styled.div`
 `;
 
 function Home() {
-  // const items = Array.from({ length: 7 }, (_, i) => i + 1);
-  const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
-  const [topTen, setTopten] = useState<IBook[]>([]);
-  const [bestSeller, setBest] = useState<IBook[]>([]);
+  const accessToken = useAccessToken();
+  // const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
+  const [topTen, setTopten] = useState<IMainBook[]>([]);
+  const [bestSeller, setBestSeller] = useState<IMainBook[]>([]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get<{ documents: IMainBook[] }>(
+  //       `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
+  //         '공부',
+  //       )}`,
+  //       {
+  //         headers: {
+  //           Authorization: `KakaoAK ${apikey}`,
+  //         },
+  //       },
+  //     )
+  //     .then(response => {
+  //       // console.log('탑텐');
+  //       console.log(response);
+  //       // setTopten(response.data.documents);
+  //       // setIsTopTenLoading(false);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching topTen:', error);
+  //     });
+  // }, []);
 
   useEffect(() => {
-    axios
-      .get<{ documents: IBook[] }>(
-        `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
-          '공부',
-        )}`,
-        {
-          headers: {
-            Authorization: `KakaoAK ${apikey}`,
-          },
-        },
-      )
+    // 리디드만의 알고리즘으로 뽑은 topten
+    getTopTen(accessToken)
       .then(response => {
-        setTopten(response.data.documents);
-        // setIsTopTenLoading(false);
+        if (response !== null) {
+          setTopten(response.data);
+        }
       })
       .catch(error => {
-        console.error('Error fetching topTen:', error);
+        console.error('Error fetching bestsellers:', error);
       });
-  }, []);
-
+  }, [accessToken]);
   useEffect(() => {
-    axios
-      .get<{ documents: IBook[] }>(
-        `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
-          '용의자',
-        )}`,
-        {
-          headers: {
-            Authorization: `KakaoAK ${apikey}`,
-          },
-        },
-      )
+    // 특정 기간의 베스트셀러를 가져와요
+    const term = {
+      year: 2023,
+      month: 1,
+      week: 1,
+    };
+    getBestSeller(accessToken, term)
       .then(response => {
-        setBest(response.data.documents);
+        if (response !== null) {
+          setBestSeller(response.data);
+        }
       })
       .catch(error => {
-        console.error('Error fetching topTen:', error);
+        console.error('Error fetching bestsellers:', error);
       });
-  }, []);
+  }, [accessToken]);
 
   return (
     <Container>
@@ -167,26 +174,16 @@ function Home() {
         </Typography>
         <BackgroundBoxPri />
         <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
-          {topTen.map((book: IBook) => {
-            return <BookCard itemId={book.isbn} key={book.isbn} book={book} />;
+          {topTen.map((book: IMainBook) => {
+            return (
+              <BookCard
+                itemId={book.bookId.toString()}
+                key={book.bookId}
+                book={book}
+              />
+            );
           })}
-          {/* 스켈레톤 로딩 */}
-          {/* {isTopTenLoading
-            ? Array.from({ length: 10 }).map((_, index) => (
-                <Skeleton
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                  variant="rectangular"
-                  width="7.5rem"
-                  height="14rem"
-                  sx={{ marginRight: 10, zIndex: 11 }}
-                />
-              ))
-            : topTen.map(book => (
-                <BookCard itemId={book.isbn} key={book.isbn} book={book} />
-              ))} */}
         </ScrollMenu>
-        {/* <BackgroundBox /> */}
       </HorizontalScrollSectionContainer>
 
       <Divider
@@ -219,55 +216,17 @@ function Home() {
         </Typography>
         <BackgroundBoxPri />
         <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
-          {bestSeller.map((book: IBook) => {
-            return <BookCard itemId={book.isbn} key={book.isbn} book={book} />;
+          {bestSeller.map((book: IMainBook) => {
+            return (
+              <BookCard
+                itemId={book.bookId.toString()}
+                key={book.bookId}
+                book={book}
+              />
+            );
           })}
         </ScrollMenu>
       </HorizontalScrollSectionContainer>
-      {/* <AliceCarousel
-        mouseTracking
-        items={topTen.map((item: IBook) => (
-          <div
-            role="button"
-            tabIndex={0}
-            key={item.isbn}
-            style={{ width: 100 }}
-            onClick={() => handlebookDetail(item.title)}>
-            <img src={item.thumbnail} alt={item.title} />
-            {item.title}
-          </div>
-        ))}
-        responsive={{ 0: { items: 3 }, 1024: { items: 3 } }}
-        disableDotsControls
-      />
-      <h2>베스트 셀러</h2>
-      <AliceCarousel
-        mouseTracking
-        items={bestSeller.map((item: IBook) => (
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={() => handlebookDetail(item.title)}
-            key={item.isbn}
-            style={{ width: 130 }}>
-            <img src={item.thumbnail} alt={item.title} />
-            {item.title}
-          </div>
-        ))}
-        responsive={{ 0: { items: 3 }, 1024: { items: 3 } }}
-        disableDotsControls
-      />
-      <h2>리디드 북클럽</h2>
-      <AliceCarousel
-        mouseTracking
-        items={items.map(item => (
-          <Box key={item} style={{ width: 130 }}>
-            {item}
-          </Box>
-        ))}
-        responsive={{ 0: { items: 3 }, 1024: { items: 3 } }}
-        disableDotsControls
-      /> */}
       <ReadedFooter />
     </Container>
   );

@@ -34,10 +34,6 @@ const ParagraphWrapper = styled.div`
   margin-right: calc((100% - 21rem) / 2);
 `;
 
-// interface ProfileCardProps {
-//   profileCardInfo: Partial<UserProfileInfo>;
-// }
-
 type IProfileCardInfo = Pick<
   IUserProfileInfo,
   | 'nickname'
@@ -45,7 +41,7 @@ type IProfileCardInfo = Pick<
   | 'profileImage'
   | 'readCount'
   | 'reportCount'
-  | 'bookClubCount'
+  | 'bookclubCount'
 >;
 
 function ProfileCard({
@@ -53,7 +49,7 @@ function ProfileCard({
 }: {
   profileCardInfo: IProfileCardInfo;
 }) {
-  const { profileImage, nickname, readCount, reportCount, bookClubCount, bio } =
+  const { profileImage, nickname, readCount, reportCount, bookclubCount, bio } =
     profileCardInfo;
   return (
     <ProfileCardWrapper>
@@ -63,7 +59,7 @@ function ProfileCard({
           nickname={nickname}
           readCount={readCount}
           reportCount={reportCount}
-          bookClubCount={bookClubCount}
+          bookclubCount={bookclubCount}
         />
       </ProfileCardTop>
 

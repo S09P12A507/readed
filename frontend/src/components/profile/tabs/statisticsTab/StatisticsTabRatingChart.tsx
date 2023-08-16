@@ -200,7 +200,11 @@ function StatisticsTabRatingChart({
             textAlign="center"
           />
           <ReadedSpan
-            text={(Math.round(maxIndex + 1) / 2).toString()}
+            text={
+              countRatingVal(userRateData)
+                ? (Math.round(maxIndex + 1) / 2).toString()
+                : '0'
+            }
             fontSize="1.5rem"
             fontWeight="500"
             textAlign="center"

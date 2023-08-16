@@ -1,7 +1,10 @@
-// import styled from 'styled-components';
+import styled from 'styled-components';
+// components
+import ReportTabCard from './ReportTabCard';
+// types
+import { IReport } from '../../../../interfaces/report/IReport';
+import ReadedFooter from '../../../common/Footer';
 
-// 기본적인 구조입니다.
-// const Container = styled.div``;
 /**
  * 내 서재 - 독서록 탭
  *
@@ -9,12 +12,54 @@
  * @see
  */
 
+const Container = styled.section``;
+
+const dummyReportData: IReport[] = [
+  {
+    reportId: 4,
+    reportTitle: '독후감 제목 변경',
+    reportContent: '독후감 테스트 내용',
+    isPublic: false,
+    bookId: 3,
+    bookTitle: '제목',
+    bookCover: null,
+    memberId: 3,
+    memberNickname: '닉네임22',
+  },
+  {
+    reportId: 5,
+    reportTitle: '독후감 3',
+    reportContent: '독후감 테스트 내용',
+    isPublic: true,
+    bookId: 3,
+    bookTitle: '제목',
+    bookCover: null,
+    memberId: 3,
+    memberNickname: '닉네임22',
+  },
+  {
+    reportId: 6,
+    reportTitle: '독후감 3',
+    reportContent: '독후감 테스트 내용',
+    isPublic: true,
+    bookId: 3,
+    bookTitle: '제목',
+    bookCover: null,
+    memberId: 3,
+    memberNickname: '닉네임22',
+  },
+];
+
 function ReportTab() {
+  const reportData = dummyReportData;
+
   return (
-    <>
-      <div>독서록 나오는 탭</div>
-      <div />
-    </>
+    <Container>
+      {reportData.map(report => {
+        return <ReportTabCard key={report.reportId} report={report} />;
+      })}
+      <ReadedFooter />
+    </Container>
   );
 }
 

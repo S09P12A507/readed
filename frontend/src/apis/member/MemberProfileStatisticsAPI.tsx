@@ -1,10 +1,10 @@
 // import { useSelector } from 'react-redux';
 // import { RootState } from '../../store/store';
-import { IUserProfileInfo } from '../../interfaces/user/IUserProfileInfo';
+import { IUserProfileStatistics } from '../../interfaces/user/IUserProfileStatistics';
 /** 내 프로필만 조회
  * @author 박성준
  * @param
- * @returns profileInfo
+ * @returns profileInfo statistics
  */
 
 // export interface IProifle {
@@ -15,14 +15,14 @@ import { IUserProfileInfo } from '../../interfaces/user/IUserProfileInfo';
 //   author: string;
 // }
 
-export interface IUserProfileInfoResponse {
-  data: IUserProfileInfo;
+export interface IUserProfileStatisticsResponse {
+  data: IUserProfileStatistics;
 }
 
-export async function getMemberProfile(
+export async function getMemberProfileStatistics(
   token: string | null,
-): Promise<IUserProfileInfoResponse | null> {
-  let fetchData: IUserProfileInfoResponse | null = null;
+): Promise<IUserProfileStatisticsResponse | null> {
+  let fetchData: IUserProfileStatisticsResponse | null = null;
   if (typeof token === 'string') {
     const response = await fetch(
       `https://i9a507.p.ssafy.io/api/members/profile?id=`,
@@ -38,7 +38,7 @@ export async function getMemberProfile(
       throw new Error('Network error');
     }
 
-    fetchData = (await response.json()) as IUserProfileInfoResponse;
+    fetchData = (await response.json()) as IUserProfileStatisticsResponse;
   }
   return fetchData;
 }

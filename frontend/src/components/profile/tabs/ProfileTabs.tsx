@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import { Divider, Tooltip } from '@mui/material';
+import { Divider } from '@mui/material';
+// import { Divider, Tooltip } from '@mui/material';
 import {
   MemoryRouter,
   Link,
@@ -50,12 +51,12 @@ function useRouteMatch(patterns: readonly string[]) {
 }
 
 // 로그인된 유저 정보(임시)
-const loginUserId = 1;
+const loginUserId = 'me';
 
 function ProfileTabs() {
   const routeMatch = useRouteMatch([
     `profile/${loginUserId}/book`,
-    // `profile/${loginUserId}/report`,
+    `profile/${loginUserId}/report`,
     `profile/${loginUserId}`,
   ]);
   const currentTab = routeMatch?.pattern?.path;
@@ -84,29 +85,13 @@ function ProfileTabs() {
           component={Link}
           sx={{ width: '30.5%' }}
         />
-        {/* 독서록 탭 완성하면, tooltip과 span을 지우고 Tab의 disabled를 지운다. */}
-        <Tooltip title="곧 출시 예정이에요." arrow placement="top">
-          <span
-            style={{
-              width: '30.5%',
-              textAlign: 'center',
-              fontSize: '0.875rem',
-              color: 'var(--text-disabled)',
-              marginTop: 'auto',
-              marginBottom: 'auto',
-              cursor: 'default',
-            }}>
-            {/* <Tab
-              label="독서록"
-              value="profile/:userId/report"
-              to="report"
-              component={Link}
-              sx={{ width: '30.5%' }}
-              disabled
-            /> */}
-            독서록
-          </span>
-        </Tooltip>
+        <Tab
+          label="독서록"
+          value={`profile/${loginUserId}/report`}
+          to="report"
+          component={Link}
+          sx={{ width: '30.5%' }}
+        />
       </Tabs>
       <Outlet />
     </>

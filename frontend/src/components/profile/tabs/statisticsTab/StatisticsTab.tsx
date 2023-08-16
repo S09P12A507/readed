@@ -1,8 +1,19 @@
+import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+// components
 import { Container, Divider } from '@mui/material';
 import StatisticsTabReadAmount from './StatisticsTabReadAmount';
 import StatisticsTabRatingChart from './StatisticsTabRatingChart';
-import { IUserProfileStatistics } from '../../../../interfaces/user/IUserProfileStatistics';
+import StatisticsTabGenreWordCloud from './StatisticsTabGenreWordCloud';
 import ReadedFooter from '../../../common/Footer';
+// hooks
+import { useAccessToken } from '../../../../hooks/useAccessToken';
+// types, apis
+import { IUserProfileStatistics } from '../../../../interfaces/user/IUserProfileStatistics';
+import {
+  getMemberProfileStatistics,
+  IUserProfileStatisticsResponse,
+} from '../../../../apis/member/MemberProfileStatisticsAPI';
 
 /**
  * 내 서재 - 통계 탭
@@ -13,58 +24,99 @@ import ReadedFooter from '../../../common/Footer';
  * @todo 선호 장르 워드클라우드는?
  */
 
-const dummyStatisticsData: IUserProfileStatistics = {
-  id: 0,
-  readCount: 154,
-  pageCount: 67483,
-  star0count: 3,
-  star0p5count: 2,
-  star1count: 4,
-  star1p5count: 5,
-  star2count: 6,
-  star2p5count: 3,
-  star3count: 4,
-  star3p5count: 7,
-  star4count: 9,
-  star4p5count: 8,
-  star5count: 5,
-};
+// const dummyStatisticsData: IUserProfileStatistics = {
+//   id: 0,
+//   readCount: 154,
+//   pageCount: 67483,
+//   star0count: 3,
+//   star0p5count: 2,
+//   star1count: 4,
+//   star1p5count: 5,
+//   star2count: 6,
+//   star2p5count: 3,
+//   star3count: 4,
+//   star3p5count: 7,
+//   star4count: 9,
+//   star4p5count: 8,
+//   star5count: 5,
+// };
 
 function StatisticsTab() {
-  const {
-    readCount,
-    pageCount,
-    star0count,
-    star0p5count,
-    star1count,
-    star1p5count,
-    star2count,
-    star2p5count,
-    star3count,
-    star3p5count,
-    star4count,
-    star4p5count,
-    star5count,
-  } = dummyStatisticsData;
-  const readAmount = { readCount, pageCount };
-  const chartData = {
-    star0count,
-    star0p5count,
-    star1count,
-    star1p5count,
-    star2count,
-    star2p5count,
-    star3count,
-    star3p5count,
-    star4count,
-    star4p5count,
-    star5count,
+  const [userProfile, setUserProfile] = useState<IUserProfileStatistics>();
+
+  const accessToken = useAccessToken();
+  // const { data, isLoading, isError } = useQuery<IUserProfileInfo>(
+  const { data } = useQuery<IUserProfileStatisticsResponse | null>(
+    ['profileCardInfo'],
+    () => getMemberProfileStatistics(accessToken),
+  );
+  useEffect(() => {
+    if (data !== null && data !== undefined) {
+      const profileInfo = data.data;
+      console.log(profileInfo);
+      setUserProfile(profileInfo);
+    }
+  }, [data]);
+  const readCount = userProfile?.readCount;
+  const pageCount = userProfile?.pageCount;
+  const star0count = userProfile?.star_0_count;
+  const star0p5count = userProfile?.star_0p5_count;
+  const star1count = userProfile?.star_1_count;
+  const star1p5count = userProfile?.star_1p5_count;
+  const star2count = userProfile?.star_2_count;
+  const star2p5count = userProfile?.star_2p5_count;
+  const star3count = userProfile?.star_3_count;
+  const star3p5count = userProfile?.star_3p5_count;
+  const star4count = userProfile?.star_4_count;
+  const star4p5count = userProfile?.star_4p5_count;
+  const star5count = userProfile?.star_5_count;
+
+  //   const {
+  //     readCount,
+  //     pageCount,
+  //   star_0_count,
+  //   star_0p5_count,
+  //   star_1_count,
+  //   star_1p5_count,
+  //   star_2_count,
+  //   star_2p5_count,
+  //   star_3_count,
+  //   star_3p5_count,
+  //   star_4_count,
+  //   star_4p5_count,
+  //   star_5_count;
+  // } = userProfile;
+
+  // const readAmount = { readCount, pageCount };
+  const chartData: Omit<
+    IUserProfileStatistics,
+    'id' | 'readCount' | 'pageCount'
+  > = {
+    star_0_count: star0count || 0,
+    star_0p5_count: star0p5count || 0,
+    star_1_count: star1count || 0,
+    star_1p5_count: star1p5count || 0,
+    star_2_count: star2count || 0,
+    star_2p5_count: star2p5count || 0,
+    star_3_count: star3count || 0,
+    star_3p5_count: star3p5count || 0,
+    star_4_count: star4count || 0,
+    star_4p5_count: star4p5count || 0,
+    star_5_count: star5count || 0,
   };
   return (
     <Container sx={{ paddingTop: '0.25rem' }}>
-      <StatisticsTabReadAmount readAmount={readAmount} />
+      {/* <StatisticsTabReadAmount readAmount={readAmount} /> */}
+      {readCount !== undefined && pageCount !== undefined ? (
+        <>
+          <StatisticsTabReadAmount readAmount={{ readCount, pageCount }} />
+          <Divider sx={{ marginTop: '3rem', marginBottom: '3rem' }} />
+        </>
+      ) : null}
       <Divider sx={{ marginTop: '3rem', marginBottom: '3rem' }} />
       <StatisticsTabRatingChart chartData={chartData} />
+      <Divider sx={{ marginTop: '3rem', marginBottom: '3rem' }} />
+      <StatisticsTabGenreWordCloud />
       <ReadedFooter />
     </Container>
   );

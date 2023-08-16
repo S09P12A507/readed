@@ -22,6 +22,9 @@ const SliderItemContainer = styled.div`
   text-align: center;
   align-items: center;
   /* background-color: var(--divider); */
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 function MainSlider() {

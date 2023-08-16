@@ -35,8 +35,7 @@ const ReadedBottomNavigationAction = styled(BottomNavigationAction)`
   padding-bottom: 1rem;
 `;
 
-// 로그인된 유저 정보(임시)
-const loginUserId = 1;
+const loginUserId = 'me';
 
 function BottomNav() {
   const [bnValue, setBNValue] = useState<number>(0);
