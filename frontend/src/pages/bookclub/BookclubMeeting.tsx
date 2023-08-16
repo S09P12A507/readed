@@ -45,7 +45,7 @@ function BookclubMeeting() {
   const [isSoundOn, setIsSoundOn] = useState<boolean>(true);
   const [isVideoOn, setIsVideoOn] = useState<boolean>(true);
 
-  const OPENVIDU_SERVER_URL = `https://${window.location.hostname}:5443`;
+  const OPENVIDU_SERVER_URL = `https://${window.location.hostname}:8443`;
   const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
 
   const leaveSession = useCallback(() => {
@@ -94,10 +94,10 @@ function BookclubMeeting() {
     }
   };
 
-  useEffect(() => {
-    setSessionId('aaaaaaaa');
-    joinSession();
-  }, []);
+  // useEffect(() => {
+  //   setSessionId('aaaaaaaa');
+  //   joinSession();
+  // }, []);
 
   useEffect(() => {
     window.addEventListener('beforeunload', leaveSession);
