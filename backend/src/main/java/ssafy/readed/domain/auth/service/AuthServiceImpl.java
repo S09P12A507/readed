@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
     public TokenDto defaultSignIn(SignInRequestDto requestDto) {
 
         Member member = memberRepository.findByEmailAndProvider(requestDto.getEmail(),
-                Provider.DEFAULT);
+                Provider.DEFAULT.toString());
 
         if (member == null) {
             throw new GlobalRuntimeException("가입되지 않은 Email 입니다.", HttpStatus.NOT_FOUND);
