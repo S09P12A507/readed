@@ -54,6 +54,8 @@ public class Bookclub extends BaseEntity {
 
     private Boolean isFinished;
 
+    private Long roomId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
@@ -68,8 +70,9 @@ public class Bookclub extends BaseEntity {
     @Builder
     public Bookclub(String bookclubTitle, String bookclubContent, LocalDateTime startTime, LocalDateTime endTime,
             Integer participantCount, Boolean isPublic, String bookclubPassword,
-            Boolean isFinished, Book book, Member host, Integer duration, String password) {
+            Boolean isFinished, Book book, Member host, Integer duration, String password, Long roomId) {
         this.bookclubTitle = bookclubTitle;
+        this.roomId = roomId;
         this.bookclubContent = bookclubContent;
         this.startTime = startTime;
         this.endTime = endTime;

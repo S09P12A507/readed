@@ -11,15 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
-import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.book.repository.BookRepository;
@@ -30,7 +25,6 @@ import ssafy.readed.domain.bookclub.repository.BookclubRepository;
 import ssafy.readed.domain.bookclub.repository.ParticipantRepository;
 import ssafy.readed.domain.bookclub.service.dto.BookclubResponseDto;
 import ssafy.readed.domain.bookclub.service.dto.MemberDto;
-import ssafy.readed.domain.bookclub.service.dto.OpenBookclubResponseDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
@@ -61,7 +55,7 @@ public class BookclubServiceImpl implements BookclubService {
     private String secret;
     private OpenVidu openVidu;
 
-    private Long bookclubId;
+    private Long roomId;
 
     public BookclubServiceImpl(BookclubRepository bookclubRepository, BookRepository bookRepository,
             MemberRepository memberRepository, ParticipantRepository participantRepository, S3FileService s3FileService,
@@ -78,7 +72,7 @@ public class BookclubServiceImpl implements BookclubService {
         this.sessionMap = new ConcurrentHashMap<>();
         this.tokenMap = new ConcurrentHashMap<>();
         this.bookclubMap = new ConcurrentHashMap<>();
-        this.bookclubId = 1L;
+        this.roomId = 1L;
     }
 
     @Override
@@ -106,18 +100,19 @@ public class BookclubServiceImpl implements BookclubService {
             Member findMember = memberRepository.findById(member.getId()).orElseThrow(
                     () -> new GlobalRuntimeException("없는 멤버입니다.", HttpStatus.NOT_FOUND));
 
-            Bookclub bookclub = requestDto.toEntity(findMember,findBook);
+            Bookclub bookclub = requestDto.toEntity(findMember,findBook, roomId);
 
-            bookclubMap.put(bookclubId, bookclub);
+//            bookclubMap.put(bookclubId, bookclub);
 //            participantRepository.save(
 //                    Participant.builder().member(findMember).bookclub(bookclub).build());
 //            findMember.getBookclubList().add(bookclub);
 
-            sessionMap.put(bookclubId, session);
+            bookclubMap.put(roomId, bookclub);
+            sessionMap.put(roomId, session);
             tokenMap.put(member.getId(), session.getSessionId());
-            memberList.put(bookclubId, new ArrayList<>());
-            memberList.get(bookclubId).add(findMember);
-            bookclubId++;
+            memberList.put(roomId, new ArrayList<>());
+            memberList.get(roomId).add(findMember);
+            roomId++;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,9 +157,6 @@ public class BookclubServiceImpl implements BookclubService {
 
     @Override
     public List<BookclubResponseDto> getBookclubList() {
-        for (Bookclub value : bookclubMap.values()) {
-            log.info("bookclub ID : "+value.getId().toString());
-        }
         List<BookclubResponseDto> list = new ArrayList<>();
         for (Bookclub bookclub : bookclubMap.values()) {
             String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
@@ -251,15 +243,15 @@ public class BookclubServiceImpl implements BookclubService {
 
     @Override
     public void leaveBookclub(Long bookclubId, Member member) {
-        Bookclub findBookclub = getBookclub(bookclubId);
+        //Bookclub findBookclub = getBookclub(bookclubId);
         Member findMember = memberRepository.findById(member.getId()).orElseThrow(
                 () -> new GlobalRuntimeException("해당하는 id의 멤버가 없습니다", HttpStatus.NOT_FOUND));
 
         List<Member> curMemberList = memberList.get(bookclubId);
 
         curMemberList.remove(findMember);
-//        findBookclub.get
-        //TODO: 북클럽 떠나는거 구현
+
+        tokenMap.remove(findMember.getId());
 
     }
 

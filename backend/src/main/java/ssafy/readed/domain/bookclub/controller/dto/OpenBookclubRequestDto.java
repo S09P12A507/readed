@@ -25,7 +25,7 @@ public class OpenBookclubRequestDto {
 
     @Builder
     public OpenBookclubRequestDto(Long bookId, String title, String description,
-            LocalDateTime startTime, Integer duration, LocalDateTime endTime, Integer maxMember,
+            LocalDateTime startTime, Integer duration, Integer maxMember,
             boolean isPublic,
             String password) {
         this.bookId = bookId;
@@ -38,7 +38,7 @@ public class OpenBookclubRequestDto {
         this.duration = duration;
     }
 
-    public Bookclub toEntity(Member member, Book book) {
+    public Bookclub toEntity(Member member, Book book, Long roomId) {
         return Bookclub.builder()
                 .bookclubTitle(this.title)
                 .bookclubContent(this.description)
@@ -49,6 +49,7 @@ public class OpenBookclubRequestDto {
                 .isPublic(this.isPublic)
                 .bookclubPassword(this.password)
                 .isFinished(false)
+                .roomId(roomId)
                 .host(member)
                 .book(book)
                 .build();

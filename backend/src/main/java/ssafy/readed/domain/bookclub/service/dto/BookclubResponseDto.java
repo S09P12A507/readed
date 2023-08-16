@@ -17,6 +17,7 @@ import ssafy.readed.domain.bookclub.entity.Bookclub;
 public class BookclubResponseDto {
 
     private Long id;
+    private Long roomId;
     private String title;
     private String bookTitle;
     private String bookCoverImageUrl;
@@ -32,6 +33,7 @@ public class BookclubResponseDto {
     public static BookclubResponseDto from(Bookclub bookclub, String bookCoverImageUrl, List<MemberDto> memberList) {
         return BookclubResponseDto.builder()
                 .id(bookclub.getId())
+                .roomId(bookclub.getRoomId())
                 .title(bookclub.getBookclubTitle())
                 .context(bookclub.getBookclubContent())
                 .time(bookclub.getStartTime())
