@@ -178,13 +178,14 @@ function BookclubCreate() {
 
     if (selectedBook) {
       const formData = {
-        bookclub_name: meetingTitle,
-        bookclub_content: bookclubIntro,
-        book_id: selectedBook.bookTitle,
-        bookclub_time: selectedDate.toDate(),
-        participant_count: selectedpeople,
-        is_public: isPublic,
-        meetingpw,
+        bookId: selectedBook.bookId,
+        title: meetingTitle,
+        description: bookclubIntro,
+        startTime: selectedDate.toDate(),
+        duration: selectedInterval,
+        maxMember: selectedpeople,
+        isPublic,
+        password: meetingpw,
       };
       if (token) {
         axios
@@ -216,8 +217,10 @@ function BookclubCreate() {
   useEffect(() => {
     if (query) {
       axios
-        .get<{ documents: Book[] }>(
-          `https://i9a507.p.ssafy.io/search?kw=${encodeURIComponent(query)}`,
+        .get<{ data: Book[] }>(
+          `https://i9a507.p.ssafy.io/api/search?kw=${encodeURIComponent(
+            query,
+          )}`,
           {
             headers: {
               'X-READED-ACCESSTOKEN': token,
@@ -225,7 +228,7 @@ function BookclubCreate() {
           },
         )
         .then(response => {
-          setData(response.data.documents);
+          setData(response.data.data);
         })
         .catch(() => {});
     }
@@ -240,6 +243,7 @@ function BookclubCreate() {
       <CoverContainer>
         {selectedBook ? (
           <img
+            style={{ height: '250px', width: '40%' }}
             src={selectedBook.coverImage}
             alt={selectedBook.bookTitle}
             onClick={handleFindBook}
@@ -406,7 +410,7 @@ function BookclubCreate() {
                 xs={3.8}
                 key={item.bookId}
                 onClick={() => handleSelectdBook(item)}>
-                <img src={item.coverImage} alt={item.bookTitle} />
+                <img width={150} src={item.coverImage} alt={item.bookTitle} />
                 <p>{item.bookTitle}</p>
               </Grid>
             ))}

@@ -11,6 +11,8 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import PeopleIcon from '@mui/icons-material/People';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -76,9 +78,14 @@ interface BookClub {
   participant_count: number;
   participants: [];
   is_public: boolean;
+  meetingpw: string;
 }
 
 function Bookclub() {
+  const token: string | null = useSelector(
+    (state: RootState) => state.auth.accessToken,
+  );
+
   const [data, setData] = useState<BookClub[]>([]);
 
   const navigate = useNavigate();
@@ -89,7 +96,11 @@ function Bookclub() {
 
   useEffect(() => {
     axios
-      .get<{ data: BookClub[] }>(`https://i9a507.p.ssafy.io/api/bookclubs`)
+      .get<{ data: BookClub[] }>(`https://i9a507.p.ssafy.io/api/bookclubs`, {
+        headers: {
+          'X-READED-ACCESSTOKEN': token,
+        },
+      })
       .then(response => {
         setData(response.data.data);
       })
@@ -112,6 +123,7 @@ function Bookclub() {
         </SearchIconWrapper>
         <StyledInputBase placeholder="관심있는 북클럽을 검색해보세요" />
       </Search>
+
       <BookClubList>
         {data.map((bookclub: BookClub) => (
           <Card
@@ -133,28 +145,24 @@ function Bookclub() {
                   <CalendarTodayIcon />
                   <p> {new Date(bookclub.time).toLocaleDateString('ko-KR')} </p>
                 </Infodetail>
-                <Infodetail>
-                  <ScheduleIcon />
-                  <p>
-                    {' '}
-                    {new Date(bookclub.time).toLocaleTimeString('en-US', {
-                      hour12: false,
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                    ~
-                    {new Date(
-                      bookclub.time.getTime() + bookclub.duration,
-                    ).toLocaleTimeString('en-US', {
-                      hour12: false,
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </p>
-                </Infodetail>
+                {bookclub.time && (
+                  <Infodetail>
+                    <ScheduleIcon />
+                    <p>
+                      {/* {new Date(
+                        bookclub.time.getTime() + bookclub.duration,
+                      ).toLocaleTimeString('en-US', {
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })} */}
+                    </p>
+                  </Infodetail>
+                )}
+
                 <Infodetail>
                   <PeopleIcon />
-                  {bookclub.participants.length}명 /{' '}
+                  {bookclub.participants && bookclub.participants.length}명 /{' '}
                   {bookclub.participant_count}명
                 </Infodetail>
               </Info>

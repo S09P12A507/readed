@@ -33,8 +33,8 @@ const AuthButton = styled(Button)`
 `;
 
 interface UserInfo {
-  name: string;
-  email: string;
+  // name: string;
+  // email: string;
   nickname: string;
   profile_image: string;
   profile_bio: string;
@@ -130,15 +130,16 @@ function InfoChange() {
     if (token) {
       axios
         .get<{ data: UserInfo }>(
-          `https://i9a507.p.ssafy.io/api/members/profile/`,
+          `https://i9a507.p.ssafy.io/api/members/profile?id=3`,
           {
             headers: {
-              'X-READED-ACCESSTOKEN': `${token}`,
+              'X-READED-ACCESSTOKEN': token,
             },
           },
         )
         .then(response => {
           setUserInfo(response.data.data);
+          console.log(response);
         })
         .catch(error => {
           console.log(error);
@@ -173,8 +174,8 @@ function InfoChange() {
               style={{ display: 'none' }}
             />
           </ImageContainer>
-          <h3>이메일</h3>
-          <p>{userInfo.email}</p>
+          {/* <h3>이메일</h3>
+          <p>{userInfo.email}</p> */}
 
           <Grid container alignItems="center">
             <Grid item xs={10.2}>

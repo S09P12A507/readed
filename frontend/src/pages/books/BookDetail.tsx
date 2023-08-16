@@ -70,7 +70,7 @@ const StyledTable = styled(Table)`
 
 interface Book {
   author: string[];
-  publisher: string;
+  publisher: string[];
   contents: string;
   coverImage: string;
   bookTitle: string;
@@ -125,7 +125,7 @@ function BookDetail() {
   const handleToggleFavorite = () => {
     if (isBookmarked) {
       axios
-        .delete('https://i9a507.p.ssafy.io/api/bookmarks/1', {
+        .delete(`https://i9a507.p.ssafy.io/api/bookmarks/${bookId as string}`, {
           headers: {
             'X-READED-ACCESSTOKEN': token,
           },
@@ -136,7 +136,7 @@ function BookDetail() {
         .catch(() => {});
     } else {
       axios
-        .post('https://i9a507.p.ssafy.io/api/bookmarks/1', {
+        .post(`https://i9a507.p.ssafy.io/api/bookmarks/${bookId as string}`, {
           headers: {
             'X-READED-ACCESSTOKEN': token,
           },
@@ -156,11 +156,15 @@ function BookDetail() {
 
     if (token) {
       axios
-        .patch('https://i9a507.p.ssafy.io/api/comment/1', formData, {
-          headers: {
-            'X-READED-ACCESSTOKEN': token,
+        .patch(
+          `https://i9a507.p.ssafy.io/api/comments/${bookId as string}`,
+          formData,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
           },
-        })
+        )
         .then(() => {
           setMessage('코멘트가 등록됐습니다.');
           setShowAlert(true);
@@ -183,7 +187,15 @@ function BookDetail() {
       if (ratingValue === 0) {
         setRatingValue(newValue);
         axios
-          .post('https://i9a507.p.ssafy.io/api/rating', formData)
+          .post(
+            `https://i9a507.p.ssafy.io/api/comments/${bookId as string}`,
+            formData,
+            {
+              headers: {
+                'X-READED-ACCESSTOKEN': token,
+              },
+            },
+          )
           .then(() => {
             setRatingsValue(newValue);
           })
@@ -191,7 +203,15 @@ function BookDetail() {
       } else {
         setRatingValue(newValue);
         axios
-          .patch('https://i9a507.p.ssafy.io/api/rating', formData)
+          .patch(
+            `https://i9a507.p.ssafy.io/api/comments/${bookId as string}`,
+            formData,
+            {
+              headers: {
+                'X-READED-ACCESSTOKEN': token,
+              },
+            },
+          )
           .then(() => {
             setRatingsValue(newValue);
           })
@@ -211,8 +231,9 @@ function BookDetail() {
 
   useEffect(() => {
     if (token) {
+      console.log(token);
       axios
-        .get('https://i9a507.p.ssafy.io/api/bookmarks/1', {
+        .get(`https://i9a507.p.ssafy.io/api/bookmarks/${bookId as string}`, {
           headers: {
             'X-READED-ACCESSTOKEN': token,
           },
@@ -221,21 +242,25 @@ function BookDetail() {
           setIsBookmarked(response.data as boolean);
         })
         .catch(() => {});
-    }
-  }, [token]);
 
-  useEffect(() => {
-    axios
-      .get<{ documents: Book[] }>(
-        `https://i9a507.p.ssafy.io/api/books/${bookId as string}`,
-      )
-      .then(response => {
-        if (response.data.documents.length > 0) {
-          setData(response.data.documents[0]);
-        }
-      })
-      .catch(() => {});
-  }, [bookId]);
+      axios
+        .get<{ data: Book }>(
+          `https://i9a507.p.ssafy.io/api/books/${bookId as string}`,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          },
+        )
+        .then(response => {
+          console.log(response.data.data);
+          setData(response.data.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }, [token, bookId]);
 
   useEffect(() => {
     setTextLength(inputText.length);
@@ -251,8 +276,8 @@ function BookDetail() {
       <Container>
         <BookImage src={data.coverImage} alt={data.bookTitle} />
         <h2>{data.bookTitle}</h2>
-        <h5>{data.author} 지음 | ??? 옮김</h5>
-        <h5> {data.publisher}</h5>
+        <h5>??? 지음 | ??? 옮김</h5>
+        {/* <h5> {data.publisher}</h5> */}
         <br />
         <h6>읽은 책을 평가해주세요</h6>
         <Star>

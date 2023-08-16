@@ -73,7 +73,7 @@ function Search() {
     setData([]);
     if (suggestquery) {
       axios
-        .get<{ documents: Book[] }>(
+        .get<{ data: Book[] }>(
           `https://i9a507.p.ssafy.io/api/search?kw=${encodeURIComponent(
             suggestquery,
           )}`,
@@ -84,7 +84,7 @@ function Search() {
           },
         )
         .then(response => {
-          setSuggestions(response.data.documents);
+          setSuggestions(response.data.data);
         })
         .catch(() => {});
     } else {
@@ -95,16 +95,23 @@ function Search() {
   useEffect(() => {
     if (query) {
       axios
-        .get<{ documents: Book[] }>(
-          `https://i9a507.p.ssafy.io/search?kw=${encodeURIComponent(query)}`,
+        .get<{ data: Book[] }>(
+          `https://i9a507.p.ssafy.io/api/search?kw=${encodeURIComponent(
+            query,
+          )}`,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          },
         )
         .then(response => {
           setSuggestions([]);
-          setData(response.data.documents);
+          setData(response.data.data);
         })
         .catch(() => {});
     }
-  }, [query]);
+  }, [query, token]);
 
   const navigate = useNavigate();
 
@@ -137,7 +144,7 @@ function Search() {
             }}
           />
         </Searched>
-        {suggestions.length > 0 && (
+        {suggestions && (
           <div
             style={{
               maxHeight: '200px',
@@ -146,7 +153,7 @@ function Search() {
             }}>
             {suggestions.map(suggestion => (
               <div
-                key={suggestion.bookTitle}
+                key={suggestion.bookId}
                 onClick={() => {
                   handlebookDetail(suggestion.bookId);
                 }}
@@ -168,7 +175,7 @@ function Search() {
               xs={4}
               key={item.bookId}
               onClick={() => handlebookDetail(item.bookId)}>
-              <img src={item.coverImage} alt={item.bookTitle} />
+              <img width={150} src={item.coverImage} alt={item.bookTitle} />
               <p>
                 {item.bookTitle.length > 14
                   ? `${item.bookTitle.slice(0, 14)}...`
