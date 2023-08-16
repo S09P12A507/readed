@@ -171,13 +171,13 @@ public class MemberServiceImpl implements MemberService {
         String email = requestDto.getEmail();
         String password1 = requestDto.getPassword();
         String password2 = requestDto.getPassword2();
-        String name = requestDto.getName();
+        //String name = requestDto.getName();
         String nickname = requestDto.getNickname();
 
         checkEmailRegexp(email);
         checkPasswordMatch(password1, password2);
         checkPasswordRegexp(password1);
-        checkNameRegexp(name);
+        //checkNameRegexp(name);
         checkNicknameRegexp(nickname);
         emailDuplicationCheck(email);
     }
