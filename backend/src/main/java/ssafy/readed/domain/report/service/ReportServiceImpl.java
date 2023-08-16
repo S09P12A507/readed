@@ -28,7 +28,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional
     public List<ReportResponseDto> getReportList(Long memberId, Member member) {
-        if (!memberId.equals(member.getId())) {
+        if (memberId != null && !memberId.equals(member.getId())) {
             return ReportToReportResponseDto(reportRepository.findPublicReportByMemberId(memberId));
         }
         return ReportToReportResponseDto(reportRepository.findAllByMemberId(memberId));
