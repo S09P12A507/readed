@@ -15,15 +15,13 @@ public interface BookclubService {
 
     List<BookclubResponseDto> getMyBookclubList(Member member);
 
-    OpenBookclubResponseDto openBookclubSession(Member member, OpenBookclubRequestDto requestDto);
+    void openBookclubSession(Member member, OpenBookclubRequestDto requestDto);
 
-    String getBookclubToken(Long bookclubId, Member member);
-
-    boolean isFull(Long bookclubId);
-
-    boolean isExist(Long bookclubId);
+    void joinBookclubSession(Long bookclubId, Member member);
 
     void deleteBookclub(Long bookclubId, Member member);
 
     void leaveBookclub(Long bookclubId, Member member);
+
+    String startBookclubSession(Member member);
 }

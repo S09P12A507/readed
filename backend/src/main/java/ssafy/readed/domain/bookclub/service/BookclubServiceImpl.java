@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.book.repository.BookRepository;
@@ -46,6 +47,8 @@ public class BookclubServiceImpl implements BookclubService {
 
     private Map<Long, Session> sessionMap; // roomId -> Session
 
+    private Map<Long, String> tokenMap;
+
     private String url;
     private String secret;
     private OpenVidu openVidu;
@@ -62,11 +65,12 @@ public class BookclubServiceImpl implements BookclubService {
         this.openVidu = new OpenVidu(this.url, this.secret);
         this.memberList = new ConcurrentHashMap<>();
         this.sessionMap = new ConcurrentHashMap<>();
+        this.tokenMap = new ConcurrentHashMap<>();
     }
 
     @Override
     @Transactional
-    public OpenBookclubResponseDto openBookclubSession(Member member,
+    public void openBookclubSession(Member member,
             OpenBookclubRequestDto requestDto) {
 
         try {
@@ -75,6 +79,10 @@ public class BookclubServiceImpl implements BookclubService {
             ConnectionProperties connectionProperties = new Builder().type(ConnectionType.WEBRTC)
                     .build();
             String token = session.createConnection(connectionProperties).getToken();
+
+            if(isEnrolled(member.getId())){
+                throw new GlobalRuntimeException("이미 다른 방에 들어가 있습니다.",HttpStatus.CONFLICT);
+            }
 
             //Find Book
             Book findBook = bookRepository.findById(requestDto.getBookId()).orElseThrow(
@@ -86,16 +94,15 @@ public class BookclubServiceImpl implements BookclubService {
 
             Bookclub bookclub = requestDto.toEntity(findMember,findBook);
 
-            bookclubRepository.save(bookclub);
-            participantRepository.save(
-                    Participant.builder().member(findMember).bookclub(bookclub).build());
-            findMember.getBookclubList().add(bookclub);
+//            bookclubRepository.save(bookclub);
+//            participantRepository.save(
+//                    Participant.builder().member(findMember).bookclub(bookclub).build());
+//            findMember.getBookclubList().add(bookclub);
 
             sessionMap.put(bookclub.getId(), session);
+            tokenMap.put(member.getId(), token);
             memberList.put(bookclub.getId(), new ArrayList<>());
             memberList.get(bookclub.getId()).add(findMember);
-
-            return OpenBookclubResponseDto.builder().token(token).build();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,7 +111,7 @@ public class BookclubServiceImpl implements BookclubService {
     }
 
     @Override
-    public String getBookclubToken(Long bookclubId, Member member) {
+    public void joinBookclubSession(Long bookclubId, Member member) {
         try {
             ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(
                     ConnectionType.WEBRTC).build();
@@ -112,7 +119,11 @@ public class BookclubServiceImpl implements BookclubService {
             String token = this.sessionMap.get(bookclubId).createConnection(connectionProperties)
                     .getToken();
 
-            memberList.get(bookclubId).add(member);
+
+
+            if(isEnrolled(member.getId())){
+                throw new GlobalRuntimeException("이미 다른 방에 들어가 있습니다.",HttpStatus.CONFLICT);
+            }
 
             if (isFull(bookclubId)) {
                 throw new GlobalRuntimeException("방이 꽉 찼습니다.", HttpStatus.PRECONDITION_FAILED);
@@ -122,12 +133,17 @@ public class BookclubServiceImpl implements BookclubService {
                 throw new GlobalRuntimeException("방이 없습니다.", HttpStatus.NOT_FOUND);
             }
 
-            return token;
+            memberList.get(bookclubId).add(member);
+
+            tokenMap.put(member.getId(), token);
+
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             e.printStackTrace();
             throw new GlobalRuntimeException("북클럽 참가 에러", HttpStatus.CONFLICT);
         }
     }
+
+
 
     @Override
     public List<BookclubResponseDto> getBookclubList() {
@@ -159,16 +175,21 @@ public class BookclubServiceImpl implements BookclubService {
     }
 
 
-    @Override
-    public boolean isFull(Long bookclubId) {
+
+    private boolean isFull(Long bookclubId) {
         Integer maxMember = getBookclub(bookclubId).getParticipantCount();
         return maxMember <= memberList.get(bookclubId).size();
     }
 
-    @Override
-    public boolean isExist(Long bookclubId) {
+
+    private boolean isExist(Long bookclubId) {
         return sessionMap.get(bookclubId) != null;
     }
+
+    private boolean isEnrolled(Long memberId) {
+        return tokenMap.get(memberId) != null;
+    }
+
 
     @Override
     public void deleteBookclub(Long bookclubId, Member member) {
@@ -190,6 +211,17 @@ public class BookclubServiceImpl implements BookclubService {
 //        findBookclub.get
         //TODO: 북클럽 떠나는거 구현
 
+    }
+
+    @Override
+    public String startBookclubSession(Member member) {
+        String token = tokenMap.get(member.getId());
+
+        if(token == null){
+            throw new GlobalRuntimeException("해당 북클럽에 참가한 유저가 아닙니다.",HttpStatus.CONFLICT);
+        }
+
+        return token;
     }
 
 

@@ -33,14 +33,15 @@ public class BookclubController {
     @PostMapping
     public ResponseEntity<?> openBookclub(@AuthenticationPrincipal Member member, @RequestBody
     OpenBookclubRequestDto requestDto) {
-        OpenBookclubResponseDto responseDto = bookclubService.openBookclubSession(member,
+        bookclubService.openBookclubSession(member,
                 requestDto);
-        return JsonResponse.ok("북클럽 토큰 발급 완료", responseDto);
+        return JsonResponse.ok("북클럽 생성 신청 완료");
     }
 
-    @GetMapping("/token/{bookclub-id}")
+    @GetMapping("/join/{bookclub-id}")
     public ResponseEntity<?> getBookclubToken(@PathVariable("bookclub-id") Long bookclubId, @AuthenticationPrincipal Member member) {
-        return JsonResponse.ok("북클럽 토큰 반환",bookclubService.getBookclubToken(bookclubId,member));
+        bookclubService.joinBookclubSession(bookclubId,member);
+        return JsonResponse.ok("북클럽 참가 신청 완료");
     }
 
     @DeleteMapping("/{bookclub-id}")
@@ -73,6 +74,13 @@ public class BookclubController {
         List<BookclubResponseDto> myBookclubList =
                 bookclubService.getMyBookclubList(member);
         return JsonResponse.ok("내가 참여한 북클럽 리스트를 불러왔습니다.", myBookclubList);
+    }
+
+    @PostMapping("/start")
+    public ResponseEntity<?> startBookclubSession(@AuthenticationPrincipal Member member) {
+        String token = bookclubService.startBookclubSession(member);
+
+        return JsonResponse.ok("북클럽 세션 토큰 반환 완료",token);
     }
 
 }
