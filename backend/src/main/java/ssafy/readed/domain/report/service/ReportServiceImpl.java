@@ -28,7 +28,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional
     public List<ReportResponseDto> getReportList(Long memberId, Member member) {
-        if (memberId != null && !memberId.equals(member.getId())) {
+        if (!memberId.equals(member.getId())) {
             return ReportToReportResponseDto(reportRepository.findPublicReportByMemberId(memberId));
         }
         return ReportToReportResponseDto(reportRepository.findAllByMemberId(memberId));
@@ -49,17 +49,18 @@ public class ReportServiceImpl implements ReportService {
     public void saveReport(Long bookId, Member member, ReportRequestDto reportRequestDto) {
 
         Book book = getBook(bookId);
+        Member findMember = memberService.getMember(member.getId());
 
         //Member member1= new Member(2, )
         Report report = Report.builder()
                 .reportTitle(reportRequestDto.getTitle())
                 .reportContent(reportRequestDto.getContent())
                 .book(book)
-                .member(member)
+                .member(findMember)
                 .isPublic(reportRequestDto.getIsPublic())
                 .build();
 
-        member.addReport(report);
+        findMember.addReport(report);
         reportRepository.save(report);
     }
 

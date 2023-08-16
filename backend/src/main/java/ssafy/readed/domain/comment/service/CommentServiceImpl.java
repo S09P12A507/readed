@@ -35,7 +35,6 @@ public class CommentServiceImpl implements CommentService {
         Book book = getBook(bookId);
         Comment comment = createComment(member, book, commentRequestDto);
         memberRepository.save(member);
-        
         commentRepository.save(comment);
     }
 

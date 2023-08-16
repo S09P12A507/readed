@@ -1,7 +1,5 @@
 package ssafy.readed.domain.bookclub.controller;
 
-import io.openvidu.java.client.ConnectionProperties;
-import io.openvidu.java.client.ConnectionType;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.spring.web.json.Json;
 import ssafy.readed.domain.bookclub.controller.dto.OpenBookclubRequestDto;
 import ssafy.readed.domain.bookclub.service.BookclubService;
 import ssafy.readed.domain.bookclub.service.dto.BookclubResponseDto;
-import ssafy.readed.domain.bookclub.service.dto.OpenBookclubResponseDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.global.response.JsonResponse;
 
@@ -39,19 +35,23 @@ public class BookclubController {
     }
 
     @GetMapping("/join/{bookclub-id}")
-    public ResponseEntity<?> getBookclubToken(@PathVariable("bookclub-id") Long bookclubId, @AuthenticationPrincipal Member member) {
-        bookclubService.joinBookclubSession(bookclubId,member);
+    public ResponseEntity<?> getBookclubToken(@PathVariable("bookclub-id") Long bookclubId,
+            @AuthenticationPrincipal Member member) {
+        bookclubService.joinBookclubSession(bookclubId, member);
         return JsonResponse.ok("북클럽 참가 신청 완료");
     }
 
     @DeleteMapping("/{bookclub-id}")
-    public ResponseEntity<?> deleteBookclub(@PathVariable("bookclub-id") Long bookclubId, @AuthenticationPrincipal Member member) {
+    public ResponseEntity<?> deleteBookclub(@PathVariable("bookclub-id") Long bookclubId,
+            @AuthenticationPrincipal Member member) {
         bookclubService.deleteBookclub(bookclubId, member);
         return JsonResponse.ok("북클럽 삭제 성공");
     }
 
+
     @DeleteMapping("/leave/{bookclub-id}")
-    public ResponseEntity<?> leaveBookclub(@AuthenticationPrincipal Member member,@PathVariable("bookclub-id") Long bookclubId) {
+    public ResponseEntity<?> leaveBookclub(@AuthenticationPrincipal Member member,
+            @PathVariable("bookclub-id") Long bookclubId) {
         bookclubService.leaveBookclub(bookclubId, member);
         return JsonResponse.ok("북클럽 나가기 성공");
     }
@@ -80,7 +80,7 @@ public class BookclubController {
     public ResponseEntity<?> startBookclubSession(@AuthenticationPrincipal Member member) {
         String token = bookclubService.startBookclubSession(member);
 
-        return JsonResponse.ok("북클럽 세션 토큰 반환 완료",token);
+        return JsonResponse.ok("북클럽 세션 토큰 반환 완료", token);
     }
 
 }

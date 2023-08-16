@@ -1,5 +1,6 @@
 package ssafy.readed.domain.member.service;
 
+import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.readed.domain.auth.service.dto.TokenDto;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
@@ -9,13 +10,13 @@ import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 import ssafy.readed.domain.member.service.dto.SelectProfileResponseDto;
 
-import java.io.IOException;
-
 public interface MemberService {
 
     void signUp(SignUpRequestDto requestDto, MultipartFile image);
 
     SelectProfileResponseDto selectProfile(Long id);
+
+    Member getMember(Long id);
 
     void modifyProfile(Member member, ModifyMemberProfileRequestDto profileRequestDto);
 

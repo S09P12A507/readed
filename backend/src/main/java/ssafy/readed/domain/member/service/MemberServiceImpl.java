@@ -1,5 +1,8 @@
 package ssafy.readed.domain.member.service;
 
+import java.io.IOException;
+import java.util.regex.Pattern;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,10 +24,6 @@ import ssafy.readed.global.config.RedisUtil;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 import ssafy.readed.global.security.JwtTokenProvider;
 import ssafy.readed.global.service.S3FileService;
-
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +66,6 @@ public class MemberServiceImpl implements MemberService {
         }
 
         memberRepository.save(member);
-
     }
 
     @Override
@@ -77,6 +75,14 @@ public class MemberServiceImpl implements MemberService {
         String url = s3FileService.getS3Url(member.getMemberProfileFile());
         return SelectProfileResponseDto.from(member, url);
     }
+
+    @Override
+    @Transactional
+    public Member getMember(Long id) {
+        return memberRepository.findById(id).orElseThrow(
+                () -> new GlobalRuntimeException("해당 ID의 유저가 없습니다", HttpStatus.BAD_REQUEST));
+    }
+
 
     @Override
     @Transactional
@@ -106,7 +112,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void modifyPassword(Member member,
-                               ModifyPasswordRequestDto passwordRequestDto) {
+            ModifyPasswordRequestDto passwordRequestDto) {
 
         Member modifiedMember = getMember(member.getId());
 
@@ -176,7 +182,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void checkPrevPassword(ModifyPasswordRequestDto passwordRequestDto,
-                                   Member modifiedMember) {
+            Member modifiedMember) {
         if (!passwordEncoder.matches(passwordRequestDto.getPrevPassword(),
                 modifiedMember.getPassword().getPasswordValue())) {
             throw new GlobalRuntimeException("비밀번호가 틀립니다.", HttpStatus.BAD_REQUEST);
@@ -214,8 +220,4 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    private Member getMember(Long id) {
-        return memberRepository.findById(id).orElseThrow(
-                () -> new GlobalRuntimeException("해당 ID의 유저가 없습니다", HttpStatus.BAD_REQUEST));
-    }
 }

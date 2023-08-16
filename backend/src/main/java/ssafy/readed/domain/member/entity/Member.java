@@ -19,9 +19,12 @@ import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Where;
 import ssafy.readed.domain.bookclub.entity.Bookclub;
 import ssafy.readed.domain.bookclub.entity.Participant;
+import ssafy.readed.domain.bookmark.entity.Bookmark;
+import ssafy.readed.domain.comment.entity.Comment;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
 import ssafy.readed.domain.report.entity.Report;
 import ssafy.readed.global.entity.BaseEntity;
@@ -31,6 +34,7 @@ import ssafy.readed.global.util.IntegerArrayConverter;
 @Getter
 @NoArgsConstructor
 @Where(clause = "is_valid=true")
+@Slf4j
 public class Member extends BaseEntity {
 
     @Id
@@ -58,11 +62,17 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Report> reportList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Comment> commentList = new ArrayList<>();
+
     @OneToMany(mappedBy = "host", fetch = FetchType.LAZY)
     private List<Bookclub> bookclubList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Participant> participantList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
 
 
     private Long readCount = 0L; // 코멘트 수
@@ -106,6 +116,14 @@ public class Member extends BaseEntity {
         this.readCount++;
         this.pageCount += page;
         this.starCount.set(star, this.starCount.get(star) + 1);
+    }
+
+    public void addBookmark(Bookmark bookmark) {
+        this.bookmarkList.add(bookmark);
+    }
+
+    public void deleteBookmark(Long bookmarkId) {
+        this.bookmarkList.remove(bookmarkId);
     }
 
     public void deleteComment(Long page, int star) {
