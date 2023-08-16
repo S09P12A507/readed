@@ -18,13 +18,15 @@ public class BookclubResponseDto {
 
     private Long id;
     private String title;
+    private String bookTitle;
+    private String bookCoverImageUrl;
     private String context;
     private LocalDateTime time;
     private Integer participantCount;
     private Boolean isPublic;
     private Boolean isFinished;
-    private String bookTitle;
-    private String bookCoverImageUrl;
+    private String password;
+    private Integer duration;
     private List<MemberDto> memberList;
 
     public static BookclubResponseDto from(Bookclub bookclub, String bookCoverImageUrl, List<MemberDto> memberList) {
@@ -39,6 +41,8 @@ public class BookclubResponseDto {
                 .bookTitle(bookclub.getBook().getTitle())
                 .bookCoverImageUrl(bookCoverImageUrl)
                 .memberList(memberList)
+                .duration(bookclub.getDuration())
+                .password(bookclub.getPassword())
                 .build();
     }
 }

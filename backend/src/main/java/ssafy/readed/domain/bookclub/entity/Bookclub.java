@@ -46,6 +46,10 @@ public class Bookclub extends BaseEntity {
 
     private Boolean isPublic;
 
+    private Integer duration;
+
+    private String password;
+
     private String bookclubPassword;
 
     private Boolean isFinished;
@@ -64,7 +68,7 @@ public class Bookclub extends BaseEntity {
     @Builder
     public Bookclub(String bookclubTitle, String bookclubContent, LocalDateTime startTime, LocalDateTime endTime,
             Integer participantCount, Boolean isPublic, String bookclubPassword,
-            Boolean isFinished, Book book, Member host) {
+            Boolean isFinished, Book book, Member host, Integer duration, String password) {
         this.bookclubTitle = bookclubTitle;
         this.bookclubContent = bookclubContent;
         this.startTime = startTime;
@@ -75,6 +79,8 @@ public class Bookclub extends BaseEntity {
         this.isFinished = isFinished;
         this.book = book;
         this.host = host;
+        this.duration = duration;
+        this.password = password;
     }
 
     public void finish(){

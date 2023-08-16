@@ -2,6 +2,7 @@ package ssafy.readed.domain.bookclub.controller.dto;
 
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,13 +19,15 @@ public class OpenBookclubRequestDto {
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private Integer duration;
     private Integer maxMember;
     private boolean isPublic;
     private String password;
 
     @Builder
     public OpenBookclubRequestDto(Long bookId, String title, String description,
-            LocalDateTime startTime, LocalDateTime endTime, Integer maxMember, boolean isPublic,
+            LocalDateTime startTime, Integer duration, LocalDateTime endTime, Integer maxMember,
+            boolean isPublic,
             String password) {
         this.bookId = bookId;
         this.title = title;
@@ -34,13 +37,15 @@ public class OpenBookclubRequestDto {
         this.maxMember = maxMember;
         this.isPublic = isPublic;
         this.password = password;
+        this.duration = duration;
     }
 
-    public Bookclub toEntity(Member member, Book book){
+    public Bookclub toEntity(Member member, Book book) {
         return Bookclub.builder()
                 .bookclubTitle(this.title)
                 .bookclubContent(this.description)
                 .startTime(this.startTime)
+                .duration(this.duration)
                 .endTime(this.endTime)
                 .participantCount(this.maxMember)
                 .isPublic(this.isPublic)
