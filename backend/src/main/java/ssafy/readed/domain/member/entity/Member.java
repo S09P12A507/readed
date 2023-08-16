@@ -7,8 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,8 +45,8 @@ public class Member extends BaseEntity {
 
     @Column(name = "member_name")
     private String name;
-    @Enumerated(EnumType.STRING)
-    private Provider provider;
+
+    private String provider;
     private String nickname;
     private String profileBio;
 
@@ -142,7 +140,7 @@ public class Member extends BaseEntity {
     }
 
     @Builder
-    public Member(String email, String name, Provider provider, String nickname, String profileBio,
+    public Member(String email, String name, String provider, String nickname, String profileBio,
             Password password) {
         this.email = email;
         this.name = name;

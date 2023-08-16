@@ -16,7 +16,6 @@ import ssafy.readed.domain.member.controller.dto.ModifyPasswordRequestDto;
 import ssafy.readed.domain.member.controller.dto.SignUpRequestDto;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.entity.Password;
-import ssafy.readed.domain.member.entity.Provider;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.domain.member.service.dto.SelectMemberResponseDto;
 import ssafy.readed.domain.member.service.dto.SelectProfileResponseDto;
@@ -53,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = Member.builder()
                 .name(requestDto.getName())
                 .email(requestDto.getEmail())
-                .provider(Provider.valueOf(requestDto.getSocialLoginType()))
+                .provider(requestDto.getSocialLoginType())
                 .nickname(requestDto.getNickname())
                 .profileBio(requestDto.getProfileBio())
                 .password(password)
@@ -73,8 +72,9 @@ public class MemberServiceImpl implements MemberService {
     public SelectProfileResponseDto selectProfile(Long id, Member member) {
         Member findMember = (id == null) ? getMember(member.getId()) : getMember(id);
         Long countAll = memberRepository.countBy();
-        Long countUpper = memberRepository.countByReadCountGreaterThanEqual(findMember.getReadCount());
-        Double topPercentage = (((double)countUpper / countAll) * 100);
+        Long countUpper = memberRepository.countByReadCountGreaterThanEqual(
+                findMember.getReadCount());
+        Double topPercentage = (((double) countUpper / countAll) * 100);
 
         String url = s3FileService.getS3Url(findMember.getMemberProfileFile());
         return SelectProfileResponseDto.from(findMember, url, topPercentage);
