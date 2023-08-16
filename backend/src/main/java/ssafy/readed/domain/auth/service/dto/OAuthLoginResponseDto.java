@@ -15,4 +15,5 @@ public class OAuthLoginResponseDto {
 
     private OAuthDetailDto detailDto;
     private TokenDto token;
+    private String socialLoginType;
 }

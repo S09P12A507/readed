@@ -49,6 +49,7 @@ public class OAuthServiceImpl implements OAuthService {
             oAuthLoginResponseDto = OAuthLoginResponseDto.builder()
                     .token(null)
                     .detailDto(detailDto)
+                    .socialLoginType(socialLoginType.toString())
                     .build();
         } else {
             Token token = jwtTokenProvider.createToken(detailDto.getEmail());
@@ -57,6 +58,7 @@ public class OAuthServiceImpl implements OAuthService {
             oAuthLoginResponseDto = OAuthLoginResponseDto.builder()
                     .token(tokenDto)
                     .detailDto(detailDto)
+                    .socialLoginType(socialLoginType.toString())
                     .build();
         }
         return oAuthLoginResponseDto;
