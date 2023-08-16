@@ -22,7 +22,8 @@ public class BookclubResponseDto {
     private String bookTitle;
     private String bookCoverImageUrl;
     private String context;
-    private LocalDateTime time;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private Integer participantCount;
     private Boolean isPublic;
     private Boolean isFinished;
@@ -36,7 +37,8 @@ public class BookclubResponseDto {
                 .roomId(bookclub.getRoomId())
                 .title(bookclub.getBookclubTitle())
                 .context(bookclub.getBookclubContent())
-                .time(bookclub.getStartTime())
+                .startTime(bookclub.getStartTime())
+                .endTime(bookclub.getEndTime())
                 .participantCount(bookclub.getParticipantCount())
                 .isPublic(bookclub.getIsPublic())
                 .isFinished(bookclub.getIsFinished())

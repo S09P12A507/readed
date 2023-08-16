@@ -72,9 +72,12 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public SelectProfileResponseDto selectProfile(Long id, Member member) {
         Member findMember = (id == null) ? getMember(member.getId()) : getMember(id);
+        Long countAll = memberRepository.countBy();
+        Long countUpper = memberRepository.countByReadCountGreaterThanEqual(findMember.getReadCount());
+        Double topPercentage = (((double)countUpper / countAll) * 100);
 
         String url = s3FileService.getS3Url(findMember.getMemberProfileFile());
-        return SelectProfileResponseDto.from(findMember, url);
+        return SelectProfileResponseDto.from(findMember, url, topPercentage);
     }
 
     @Override

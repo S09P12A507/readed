@@ -32,12 +32,13 @@ public class SelectProfileResponseDto {
     private int star_4_count; // 별점 4점
     private int star_4p5_count; // 별점 4.5점
     private int star_5_count; // 별점 5점
+    private Double topPercentage; // 상위 몇퍼
 
     @Builder
     public SelectProfileResponseDto(Long id, String nickname, String profileBio,
             String profileImage,
             Long readCount, Long reportCount, Long bookclubCount, Long pageCount,
-            List<Integer> starCount) {
+            List<Integer> starCount, Double topPercentage) {
         this.id = id;
         this.nickname = nickname;
         this.profileBio = profileBio;
@@ -57,9 +58,10 @@ public class SelectProfileResponseDto {
         this.star_4_count = starCount.get(8);
         this.star_4p5_count = starCount.get(9);
         this.star_5_count = starCount.get(10);
+        this.topPercentage = topPercentage;
     }
 
-    public static SelectProfileResponseDto from(Member member, String url) {
+    public static SelectProfileResponseDto from(Member member, String url, Double topPercentage) {
 
         return SelectProfileResponseDto.builder()
                 .id(member.getId())
@@ -71,6 +73,7 @@ public class SelectProfileResponseDto {
                 .bookclubCount(member.getBookclubCount())
                 .pageCount(member.getPageCount())
                 .starCount(member.getStarCount())
+                .topPercentage(topPercentage)
                 .build();
     }
 }

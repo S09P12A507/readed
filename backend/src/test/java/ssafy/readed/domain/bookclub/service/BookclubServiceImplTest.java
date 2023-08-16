@@ -23,7 +23,6 @@ class BookclubServiceImplTest {
                 .bookclubTitle("title1")
                 .bookclubContent("content1")
                 .startTime(LocalDateTime.now())
-                .endTime(LocalDateTime.now())
                 .participantCount(5)
                 .isPublic(true)
                 .bookclubPassword("")

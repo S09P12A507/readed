@@ -12,4 +12,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Member findByEmailAndProvider(String email, Provider provider);
 
+    Long countBy();
+
+    Long countByReadCountGreaterThanEqual(Long readCount);
+
 }
