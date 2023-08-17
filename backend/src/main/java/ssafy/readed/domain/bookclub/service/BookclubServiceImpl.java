@@ -162,7 +162,17 @@ public class BookclubServiceImpl implements BookclubService {
         List<BookclubResponseDto> list = new ArrayList<>();
         for (Bookclub bookclub : bookclubMap.values()) {
             String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
-            list.add(BookclubResponseDto.from(bookclub,url,null,false));
+            List<MemberDto> memberDtoList = new ArrayList<>();
+            List<Member> curMemberList = memberList.get(bookclub.getRoomId());
+            for (Member member : curMemberList) {
+                MemberDto memberDto = MemberDto.builder()
+                        .memberId(member.getId())
+                        .memberNickname(member.getNickname())
+                        .memberProfileImage(s3FileService.getS3Url(member.getMemberProfileFile()))
+                        .build();
+                memberDtoList.add(memberDto);
+            }
+            list.add(BookclubResponseDto.from(bookclub,url,memberDtoList,false));
             log.info("bookclub title : "+bookclub.getBookclubTitle());
             log.info("bookclub img url : "+url);
         }

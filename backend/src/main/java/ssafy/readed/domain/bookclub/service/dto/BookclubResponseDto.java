@@ -1,6 +1,7 @@
 package ssafy.readed.domain.bookclub.service.dto;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +39,7 @@ public class BookclubResponseDto {
                 .roomId(bookclub.getRoomId())
                 .title(bookclub.getBookclubTitle())
                 .context(bookclub.getBookclubContent())
-                .startTime(bookclub.getStartTime())
+                .startTime(bookclub.getStartTime().plusSeconds(ZonedDateTime.now().getOffset().getTotalSeconds()))
                 .endTime(bookclub.getEndTime())
                 .participantCount(bookclub.getParticipantCount())
                 .isPublic(bookclub.getIsPublic())
