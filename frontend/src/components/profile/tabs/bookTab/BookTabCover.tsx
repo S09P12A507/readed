@@ -17,19 +17,20 @@ import { IComment } from '../../../../interfaces/comment/IComment';
 // const primaryColor = 'var(--primary-main)';
 const noThumbnailColor = 'var(--divider)';
 
-const BookReadCover = styled(Button)<{ bookCover1: string }>`
+const BookReadCover = styled(Button)<{ bookCover: string }>`
   width: 100%;
   border-radius: 0.25rem;
   aspect-ratio: 6.5/9;
   /* 임시 컬러 지정 */
   /* 얘네들 작동 안하는 것 같음 */
   background-color: ${props =>
-    props.bookCover1 === null ? '#d9d9d9' : noThumbnailColor};
+    props.bookCover === null ? '#d9d9d9' : noThumbnailColor};
   background-image: ${props =>
-    props.bookCover1 !== null ? `url(${props.bookCover1})` : '#d9d9d9'};
+    props.bookCover !== null ? `url(${props.bookCover})` : '#d9d9d9'};
   /* :hover {
     cursor: pointer;
   } */
+  background-size: cover;
 `;
 
 function BookTabCover({ bookRead }: { bookRead: IComment }) {
@@ -44,7 +45,7 @@ function BookTabCover({ bookRead }: { bookRead: IComment }) {
       <BookReadCover
         // variant="contained"
         sx={{ bgcolor: '#d9d9d9' }} // 임시 컬러
-        bookCover1={bookRead.bookCover}
+        bookCover={bookRead.bookCover}
         onClick={toggleDrawer(true)}
       />
       <BookTabBottomSheet

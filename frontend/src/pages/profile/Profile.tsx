@@ -33,17 +33,6 @@ const HeaderTopContainer = styled.div`
   align-items: center;
 `;
 
-// 더미데이터
-// const dummyUserProfileInfo: IUserProfileInfo = {
-//   id: 1,
-//   nickname: '닉네임',
-//   bio: '안녕하세요 😀 책을 좋아합니다. \n책에 대한 생각을 이야기하는 것도 좋아해요.',
-//   profileImage: '사진',
-//   readCount: 154,
-//   reportCount: 26,
-//   bookclubCount: 8,
-// };
-
 function Profile() {
   const [userProfile, setUserProfile] = useState<IUserProfileInfo>();
 

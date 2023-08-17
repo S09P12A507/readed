@@ -25,6 +25,7 @@ import axios from 'axios';
 import { RootState } from '../../store/store';
 import Alerts from '../../components/common/alert/Alert';
 import BackButton from '../../components/common/button/BackButton';
+import ReadedFooter from '../../components/common/Footer';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -442,6 +443,7 @@ function BookclubChange() {
           </Grid>
         </div>
       </Modal>
+      <ReadedFooter />
     </Container>
   );
 }

@@ -63,34 +63,16 @@ const BackgroundBoxPri = styled.div`
   /* transform: translateY(-50%); */
 `;
 
+let term = {
+  year: 0,
+  month: 0,
+  week: 0,
+};
+
 function Home() {
   const accessToken = useAccessToken();
-  // const apikey = 'e1496c3a1b0232c4d6f84d511cf90255';
   const [topTen, setTopten] = useState<IMainBook[]>([]);
   const [bestSeller, setBestSeller] = useState<IMainBook[]>([]);
-
-  // useEffect(() => {
-  //   axios
-  //     .get<{ documents: IMainBook[] }>(
-  //       `https://dapi.kakao.com/v3/search/book?query=${encodeURIComponent(
-  //         '공부',
-  //       )}`,
-  //       {
-  //         headers: {
-  //           Authorization: `KakaoAK ${apikey}`,
-  //         },
-  //       },
-  //     )
-  //     .then(response => {
-  //       // console.log('탑텐');
-  //       console.log(response);
-  //       // setTopten(response.data.documents);
-  //       // setIsTopTenLoading(false);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching topTen:', error);
-  //     });
-  // }, []);
 
   useEffect(() => {
     // 리디드만의 알고리즘으로 뽑은 topten
@@ -106,10 +88,10 @@ function Home() {
   }, [accessToken]);
   useEffect(() => {
     // 특정 기간의 베스트셀러를 가져와요
-    const term = {
+    term = {
       year: 2023,
-      month: 1,
-      week: 1,
+      month: 8,
+      week: 2,
     };
     getBestSeller(accessToken, term)
       .then(response => {
@@ -211,7 +193,7 @@ function Home() {
               // textDecorationColor: 'var(--secondary-light)',
             }
           }>
-          베스트셀러
+          {term.month}월 {term.week}주차 베스트셀러
           {/* <BackgroundBoxSec /> */}
         </Typography>
         <BackgroundBoxPri />

@@ -30,6 +30,7 @@ import yes24Logo from '../../assets/img/yes24.png';
 import ridiLogo from '../../assets/img/Ridi.png';
 import miliLogo from '../../assets/img/millie.png';
 import non from '../../assets/img/Nan.png';
+import ReadedFooter from '../../components/common/Footer';
 
 const Container = styled.div`
   display: flex;
@@ -746,6 +747,7 @@ function BookDetail() {
         onClose={() => setShowAlert(false)}
         message={message}
       />
+      <ReadedFooter />
     </div>
   );
 }

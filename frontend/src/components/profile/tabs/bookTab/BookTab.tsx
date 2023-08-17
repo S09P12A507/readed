@@ -12,6 +12,8 @@ import {
 } from '../../../../apis/comment/CommentListByMember';
 // types
 import { IComment } from '../../../../interfaces/comment/IComment';
+// components
+import ReadedFooter from '../../../common/Footer';
 
 /**
  * 내 서재 - 읽은 책 탭
@@ -47,14 +49,17 @@ function BookTab() {
       const memberComment = data.data.reverse();
       setComment(memberComment);
     }
-  }, [data]);
+  }, [data, comment]);
 
   return (
-    <BookTabCoverList>
-      {comment.map(bookRead => {
-        return <BookTabCover key={bookRead.bookId} bookRead={bookRead} />;
-      })}
-    </BookTabCoverList>
+    <>
+      <BookTabCoverList>
+        {comment.map(bookRead => {
+          return <BookTabCover key={bookRead.bookId} bookRead={bookRead} />;
+        })}
+      </BookTabCoverList>
+      <ReadedFooter />
+    </>
   );
 }
 

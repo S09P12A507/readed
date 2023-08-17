@@ -37,7 +37,6 @@ function StatisticsTab() {
   useEffect(() => {
     if (data !== null && data !== undefined) {
       const profileInfo = data.data;
-      console.log(profileInfo);
       setUserProfile(profileInfo);
     }
   }, [data]);
@@ -56,9 +55,11 @@ function StatisticsTab() {
   const star5count = userProfile?.star_5_count;
   const topPercentage = userProfile?.topPercentage;
 
+  const nickname = userProfile?.nickname;
+
   const chartData: Omit<
     IUserProfileStatistics,
-    'id' | 'readCount' | 'pageCount' | 'topPercentage'
+    'id' | 'readCount' | 'pageCount' | 'topPercentage' | 'nickname'
   > = {
     star_0_count: star0count || 0,
     star_0p5_count: star0p5count || 0,
@@ -77,15 +78,15 @@ function StatisticsTab() {
       {/* <StatisticsTabReadAmount readAmount={readAmount} /> */}
       {readCount !== undefined &&
       pageCount !== undefined &&
-      topPercentage !== undefined ? (
+      topPercentage !== undefined &&
+      nickname !== undefined ? (
         <>
           <StatisticsTabReadAmount
-            readAmount={{ readCount, pageCount, topPercentage }}
+            readAmount={{ readCount, pageCount, topPercentage, nickname }}
           />
           <Divider sx={{ marginTop: '3rem', marginBottom: '3rem' }} />
         </>
       ) : null}
-      <Divider sx={{ marginTop: '3rem', marginBottom: '3rem' }} />
       <StatisticsTabRatingChart chartData={chartData} />
       <Divider sx={{ marginTop: '3rem', marginBottom: '3rem' }} />
       <StatisticsTabGenreWordCloud />

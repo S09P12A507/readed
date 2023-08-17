@@ -12,6 +12,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import BackButton from '../../components/common/button/BackButton';
+import ReadedFooter from '../../components/common/Footer';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -309,6 +310,7 @@ function BookClubDetail() {
             : '북클럽 접속하기'}
         </StartButtonContainer>
       )}
+      <ReadedFooter />
     </Container>
   );
 }

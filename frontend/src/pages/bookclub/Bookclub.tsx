@@ -13,6 +13,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import ReadedFooter from '../../components/common/Footer';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -198,6 +199,7 @@ function Bookclub() {
           </Card>
         ))}
       </BookClubList>
+      <ReadedFooter />
     </Container>
   );
 }

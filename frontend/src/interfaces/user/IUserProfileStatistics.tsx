@@ -1,5 +1,6 @@
 export interface IUserProfileStatistics {
   id: number;
+  nickname: string;
   readCount: number;
   pageCount: number;
   star_0_count: number;

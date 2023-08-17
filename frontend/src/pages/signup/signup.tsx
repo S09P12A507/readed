@@ -5,6 +5,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Alerts from '../../components/common/alert/Alert';
 import BackButton from '../../components/common/button/BackButton';
+import ReadedFooter from '../../components/common/Footer';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -372,6 +373,7 @@ function Signup() {
         onClose={() => setShowAlert(false)}
         message={message}
       />
+      <ReadedFooter />
     </Container>
   );
 }

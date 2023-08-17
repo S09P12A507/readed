@@ -4,6 +4,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Alerts from '../../components/common/alert/Alert';
 import basic from '../../assets/img/non.png';
+import ReadedFooter from '../../components/common/Footer';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -315,6 +316,7 @@ function Addprofile() {
         // onClose={() => setShowAlert(false)}
         message={message}
       />
+      <ReadedFooter />
     </Container>
   );
 }

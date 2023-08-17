@@ -40,12 +40,27 @@ const SloganContainer = styled.div`
   text-align: center;
 `;
 
+function getRankSlogan(topPercentage: number): string {
+  if (topPercentage <= 1) return '책을 정말정말 사랑하는 분이시네요!!';
+  if (topPercentage <= 3 && topPercentage > 1)
+    return '책을 사랑하는 분이시군요!';
+  if (topPercentage <= 5 && topPercentage > 3)
+    return '책과 정말 친한 친구 사이네요!';
+  if (topPercentage <= 10 && topPercentage > 5)
+    return '책과 아주 열심히 읽고 계시네요!';
+  if (topPercentage <= 25 && topPercentage > 10)
+    return '책에 대한 은은한 애정이 느껴져요.';
+  if (topPercentage <= 50 && topPercentage > 25)
+    return '책을 꽤 열심히 읽고 계시군요!';
+  return '책과 더 가까워질 기회입니다!';
+}
+
 function StatisticsTabReadAmount({
   readAmount,
 }: {
   readAmount: Pick<
     IUserProfileStatistics,
-    'readCount' | 'pageCount' | 'topPercentage'
+    'readCount' | 'pageCount' | 'topPercentage' | 'nickname'
   >;
 }) {
   const handleNumberFormat = useCallback((value: number) => {
@@ -55,6 +70,7 @@ function StatisticsTabReadAmount({
     }).format(value);
     return formattedNumber;
   }, []);
+  const memberSlogan = getRankSlogan(readAmount.topPercentage);
   return (
     <Container>
       <ReadedSpan text="독서량" fontSize="1.125rem" fontWeight="600" />
@@ -94,14 +110,14 @@ function StatisticsTabReadAmount({
       <SloganContainer>
         <div>
           <ReadedSpan
-            text="유저명 님은 "
+            text={`${readAmount.nickname}님은 `}
             fontSize="0.875rem"
             fontWeight="300"
             textAlign="center"
             lineHeight="1.8"
           />
           <ReadedSpan
-            text={`상위 ${readAmount.topPercentage.toString()}%`}
+            text={`리디드 상위 ${readAmount.topPercentage.toFixed(2)}%`}
             fontSize="0.875rem"
             fontWeight="500"
             fontColor="var(--primary-dark)"
@@ -117,7 +133,7 @@ function StatisticsTabReadAmount({
           />
         </div>
         <ReadedSpan
-          text=" 멘트: 책을 정말 사랑하는 분이시네요!"
+          text={memberSlogan}
           fontSize="0.875rem"
           fontWeight="300"
           textAlign="center"

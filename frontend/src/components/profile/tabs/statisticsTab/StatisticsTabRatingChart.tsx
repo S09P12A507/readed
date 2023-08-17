@@ -63,7 +63,8 @@ function countRating(ratings: number[]) {
 // 별점 * 개수 합
 function countRatingVal(ratings: number[]) {
   const rateValArr = ratings.map((value, index) => {
-    return (value * Math.round(index + 1)) / 2;
+    // console.log(rateValArr);
+    return value * (index / 2);
   });
 
   return Number(
@@ -77,7 +78,7 @@ function countRatingVal(ratings: number[]) {
 function countRatingAvg(ratings: number[]) {
   const ratingVal = countRatingVal(ratings);
   const ratingCnt = countRating(ratings);
-  return (ratingVal / ratingCnt).toFixed(1);
+  return (ratingVal / ratingCnt).toFixed(2);
 }
 
 function StatisticsTabRatingChart({
@@ -85,10 +86,11 @@ function StatisticsTabRatingChart({
 }: {
   chartData: Omit<
     IUserProfileStatistics,
-    'id' | 'readCount' | 'pageCount' | 'topPercentage'
+    'id' | 'readCount' | 'pageCount' | 'topPercentage' | 'nickname'
   >;
 }) {
   const userRateData: number[] = [...Object.values(chartData)];
+  const chartUserRateData = userRateData.slice(1, -1);
   const maxIndex = userRateData.indexOf(Math.max(...userRateData));
   const options = {
     responsive: true,
@@ -141,9 +143,9 @@ function StatisticsTabRatingChart({
     datasets: [
       {
         label: '코멘트 수',
-        data: userRateData,
-        backgroundColor: userRateData.map((value, index) =>
-          // var 사용 불가?
+        data: chartUserRateData,
+        backgroundColor: chartUserRateData.map((value, index) =>
+          // var() 사용 불가?
           index === maxIndex ? '#F3C32C' : '#F7DB6A',
         ),
       },
