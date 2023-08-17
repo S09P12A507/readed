@@ -39,7 +39,7 @@ public class BookclubResponseDto {
                 .roomId(bookclub.getRoomId())
                 .title(bookclub.getBookclubTitle())
                 .context(bookclub.getBookclubContent())
-                .startTime(bookclub.getStartTime().plusSeconds(ZonedDateTime.now().getOffset().getTotalSeconds()))
+                .startTime(bookclub.getStartTime().plusHours(9L))
                 .endTime(bookclub.getEndTime())
                 .participantCount(bookclub.getParticipantCount())
                 .isPublic(bookclub.getIsPublic())
