@@ -16,7 +16,7 @@ import ssafy.readed.domain.comment.entity.Like;
 import ssafy.readed.domain.comment.repository.CommentRepository;
 import ssafy.readed.domain.comment.repository.LikeRepository;
 import ssafy.readed.domain.member.entity.Member;
-import ssafy.readed.domain.member.repository.MemberRepository;
+import ssafy.readed.domain.member.service.MemberService;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 import ssafy.readed.global.service.S3FileService;
 
@@ -28,15 +28,16 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final LikeRepository likeRepository;
     private final BookRepository bookRepository;
-    private final MemberRepository memberRepository;
     private final S3FileService s3FileService;
+    private final MemberService memberService;
 
     @Override
     @Transactional
     public void saveComment(Long bookId, Member member, CommentRequestDto commentRequestDto) {
         Book book = getBook(bookId);
-        Comment comment = createComment(member, book, commentRequestDto);
-        memberRepository.save(member);
+        Member findMember = memberService.getMember(member.getId());
+        Comment comment = createComment(findMember, book, commentRequestDto);
+
         commentRepository.save(comment);
     }
 
@@ -64,7 +65,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public List<CommentResponseDto> getBookCommentList(Long bookId, Member member) {
-        return checkLikeList(commentRepository.findAllByBook_Id(bookId), member);
+        return checkLikeList(commentRepository.findAllByBook_Id(bookId),
+                memberService.getMember(member.getId()));
     }
 
     @Override
@@ -94,11 +96,11 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public void deleteComment(Long commentId, Member member) {
         Comment comment = getComment(commentId);
+        Member findMember = memberService.getMember(member.getId());
 
         authCheckComment(member, comment);
         deleteLikeByComment(commentId);
-        comment.deleteComment(member, comment);
-        memberRepository.save(member);
+        comment.deleteComment(findMember, comment);
 
         commentRepository.delete(comment);
     }
@@ -106,7 +108,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void likeComment(Long commentId, Member member) {
-        likeRepository.save(Like.createLike(member, getComment(commentId)));
+        Member findMember = memberService.getMember(member.getId());
+        likeRepository.save(Like.createLike(findMember, getComment(commentId)));
     }
 
     @Override
