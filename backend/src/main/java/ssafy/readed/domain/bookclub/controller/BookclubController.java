@@ -77,7 +77,7 @@ public class BookclubController {
         return JsonResponse.ok("내가 참여한 북클럽 리스트를 불러왔습니다.", myBookclubList);
     }
 
-    @PostMapping("/start")
+    @PostMapping("/start-bookclub")
     public ResponseEntity<?> startBookclubSession(@AuthenticationPrincipal Member member) {
         String bookclubSessionToken = bookclubService.startBookclubSession(member);
 
