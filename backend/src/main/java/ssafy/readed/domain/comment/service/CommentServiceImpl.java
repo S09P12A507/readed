@@ -18,6 +18,7 @@ import ssafy.readed.domain.comment.repository.LikeRepository;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.domain.member.repository.MemberRepository;
 import ssafy.readed.global.exception.GlobalRuntimeException;
+import ssafy.readed.global.service.S3FileService;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class CommentServiceImpl implements CommentService {
     private final LikeRepository likeRepository;
     private final BookRepository bookRepository;
     private final MemberRepository memberRepository;
+    private final S3FileService s3FileService;
 
     @Override
     @Transactional
@@ -41,7 +43,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentResponseDto selectComment(Long commentId, Member member) {
+
         return CommentResponseDto.from(getComment(commentId),
+                s3FileService.getS3Url(member.getMemberProfileFile()),
                 checkLikeByMember(commentId, member.getId()));
     }
 
@@ -141,10 +145,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private List<CommentResponseDto> checkLikeList(List<Comment> commentList, Member member) {
+
         return commentList.stream().map(comment ->
                 checkLikeByMember(comment.getId(), member.getId()) ?
-                        CommentResponseDto.from(comment, true)
-                        : CommentResponseDto.from(comment, false)
+                        CommentResponseDto.from(comment,
+                                s3FileService.getS3Url(member.getMemberProfileFile()), true)
+                        : CommentResponseDto.from(comment,
+                                s3FileService.getS3Url(member.getMemberProfileFile()), false)
         ).toList();
     }
 
