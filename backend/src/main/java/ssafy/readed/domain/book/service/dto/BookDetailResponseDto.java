@@ -1,5 +1,6 @@
 package ssafy.readed.domain.book.service.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,10 +8,9 @@ import lombok.NoArgsConstructor;
 import ssafy.readed.domain.book.entity.Book;
 import ssafy.readed.domain.book.entity.BookCode;
 import ssafy.readed.domain.book.entity.Publisher;
+import ssafy.readed.domain.comment.entity.Comment;
 import ssafy.readed.global.util.ItemType;
 import ssafy.readed.global.util.UrlConverter;
-
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -38,10 +38,12 @@ public class BookDetailResponseDto {
     private PublisherResponseDto publisher;
     private List<BookAuthorResponseDto> author;
     private Boolean isBookmarkChecked;
+    private String commentContent;
+    private Long commentRating;
 
     public static BookDetailResponseDto from(Book book, String coverImageS3Url,
-                                             String publisherS3Url, List<BookAuthorResponseDto> bookAuthorResponseDtoList,
-                                             Boolean isBookmarkChecked) {
+            String publisherS3Url, List<BookAuthorResponseDto> bookAuthorResponseDtoList,
+            Boolean isBookmarkChecked, Comment comment) {
 
         BookCode bookCode = book.getBookCode();
         Publisher publisher = book.getPublisher();
@@ -91,6 +93,8 @@ public class BookDetailResponseDto {
                 .publisher(publisherDto)
                 .author(bookAuthorResponseDtoList)
                 .isBookmarkChecked(isBookmarkChecked)
+                .commentContent(comment.getCommentContent())
+                .commentRating(comment.getRating())
                 .build();
     }
 }

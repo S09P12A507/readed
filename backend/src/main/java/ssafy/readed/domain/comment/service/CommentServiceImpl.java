@@ -76,6 +76,9 @@ public class CommentServiceImpl implements CommentService {
             CommentRequestDto commentRequestDto) {
 
         Comment comment = getCommentByBookAndMember(bookId, member);
+        if (comment == null) {
+            throw new GlobalRuntimeException("해당 코멘트가 존재하지 않습니다", HttpStatus.BAD_REQUEST);
+        }
 
         authCheckComment(member, comment);
         comment.update(commentRequestDto);
@@ -130,9 +133,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private Comment getCommentByBookAndMember(Long bookId, Member member) {
-        return commentRepository.findByBookAndMember(bookId, member.getId()).orElseThrow(
-                () -> new GlobalRuntimeException("해당 코멘트가 존재하지 않습니다", HttpStatus.BAD_REQUEST)
-        );
+        return commentRepository.findByBookAndMember(bookId, member.getId());
     }
 
     private Boolean checkLikeByMember(Long commentId, Long memberId) {

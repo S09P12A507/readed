@@ -1,21 +1,26 @@
 package ssafy.readed.domain.book.service;
 
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ssafy.readed.domain.book.entity.*;
+import ssafy.readed.domain.book.entity.AuthorProfileFile;
+import ssafy.readed.domain.book.entity.BestsellerBook;
+import ssafy.readed.domain.book.entity.Book;
+import ssafy.readed.domain.book.entity.BookCoverFile;
+import ssafy.readed.domain.book.entity.Publisher;
 import ssafy.readed.domain.book.repository.BestsellerBookRepository;
 import ssafy.readed.domain.book.repository.BookRepository;
 import ssafy.readed.domain.book.service.dto.BookAuthorResponseDto;
 import ssafy.readed.domain.book.service.dto.BookBriefResponseDto;
 import ssafy.readed.domain.book.service.dto.BookDetailResponseDto;
 import ssafy.readed.domain.bookmark.service.BookmarkService;
+import ssafy.readed.domain.comment.entity.Comment;
+import ssafy.readed.domain.comment.repository.CommentRepository;
 import ssafy.readed.domain.member.entity.Member;
 import ssafy.readed.global.exception.GlobalRuntimeException;
 import ssafy.readed.global.service.S3FileService;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +30,7 @@ public class BookServiceImpl implements BookService {
     private final BestsellerBookRepository bestsellerBookRepository;
     private final BookmarkService bookmarkService;
     private final S3FileService s3FileService;
+    private final CommentRepository commentRepository;
 
 
     @Override
@@ -43,8 +49,13 @@ public class BookServiceImpl implements BookService {
                 }).toList();
         Boolean isBookmarkCheck = bookmarkService.getBookmark(bookId, member.getId()) != null;
 
+        Comment comment = commentRepository.findByBookAndMember(bookId, member.getId());
+        if (comment == null) {
+            comment = new Comment();
+        }
+
         return BookDetailResponseDto.from(book, bookCoverImageUrl, publisherLogoUrl,
-                bookAuthorResponseDtoList, isBookmarkCheck);
+                bookAuthorResponseDtoList, isBookmarkCheck, comment);
     }
 
     @Override
@@ -73,7 +84,8 @@ public class BookServiceImpl implements BookService {
     public List<BookBriefResponseDto> getReadedTopTen() {
         return bookRepository.findReadedTop10().stream()
                 .map(book ->
-                        BookBriefResponseDto.from(book, s3FileService.getS3Url(book.getBookCoverFile())))
+                        BookBriefResponseDto.from(book,
+                                s3FileService.getS3Url(book.getBookCoverFile())))
                 .toList();
     }
 
@@ -81,7 +93,8 @@ public class BookServiceImpl implements BookService {
     public List<BookBriefResponseDto> getRecommendBooks(Integer genreId) {
         return bookRepository.findBooksByRecommendGenre(GenreMapper.getGenre(genreId)).stream()
                 .map(book ->
-                        BookBriefResponseDto.from(book, s3FileService.getS3Url(book.getBookCoverFile())))
+                        BookBriefResponseDto.from(book,
+                                s3FileService.getS3Url(book.getBookCoverFile())))
                 .toList();
     }
 }
