@@ -250,12 +250,19 @@ public class BookclubServiceImpl implements BookclubService {
     @Override
     public void leaveBookclub(Long bookclubId, Member member) {
 
+        Long id = member.getId();
+
         List<Member> curMemberList = memberList.get(bookclubId);
 
         Member findMember = memberRepository.findById(member.getId()).orElseThrow(
                 () -> new GlobalRuntimeException("없는 멤버입니다.", HttpStatus.NOT_FOUND));
 
-        curMemberList.remove(findMember);
+        for (Member member1 : curMemberList) {
+            if(member1.getId().equals(id)){
+                curMemberList.remove(member1);
+                break;
+            }
+        }
 
         log.info("나간 멤버 : "+findMember.getNickname());
 
