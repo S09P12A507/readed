@@ -129,6 +129,8 @@ public class BookclubServiceImpl implements BookclubService {
             String token = this.sessionMap.get(bookclubId).createConnection(connectionProperties)
                     .getToken();
 
+            Member findMember = memberRepository.findById(member.getId()).orElseThrow(
+                    () -> new GlobalRuntimeException("없는 멤버입니다.", HttpStatus.NOT_FOUND));
 
 
             if(isEnrolled(member.getId())){
@@ -143,7 +145,7 @@ public class BookclubServiceImpl implements BookclubService {
                 throw new GlobalRuntimeException("방이 없습니다.", HttpStatus.NOT_FOUND);
             }
 
-            memberList.get(bookclubId).add(member);
+            memberList.get(bookclubId).add(findMember);
 
             tokenMap.put(member.getId(), sessionMap.get(bookclubId).getSessionId());
 
@@ -247,10 +249,11 @@ public class BookclubServiceImpl implements BookclubService {
 
     @Override
     public void leaveBookclub(Long bookclubId, Member member) {
-        Member findMember = memberRepository.findById(member.getId()).orElseThrow(
-                () -> new GlobalRuntimeException("해당하는 id의 멤버가 없습니다", HttpStatus.NOT_FOUND));
 
         List<Member> curMemberList = memberList.get(bookclubId);
+
+        Member findMember = memberRepository.findById(member.getId()).orElseThrow(
+                () -> new GlobalRuntimeException("없는 멤버입니다.", HttpStatus.NOT_FOUND));
 
         curMemberList.remove(findMember);
 
