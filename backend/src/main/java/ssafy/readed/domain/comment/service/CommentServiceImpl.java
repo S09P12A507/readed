@@ -43,8 +43,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentResponseDto selectComment(Long commentId, Member member) {
+        Comment comment = getComment(commentId);
 
-        return CommentResponseDto.from(getComment(commentId),
+        return CommentResponseDto.from(comment,
+                s3FileService.getS3Url(comment.getBook().getBookCoverFile()),
                 s3FileService.getS3Url(member.getMemberProfileFile()),
                 checkLikeByMember(commentId, member.getId()));
     }
@@ -149,8 +151,10 @@ public class CommentServiceImpl implements CommentService {
         return commentList.stream().map(comment ->
                 checkLikeByMember(comment.getId(), member.getId()) ?
                         CommentResponseDto.from(comment,
+                                s3FileService.getS3Url(comment.getBook().getBookCoverFile()),
                                 s3FileService.getS3Url(member.getMemberProfileFile()), true)
                         : CommentResponseDto.from(comment,
+                                s3FileService.getS3Url(comment.getBook().getBookCoverFile()),
                                 s3FileService.getS3Url(member.getMemberProfileFile()), false)
         ).toList();
     }

@@ -26,7 +26,8 @@ public class CommentResponseDto {
     private Boolean isLiked;
 
     // 엔티티를 디티오로 바꾸는 메서드 static
-    public static CommentResponseDto from(Comment comment, String url, Boolean isLiked) {
+    public static CommentResponseDto from(Comment comment, String coverImageS3Url,
+            String profileImageS3Url, Boolean isLiked) {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .memberId(comment.getMember().getId())
@@ -37,8 +38,9 @@ public class CommentResponseDto {
                 .isSpoiler(comment.getIsSpoiler())
                 .createdAt(comment.getCreatedAt())
                 .bookTitle(comment.getBook().getTitle())
+                .bookCover(coverImageS3Url)
                 .memberNickname(comment.getMember().getNickname())
-                .profileImage(url)
+                .profileImage(profileImageS3Url)
                 .isLiked(isLiked)
                 .build();
     }
