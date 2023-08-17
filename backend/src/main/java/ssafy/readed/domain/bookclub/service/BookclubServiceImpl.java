@@ -257,7 +257,13 @@ public class BookclubServiceImpl implements BookclubService {
 
         curMemberList.remove(findMember);
 
+        log.info("나간 멤버 : "+findMember.getNickname());
+
         tokenMap.remove(findMember.getId());
+
+        for (Member member1 : curMemberList) {
+            log.info("현재 member 닉네임 : "+member1.getNickname());
+        }
 
         if(curMemberList.size() == 0){
             sessionMap.remove(bookclubId);
