@@ -7,6 +7,7 @@ import {
   Subscriber,
 } from 'openvidu-browser';
 import axios, { AxiosError } from 'axios';
+import { useParams } from 'react-router-dom';
 import { Divider } from '@mui/material';
 import Form from '../../components/bookclub/Form';
 import Session from '../../components/bookclub/Session';
@@ -48,6 +49,7 @@ function BookclubMeeting() {
   const OPENVIDU_SERVER_URL = `https://${window.location.hostname}:8443`;
   const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
 
+  const { sessionData } = useParams();
   const leaveSession = useCallback(() => {
     if (session) session.disconnect();
 
@@ -94,10 +96,12 @@ function BookclubMeeting() {
     }
   };
 
-  // useEffect(() => {
-  //   setSessionId('aaaaaaaa');
-  //   joinSession();
-  // }, []);
+  useEffect(() => {
+    if (sessionData) {
+      setSessionId(sessionData);
+      joinSession();
+    }
+  }, [sessionData]);
 
   useEffect(() => {
     window.addEventListener('beforeunload', leaveSession);
@@ -233,7 +237,6 @@ function BookclubMeeting() {
         )}
         {session && (
           <Session
-            sessionId={sessionId}
             publisher={publisher as Publisher}
             subscriber={subscriber as Subscriber}
           />

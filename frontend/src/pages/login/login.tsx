@@ -90,7 +90,6 @@ interface Tokens {
 function Login() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  // const [remember, setRememberStatus] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();

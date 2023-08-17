@@ -4,11 +4,10 @@ import Video from './Video';
 
 interface SessionProps {
   subscriber: Subscriber;
-  sessionId: string;
   publisher: Publisher;
 }
 
-function Session({ subscriber, sessionId, publisher }: SessionProps) {
+function Session({ subscriber, publisher }: SessionProps) {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
 
   useEffect(() => {
@@ -42,17 +41,11 @@ function Session({ subscriber, sessionId, publisher }: SessionProps) {
             <Video streamManager={subscriberItem} />
           </div>
         ))}
-        {subscribers.length}
       </div>
     );
   };
 
-  return (
-    <>
-      <p>{sessionId}</p>
-      {renderSubscribers()}
-    </>
-  );
+  return <>{renderSubscribers()}</>;
 }
 
 export default Session;

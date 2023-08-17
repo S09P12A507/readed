@@ -120,7 +120,7 @@ function App() {
                 element={<BookclubRoom />}
               />
               <Route
-                path="/bookclub/:bookclubId"
+                path="/bookclub/:bookclubId/:sessionData"
                 element={<BookclubMeeting />}
               />
               <Route path="/report/:bookId" element={<Report />} />

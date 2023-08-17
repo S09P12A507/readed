@@ -285,6 +285,7 @@ function BookDetail() {
             },
           )
           .then(() => {
+            console.log(token);
             setIsBookmarked(true);
           })
           .catch(() => {});
@@ -331,11 +332,15 @@ function BookDetail() {
           .catch(() => {});
       } else {
         axios
-          .post(`https://i9a507.p.ssafy.io/api/comments/likes/${commentId}`, {
-            headers: {
-              'X-READED-ACCESSTOKEN': token,
+          .post(
+            `https://i9a507.p.ssafy.io/api/comments/likes/${commentId}`,
+            {},
+            {
+              headers: {
+                'X-READED-ACCESSTOKEN': token,
+              },
             },
-          })
+          )
           .then(() => {})
           .catch(() => {});
       }

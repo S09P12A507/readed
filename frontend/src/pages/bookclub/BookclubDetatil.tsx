@@ -128,14 +128,22 @@ function BookClubDetail() {
           .catch(() => {});
       } else {
         axios
-          .post('https://i9a507.p.ssafy.io/api/bookclubs/start', {
-            headers: {
-              'X-READED-ACCESSTOKEN': token,
+          .post(
+            'https://i9a507.p.ssafy.io/api/bookclubs/start-bookclub',
+            {},
+            {
+              headers: {
+                'X-READED-ACCESSTOKEN': token,
+              },
             },
-          })
+          )
           .then(response => {
-            console.log(response);
-            // navigate(`/bookclub/${bookclubId as string}`);
+            const sessionData = (response.data as { data: string }).data;
+            navigate(
+              `/bookclub/${bookclubId as string}/${encodeURIComponent(
+                sessionData,
+              )}`,
+            );
           })
           .catch(() => {});
       }

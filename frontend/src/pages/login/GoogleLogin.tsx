@@ -47,7 +47,9 @@ function GoogleLogin() {
                 socialLoginType: userdata.socialLoginType,
               };
               sessionStorage.setItem('signupData', JSON.stringify(formData));
-              window.location.href = '/signup/addprofile';
+              console.log(userdata);
+              console.log(sessionStorage.getItem('signupData'));
+              // window.location.href = '/signup/addprofile';
             }
           })
           .catch(() => {});

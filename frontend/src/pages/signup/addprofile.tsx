@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { setTokens } from '../../store/actions/authActions';
 import Alerts from '../../components/common/alert/Alert';
 import basic from '../../assets/img/non.png';
 import ReadedFooter from '../../components/common/Footer';
@@ -95,6 +97,11 @@ interface SignUpData {
   socialLoginType: string;
 }
 
+interface Tokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
 function Addprofile() {
   const storedData = sessionStorage.getItem('signupData');
   const signUpData: SignUpData = storedData
@@ -120,6 +127,7 @@ function Addprofile() {
   const [nicknameExists, setNicknameExists] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState('');
+  const dispatch = useDispatch();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -151,7 +159,7 @@ function Addprofile() {
       .then(response => {
         if (response.status >= 200 && response.status <= 299) {
           setNicknameExists(true);
-          setMessage('중복 확인되었습니다.');
+          setMessage('사용 가능한 닉네입입니다.');
           setShowAlert(true);
         } else {
           setNicknameExists(false);
@@ -209,7 +217,26 @@ function Addprofile() {
   const handleAlertClose = () => {
     setShowAlert(false);
     if (message === '회원 가입에 성공했습니다.') {
-      window.location.href = '/genre';
+      axios
+        .post<{ data: Tokens }>('https://i9a507.p.ssafy.io/api/auth/sign-in', {
+          email,
+          password: password1,
+        })
+        .then(response => {
+          const receivedToken: Tokens = response.data.data;
+          if (receivedToken) {
+            const AToken = receivedToken.accessToken;
+            const RToken = receivedToken.refreshToken;
+            if (AToken && RToken) {
+              dispatch(setTokens(AToken, RToken));
+            }
+          }
+          window.location.href = '/genre';
+        })
+        .catch(() => {
+          setMessage('서버에 오류가 발생해 로그인에 실패했어요.');
+          setShowAlert(true);
+        });
     }
   };
   return (
@@ -309,12 +336,7 @@ function Addprofile() {
         }}>
         회원가입
       </SignupButton>
-      <Alerts
-        open={showAlert}
-        onClose={handleAlertClose}
-        // onClose={() => setShowAlert(false)}
-        message={message}
-      />
+      <Alerts open={showAlert} onClose={handleAlertClose} message={message} />
       <ReadedFooter />
     </Container>
   );
