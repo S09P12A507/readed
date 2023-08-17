@@ -139,7 +139,7 @@ function App() {
                   <Route path="book" element={<BookTab />} />
                   <Route path="report" element={<ReportTab />} />
                 </Route>
-                <Route path="/bookmark/:userId" element={<Bookmark />} />
+                <Route path="/bookmark" element={<Bookmark />} />
               </Route>
               {/* <Route path="*" element={<PageNotFound />} /> */}
             </Routes>

@@ -39,13 +39,16 @@ const UserComment = styled(Typography)`
 
 const noThumbnailColor = 'var(--divider)';
 
-const PrivateBookCommentCover = styled.img<{ bookCover: string }>`
+const PrivateBookCommentCover = styled.div<{ bookcover: string }>`
   width: 6.5rem;
   aspect-ratio: 6.5/10;
   /* 임시 컬러 지정 */
   /* img를 가져와서 background-image로 넣을 것 */
-  background-color: ${props =>
-    props.bookCover ? '#d9d9d9' : noThumbnailColor};
+  /* background-color: ${props =>
+    props.bookcover ? '#d9d9d9' : noThumbnailColor}; */
+  background-image: ${props =>
+    props.bookcover ? `url(${props.bookcover})` : noThumbnailColor};
+  background-size: cover;
 `;
 
 interface BottomSheetProps {
@@ -55,8 +58,7 @@ interface BottomSheetProps {
 }
 
 function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
-  const { bookId, bookTitle, bookCover, rating, commentContent } = bookRead;
-
+  const { bookId, bookTitle, bookcover, rating, commentContent } = bookRead;
   return (
     <SwipeableDrawer
       PaperProps={{
@@ -92,7 +94,7 @@ function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
             flexFlow: 'column',
             textDecoration: 'none',
           }}>
-          <PrivateBookCommentCover bookCover={bookCover} />
+          <PrivateBookCommentCover bookcover={bookcover} />
           <Button
             size="small"
             endIcon={<ChevronRightIcon />}

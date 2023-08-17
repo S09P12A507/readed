@@ -17,7 +17,7 @@ import { IBookmark } from '../../../interfaces/bookmark/IBookmark';
 
 const noThumbnailColor = 'var(--divider)';
 
-const BookmarkCover = styled.div<{ bookCover: string }>`
+const BookmarkCover = styled.div<{ bookcover: string }>`
   position: relative;
   width: 100%;
   border-radius: 0.25rem;
@@ -25,9 +25,10 @@ const BookmarkCover = styled.div<{ bookCover: string }>`
   /* 임시 컬러 지정 */
   /* img를 가져와서 background-image로 넣을 것 */
   background-color: ${props =>
-    props.bookCover ? '#d9d9d9' : noThumbnailColor};
+    props.bookcover ? '#d9d9d9' : noThumbnailColor};
   background-image: ${props =>
-    props.bookCover ? `url${props.bookCover}` : noThumbnailColor};
+    props.bookcover ? `url(${props.bookcover})` : noThumbnailColor};
+  background-size: cover;
 `;
 
 const HeartMark = styled(Rating)({
@@ -42,11 +43,15 @@ const HeartMark = styled(Rating)({
 });
 
 function BookTabCover({ bookmarkBook }: { bookmarkBook: IBookmark }) {
+  const { bookCover } = bookmarkBook;
+  // console.log(bookmarkBook);
   return (
     <>
-      <BookmarkCover bookCover={bookmarkBook.bookCover}>
+      <BookmarkCover bookcover={bookCover}>
         <HeartMark
+          size="large"
           max={1}
+          defaultValue={1}
           icon={<FavoriteIcon fontSize="inherit" />}
           emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
         />

@@ -7,7 +7,7 @@ export interface IComment {
   likeCount: number;
   isSpoiler: false;
   bookTitle: string;
-  bookCover: string;
+  bookcover: string;
   memberNickname: string;
   isLiked: boolean;
 }

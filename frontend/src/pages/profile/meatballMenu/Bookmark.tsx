@@ -36,12 +36,18 @@ const BookTabCoverList = styled.section`
   row-gap: 0.4rem;
 `;
 
+interface IbookmarkCheck {
+  bookId: IBookmark['id'];
+  isChecked: boolean;
+}
+
 function Bookmark() {
   // const bookData = dummyBookData;
   const navigate = useNavigate();
   const accessToken = useAccessToken();
 
   const [bookmark, setBookmark] = useState<IBookmark[]>([]);
+  const [bookmarkCheck, setBookmarkCheck] = useState<IbookmarkCheck[]>([]);
 
   const { data } = useQuery<IBookmarkResponse | null>(['memberReport'], () =>
     getBookmark(accessToken),
@@ -49,11 +55,19 @@ function Bookmark() {
 
   useEffect(() => {
     if (data !== null && data !== undefined) {
-      const bookmarkData = data.data.reverse();
-      setBookmark(bookmarkData);
+      setBookmark(data.data.reverse());
     }
-    console.log(data);
   }, [data]);
+
+  useEffect(() => {
+    const updatedBookmarkCheck = bookmarkCheck.map(item => ({
+      ...item,
+      isChecked: true,
+    }));
+    setBookmarkCheck(updatedBookmarkCheck);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Container>
       <TopWrapper>
