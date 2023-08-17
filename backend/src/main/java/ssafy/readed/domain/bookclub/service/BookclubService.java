@@ -11,7 +11,7 @@ public interface BookclubService {
 
     List<BookclubResponseDto> getBookclubList();
 
-    BookclubResponseDto getBookclubDetail(Long bookClubId);
+    BookclubResponseDto getBookclubDetail(Long bookClubId, Member authMember);
 
     List<BookclubResponseDto> getMyBookclubList(Member member);
 

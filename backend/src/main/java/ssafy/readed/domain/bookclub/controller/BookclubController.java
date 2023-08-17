@@ -57,15 +57,16 @@ public class BookclubController {
     }
 
     @GetMapping
-    public ResponseEntity<?> selectBookclubList() {
+    public ResponseEntity<?> getBookclubList() {
         List<BookclubResponseDto> bookclubList = bookclubService.getBookclubList();
         return JsonResponse.ok("전체 북클럽 리스트를 불러왔습니다.", bookclubList);
     }
 
     @GetMapping("/{bookclub-id}")
-    public ResponseEntity<?> selectBookclub(@PathVariable(name = "bookclub-id") Long bookclubId) {
-        BookclubResponseDto bookclub = bookclubService.getBookclubDetail(bookclubId);
-        return JsonResponse.ok("해당 id의 북클럽을 불러왔습니다.", bookclub);
+    public ResponseEntity<?> getBookclubDetail(@PathVariable(name = "bookclub-id") Long bookclubId,
+            @AuthenticationPrincipal Member authMember) {
+        BookclubResponseDto bookclub = bookclubService.getBookclubDetail(bookclubId, authMember);
+        return JsonResponse.ok("해당 Room ID의 북클럽을 불러왔습니다.", bookclub);
     }
 
     @GetMapping("/mylist")

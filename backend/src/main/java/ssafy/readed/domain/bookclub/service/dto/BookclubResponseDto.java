@@ -30,8 +30,9 @@ public class BookclubResponseDto {
     private String password;
     private Integer duration;
     private List<MemberDto> memberList;
+    private Boolean isJoined;
 
-    public static BookclubResponseDto from(Bookclub bookclub, String bookCoverImageUrl, List<MemberDto> memberList) {
+    public static BookclubResponseDto from(Bookclub bookclub, String bookCoverImageUrl, List<MemberDto> memberList, Boolean isJoined) {
         return BookclubResponseDto.builder()
                 .id(bookclub.getId())
                 .roomId(bookclub.getRoomId())
@@ -47,6 +48,7 @@ public class BookclubResponseDto {
                 .memberList(memberList)
                 .duration(bookclub.getDuration())
                 .password(bookclub.getPassword())
+                .isJoined(isJoined)
                 .build();
     }
 }

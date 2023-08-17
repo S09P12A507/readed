@@ -169,12 +169,16 @@ public class BookclubServiceImpl implements BookclubService {
     }
 
     @Override
-    public BookclubResponseDto getBookclubDetail(Long roomId) {
+    public BookclubResponseDto getBookclubDetail(Long roomId, Member authMember) {
         List<MemberDto> memberDtoList = new ArrayList<>();
         Bookclub bookclub = bookclubMap.get(roomId);
         String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
         List<Member> curMemberList = memberList.get(roomId);
+
+        Boolean isJoined = false;
         for (Member member : curMemberList) {
+            if(member.getId() == authMember.getId())
+                isJoined = true;
             MemberDto memberDto = MemberDto.builder()
                     .memberId(member.getId())
                     .memberNickname(member.getNickname())
@@ -182,7 +186,7 @@ public class BookclubServiceImpl implements BookclubService {
                     .build();
             memberDtoList.add(memberDto);
         }
-        return BookclubResponseDto.from(bookclub,url,memberDtoList);
+        return BookclubResponseDto.from(bookclub,url,memberDtoList,isJoined);
     }
 
     @Override
@@ -243,7 +247,6 @@ public class BookclubServiceImpl implements BookclubService {
 
     @Override
     public void leaveBookclub(Long bookclubId, Member member) {
-        //Bookclub findBookclub = getBookclub(bookclubId);
         Member findMember = memberRepository.findById(member.getId()).orElseThrow(
                 () -> new GlobalRuntimeException("해당하는 id의 멤버가 없습니다", HttpStatus.NOT_FOUND));
 
