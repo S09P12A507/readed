@@ -160,7 +160,7 @@ public class BookclubServiceImpl implements BookclubService {
         List<BookclubResponseDto> list = new ArrayList<>();
         for (Bookclub bookclub : bookclubMap.values()) {
             String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
-            list.add(BookclubResponseDto.from(bookclub,url,null));
+            list.add(BookclubResponseDto.from(bookclub,url,null,false));
             log.info("bookclub title : "+bookclub.getBookclubTitle());
             log.info("bookclub img url : "+url);
         }
@@ -200,7 +200,7 @@ public class BookclubServiceImpl implements BookclubService {
 
         for (Bookclub bookclub : list) {
             String url = s3FileService.getS3Url(bookclub.getBook().getBookCoverFile());
-            BookclubResponseDto dto = BookclubResponseDto.from(bookclub, url, null);
+            BookclubResponseDto dto = BookclubResponseDto.from(bookclub, url, null,false);
             dtoList.add(dto);
         }
 
