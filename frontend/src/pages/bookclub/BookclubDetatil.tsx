@@ -185,7 +185,7 @@ function BookClubDetail() {
       };
     }
   }, [data]);
-
+  const isButtonDisabled = remainingTime && remainingTime < 0;
   const formatTime = (timeInSeconds: number) => {
     const day = Math.floor(timeInSeconds / 86400);
     const hours = Math.floor(timeInSeconds / 3600 - day * 24);
@@ -333,12 +333,13 @@ function BookClubDetail() {
             background: '#4B8346',
             color: 'white',
           }}
-          onClick={() => handleSubmit()}>
+          onClick={() => handleSubmit()}
+          disabled={isButtonDisabled as boolean}>
           {remainingTime && remainingTime > 0
             ? `북클럽 참여하기 (${formatTime(
                 Math.floor(remainingTime / 1000),
               )} 남음)`
-            : '북클럽 접속하기'}
+            : '참여할 수 없는 북클럽입니다.'}
         </StartButtonContainer>
       )}
       <ReadedFooter />

@@ -49,7 +49,7 @@ function BookclubMeeting() {
   const OPENVIDU_SERVER_URL = `https://${window.location.hostname}:8443`;
   const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
 
-  const { sessionData } = useParams();
+  const { bookclubId, sessionData } = useParams();
   const leaveSession = useCallback(() => {
     if (session) session.disconnect();
 
@@ -245,7 +245,7 @@ function BookclubMeeting() {
         <Icons>
           <VideoIcon toggleVideo={toggleVideo} isVideoOn={isVideoOn} />
           <VoiceIcon toggleVoice={toggleSound} isVoiceOn={isSoundOn} />
-          <LeaveIcon />
+          <LeaveIcon bookclubId={bookclubId as string} />
         </Icons>
       </>
     </Container>

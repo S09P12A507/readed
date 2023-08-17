@@ -1,5 +1,8 @@
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { RootState } from '../../store/store';
 
 const IconContainer = styled.div`
   display: flex;
@@ -12,9 +15,25 @@ const IconContainer = styled.div`
   color: rgba(0, 0, 0, 0.54);
 `;
 
-function LeaveIcon() {
+interface Props {
+  bookclubId: string;
+}
+
+function LeaveIcon({ bookclubId }: Props) {
+  const token: string | null = useSelector(
+    (state: RootState) => state.auth.accessToken,
+  );
   const handleBookclubOut = () => {
-    window.location.href = '/bookclub';
+    axios
+      .delete(`https://i9a507.p.ssafy.io/api/bookclubs/leave/${bookclubId}`, {
+        headers: {
+          'X-READED-ACCESSTOKEN': token,
+        },
+      })
+      .then(() => {
+        window.location.href = '/bookclub';
+      })
+      .catch(() => {});
   };
 
   return (

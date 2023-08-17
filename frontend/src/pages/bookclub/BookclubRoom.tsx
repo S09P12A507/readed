@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import LeaveIcon from '../../components/bookclub/LeaveIcon';
+// import LeaveIcon from '../../components/bookclub/LeaveIcon';
 import VoiceIcon from '../../components/bookclub/VoiceIcon';
 import VideoIcon from '../../components/bookclub/VideoIcon';
 
@@ -88,7 +88,7 @@ function BookclubRoom() {
       <Icons>
         <VideoIcon toggleVideo={toggleVideo} isVideoOn={videoEnabled} />
         <VoiceIcon toggleVoice={toggleAudio} isVoiceOn={audioEnabled} />
-        <LeaveIcon />
+        {/* <LeaveIcon /> */}
       </Icons>
     </Container>
   );

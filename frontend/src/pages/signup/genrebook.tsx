@@ -48,6 +48,7 @@ function Genrebook() {
     (state: RootState) => state.auth.accessToken,
   );
   const { genre } = useParams();
+
   const storedData = localStorage.getItem('signupData');
   const signUpData: NameData = storedData
     ? (JSON.parse(storedData) as NameData)
@@ -203,7 +204,7 @@ function Genrebook() {
         variant="contained"
         onClick={handleSignUp}
         style={{
-          position: 'fixed',
+          position: 'absolute',
           maxWidth: 'var(--screen-size-mobile)',
           width: '100%',
           bottom: '0',
