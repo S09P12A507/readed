@@ -58,10 +58,12 @@ public class MemberServiceImpl implements MemberService {
                 .password(password)
                 .build();
 
-        try {
-            saveNewProfileFile(member, image);
-        } catch (IOException e) {
-            throw new GlobalRuntimeException("프로필 사진 저장 실패", HttpStatus.CONFLICT);
+        if (!image.isEmpty()) {
+            try {
+                saveNewProfileFile(member, image);
+            } catch (IOException e) {
+                throw new GlobalRuntimeException("프로필 사진 저장 실패", HttpStatus.CONFLICT);
+            }
         }
 
         memberRepository.save(member);
@@ -95,11 +97,13 @@ public class MemberServiceImpl implements MemberService {
 
         Member modifiedMember = getMember(member.getId());
 
-        try {
-            saveNewProfileFile(modifiedMember, requestDto.getProfileImage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new GlobalRuntimeException("프로필 사진 저장 실패", HttpStatus.CONFLICT);
+        if (!requestDto.getProfileImage().isEmpty()) {
+            try {
+                saveNewProfileFile(modifiedMember, requestDto.getProfileImage());
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new GlobalRuntimeException("프로필 사진 저장 실패", HttpStatus.CONFLICT);
+            }
         }
 
         modifiedMember.modify(requestDto);
@@ -164,7 +168,6 @@ public class MemberServiceImpl implements MemberService {
         redisUtil.setBlackList(tokenDto.getAccessToken(), "accessToken", expirationTime);
     }
 
-    @Override
     public void saveNewProfileFile(Member member, MultipartFile multipartFile) throws IOException {
         String savedFilename = s3FileService.saveFile(path, multipartFile);
         member.saveNewProfileFile(path, multipartFile.getOriginalFilename(), savedFilename);

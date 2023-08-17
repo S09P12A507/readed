@@ -1,6 +1,5 @@
 package ssafy.readed.domain.member.service;
 
-import java.io.IOException;
 import org.springframework.web.multipart.MultipartFile;
 import ssafy.readed.domain.auth.service.dto.TokenDto;
 import ssafy.readed.domain.member.controller.dto.ModifyMemberProfileRequestDto;
@@ -31,6 +30,4 @@ public interface MemberService {
     void deleteMember(Member member, TokenDto tokenDto);
 
     void logout(Member member, TokenDto tokenDto);
-
-    void saveNewProfileFile(Member member, MultipartFile multipartFile) throws IOException;
 }

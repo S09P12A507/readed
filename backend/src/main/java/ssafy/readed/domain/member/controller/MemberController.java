@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,8 +33,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestPart SignUpRequestDto requestDto, @RequestPart
-    MultipartFile image) {
+    public ResponseEntity<?> signUp(@RequestPart SignUpRequestDto requestDto,
+            @RequestParam(required = false) MultipartFile image) {
         log.info(requestDto.getEmail());
         memberService.signUp(requestDto, image);
         return JsonResponse.ok("회원가입 성공!");
