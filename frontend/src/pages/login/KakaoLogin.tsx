@@ -30,7 +30,7 @@ function KaKaoLogin() {
           .then(response => {
             const receivedToken = (response.data as { data: Tokens }).data;
 
-            if (receivedToken) {
+            if (receivedToken.accessToken) {
               const AToken = receivedToken.accessToken;
               const RToken = receivedToken.refreshToken;
 

@@ -1,10 +1,12 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
 import { RootState } from '../../../store/store';
 import AlertsModal from '../../common/alert/Alert';
+import basic from '../../../assets/img/non.png';
 
 const ImageContainer = styled.div`
   text-align: center;
@@ -33,23 +35,19 @@ const AuthButton = styled(Button)`
 `;
 
 interface UserInfo {
-  // name: string;
-  // email: string;
   nickname: string;
-  profile_image: string;
-  profile_bio: string;
+  profileImage: string;
+  profileBio: string;
 }
 
 function InfoChange() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  // const [ProfileImage, setprofileimage] = useState<File | null>(null);
+  const [ProfileImage, setprofileimage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
-  const [ProfileBio, setprofilebio] = useState<string>('');
+  const [ProfileBio, setprofilebio] = useState<string | null>('');
   const [nicknameExists, setNicknameExists] = useState<boolean>(false);
-  const [ProfileImage, setprofileimage] = useState<string | undefined>(
-    undefined,
-  );
+
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -60,7 +58,7 @@ function InfoChange() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      // setprofileimage(file);
+      setprofileimage(file);
 
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -70,6 +68,18 @@ function InfoChange() {
     }
   };
 
+  const handleAlertClose = () => {
+    setShowAlert(false);
+
+    if (message === '회원 정보가 변경됐습니다!') {
+      window.location.href = '/';
+    }
+  };
+
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate('/');
+  };
   const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!userInfo) return;
     setNickname(event.target.value);
@@ -78,30 +88,38 @@ function InfoChange() {
 
   const handleIntroChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setprofilebio(event.target.value);
-    console.log(nicknameExists);
   };
 
   const handleInfoChange = () => {
-    const formData = {
-      nickname,
-      profile_bio: ProfileBio,
-      profile_image: previewUrl,
-    };
-    console.log(formData);
-    if (token) {
-      axios
-        .patch('https://i9a507.p.ssafy.io/api/members/profile', formData, {
-          headers: {
-            'X-READED-ACCESSTOKEN': `${token}`,
-          },
-        })
-        .then(() => {
-          setMessage('회원 정보가 변경됐습니다.');
-          setShowAlert(true);
-        })
-        .catch(error => {
-          console.error(error);
-        });
+    if (nicknameExists) {
+      const InfoData = {
+        nickname,
+        profileBio: ProfileBio,
+      };
+      const InfoDataJson = JSON.stringify(InfoData);
+      const formData = new FormData();
+      formData.append(
+        'requestDto',
+        new Blob([InfoDataJson], { type: 'application/json' }),
+      );
+      if (ProfileImage) {
+        formData.append('profileImage', ProfileImage);
+      }
+
+      if (token) {
+        axios
+          .patch('https://i9a507.p.ssafy.io/api/members/profile', formData, {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then(() => {
+            setMessage('회원 정보가 변경됐습니다!');
+            setShowAlert(true);
+          })
+          .catch(() => {});
+      }
     }
   };
 
@@ -121,16 +139,14 @@ function InfoChange() {
           setShowAlert(true);
         }
       })
-      .catch(error => {
-        console.error('중복 확인 실패:', error);
-      });
+      .catch(() => {});
   };
 
   useEffect(() => {
     if (token) {
       axios
         .get<{ data: UserInfo }>(
-          `https://i9a507.p.ssafy.io/api/members/profile?id=3`,
+          `https://i9a507.p.ssafy.io/api/members/profile?id=`,
           {
             headers: {
               'X-READED-ACCESSTOKEN': token,
@@ -139,32 +155,33 @@ function InfoChange() {
         )
         .then(response => {
           setUserInfo(response.data.data);
-          console.log(response);
+          console.log(response.data.data);
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(() => {});
     }
   }, [token]);
 
   useEffect(() => {
     if (userInfo) {
       setNickname(userInfo.nickname);
-      setprofilebio(userInfo.profile_bio);
-      setprofileimage(userInfo.profile_image);
+      setprofilebio(userInfo.profileBio);
+      setPreviewUrl(userInfo.profileImage);
     }
   }, [userInfo]);
   return (
     <div>
       {userInfo ? (
         <div>
-          <h2> 프로필 이미지</h2>
+          <h2 style={{ display: 'flex', justifyContent: 'center' }}>
+            {' '}
+            프로필 이미지 수정
+          </h2>
           <ImageContainer>
             <label htmlFor="fileInput">
               {previewUrl ? (
                 <ProfileImg src={previewUrl} alt="프로필 미리보기" />
               ) : (
-                <ProfileImg src={ProfileImage} alt="기본 이미지" />
+                <ProfileImg src={basic} alt="기본 이미지" />
               )}
             </label>
             <input
@@ -174,11 +191,9 @@ function InfoChange() {
               style={{ display: 'none' }}
             />
           </ImageContainer>
-          {/* <h3>이메일</h3>
-          <p>{userInfo.email}</p> */}
 
           <Grid container alignItems="center">
-            <Grid item xs={10.2}>
+            <Grid item xs={9.9}>
               <IntroduceForm
                 label="닉네임"
                 variant="outlined"
@@ -219,7 +234,10 @@ function InfoChange() {
               },
             }}
           />
-          <Button variant="contained" style={{ width: '40%', margin: '5%' }}>
+          <Button
+            variant="contained"
+            style={{ width: '40%', margin: '5%' }}
+            onClick={handleBack}>
             취소
           </Button>
           <Button
@@ -231,8 +249,8 @@ function InfoChange() {
           </Button>
 
           <AlertsModal
+            onClose={handleAlertClose}
             open={showAlert}
-            onClose={() => setShowAlert(false)}
             message={message}
           />
         </div>

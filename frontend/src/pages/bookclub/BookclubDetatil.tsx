@@ -64,6 +64,7 @@ interface BookClub {
     memberProfileImage: string;
   }[];
   is_public: boolean;
+  isJoined: boolean;
 }
 
 function BookClubDetail() {
@@ -74,6 +75,7 @@ function BookClubDetail() {
   const { bookclubId } = useParams();
   const [data, setData] = useState<BookClub | null>(null);
   const [remainingTime, setRemainingTime] = useState<number | null>(null);
+  const [registerd, setRegisterd] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const handleBookClubChange = () => {
@@ -93,11 +95,32 @@ function BookClubDetail() {
             },
           },
         )
-        .then(() => {})
+        .then(response => {
+          console.log(response.data.data);
+        })
         .catch(() => {});
     }
   };
-
+  const handleunRegisterd = () => {
+    if (token) {
+      axios
+        .delete(
+          `https://i9a507.p.ssafy.io/api/bookclubs/leave/${
+            bookclubId as string
+          }`,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          },
+        )
+        .then(response => {
+          setRegisterd(false);
+          console.log(response.data);
+        })
+        .catch(() => {});
+    }
+  };
   useEffect(() => {
     if (token) {
       axios
@@ -111,6 +134,8 @@ function BookClubDetail() {
         )
         .then(response => {
           setData(response.data.data);
+          setRegisterd(response.data.data.isJoined);
+          console.log(response.data.data);
         })
         .catch(() => {});
     }
@@ -119,11 +144,14 @@ function BookClubDetail() {
   useEffect(() => {
     if (data) {
       const endTime = new Date(data.endTime);
-      setInterval(() => {
+      const intervalId = setInterval(() => {
         const currentTime = new Date();
         const timeDiff = endTime.getTime() - currentTime.getTime();
         setRemainingTime(timeDiff);
       }, 1000);
+      return () => {
+        clearInterval(intervalId);
+      };
     }
   }, [data]);
 
@@ -163,9 +191,9 @@ function BookClubDetail() {
         />
         <CardContent sx={{ flex: '1 0 auto' }}>
           <h5> {data?.is_public ? '비공개' : '공개'}</h5>
-          <h2 style={{ wordWrap: 'break-word' }}>
-            {data && data?.title && data?.title.length > 20
-              ? `${data?.title.slice(0, 20)}...`
+          <h2>
+            {data && data?.title && data?.title.length > 8
+              ? `${data?.title.slice(0, 8)}...`
               : data?.title}
           </h2>
           <h4>
@@ -242,24 +270,45 @@ function BookClubDetail() {
           ))}
         </Grid>
       </Members>
-      <StartButtonContainer
-        variant="contained"
-        style={{
-          position: 'absolute',
-          maxWidth: 'var(--screen-size-mobile)',
-          width: '100%',
-          bottom: '0',
-          left: '0',
-          background: '#4B8346',
-          color: 'white',
-        }}
-        onClick={handleSubmit}>
-        {remainingTime !== null && remainingTime > 0
-          ? `북클럽 참여하기 (${formatTime(
+      {registerd ? (
+        <StartButtonContainer
+          variant="contained"
+          style={{
+            position: 'absolute',
+            maxWidth: 'var(--screen-size-mobile)',
+            width: '100%',
+            bottom: '0',
+            left: '0',
+            background: '#FF6D75',
+            color: 'white',
+          }}
+          onClick={handleunRegisterd}>
+          {remainingTime !== null &&
+            remainingTime > 0 &&
+            `북클럽 참여 취소 (${formatTime(
               Math.floor(remainingTime / 1000),
-            )} 남음)`
-          : '북클럽 참여하기'}
-      </StartButtonContainer>
+            )} 남음)`}
+        </StartButtonContainer>
+      ) : (
+        <StartButtonContainer
+          variant="contained"
+          style={{
+            position: 'absolute',
+            maxWidth: 'var(--screen-size-mobile)',
+            width: '100%',
+            bottom: '0',
+            left: '0',
+            background: '#4B8346',
+            color: 'white',
+          }}
+          onClick={handleSubmit}>
+          {remainingTime !== null && remainingTime > 0
+            ? `북클럽 참여하기 (${formatTime(
+                Math.floor(remainingTime / 1000),
+              )} 남음)`
+            : '북클럽 접속하기'}
+        </StartButtonContainer>
+      )}
     </Container>
   );
 }

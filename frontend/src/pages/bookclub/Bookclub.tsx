@@ -142,7 +142,11 @@ function Bookclub() {
             />
             <CardContent sx={{ flex: '1 0 auto' }}>
               <h6>{bookclub.is_public ? '비공개' : '공개'}</h6>
-              <h2>{bookclub.title}</h2>
+              <h2>
+                {bookclub.title.length > 10
+                  ? `${bookclub.title.slice(0, 10)}...`
+                  : bookclub.title}
+              </h2>
               <h5>
                 {bookclub.bookTitle.length > 10
                   ? `${bookclub.bookTitle.slice(0, 10)}...`

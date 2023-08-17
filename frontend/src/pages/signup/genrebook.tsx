@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Grid, Button, Modal } from '@mui/material';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Comments from '../../components/book/Comment';
 import BackButton from '../../components/common/button/BackButton';
+import { RootState } from '../../store/store';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
-
   flex: 1;
   overflow-y: auto;
 `;
@@ -27,12 +29,6 @@ const BookCover = styled.div<{ imageUrl: string }>`
   background-size: cover;
 `;
 
-const BookCoverTest = styled.div`
-  background-color: #beeaea;
-  margin: 5px;
-  height: 150px;
-`;
-
 const Start = styled(Button)`
   height: 50px;
 `;
@@ -41,7 +37,17 @@ interface NameData {
   MemberName: string;
 }
 
+interface Book {
+  bookId: string;
+  coverImage: string;
+  bookTitle: string;
+}
+
 function Genrebook() {
+  const token: string | null = useSelector(
+    (state: RootState) => state.auth.accessToken,
+  );
+  const { genre } = useParams();
   const storedData = localStorage.getItem('signupData');
   const signUpData: NameData = storedData
     ? (JSON.parse(storedData) as NameData)
@@ -50,13 +56,17 @@ function Genrebook() {
       };
   const [isPageLoaded, setIsPageLoaded] = useState(true);
   const [MemberName] = useState<string>(signUpData.MemberName || '');
-  const [bookCovers, setBookCovers] = useState<string[]>([]);
+  const [data, setdata] = useState<Book[]>([]);
   const [IsModalOpen, setIsModalOpen] = useState(false);
   const [inputText, setInputText] = useState('');
   const [textLength, setTextLength] = useState<number>(0);
   const [ratingValue, setRatingValue] = useState<number>(0);
+  const [selectedbook, setSelecetedbook] = useState('');
+  const [selectedbookId, setSelecetedbookId] = useState('');
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (selectebook: Book) => {
+    setSelecetedbook(selectebook.bookTitle);
+    setSelecetedbookId(selectebook.bookId);
     setIsModalOpen(true);
     setInputText('');
     setRatingValue(0);
@@ -78,8 +88,23 @@ function Genrebook() {
   };
 
   const handleSaveButton = () => {
-    console.log('Input Text:', inputText);
-    console.log('Rating:', ratingValue);
+    const formData = {
+      commentContent: inputText,
+      rating: ratingValue * 2,
+    };
+    axios
+      .post(
+        `https://i9a507.p.ssafy.io/api/comments/${selectedbookId}`,
+        formData,
+        {
+          headers: {
+            'X-READED-ACCESSTOKEN': token,
+          },
+        },
+      )
+      .then(() => {})
+      .catch(() => {});
+
     setIsModalOpen(false);
   };
 
@@ -93,17 +118,27 @@ function Genrebook() {
   };
   useEffect(() => {
     if (isPageLoaded) {
-      axios
-        .get('http://3.38.252.22/api/select')
-        .then(response => {
-          setBookCovers(response.data as string[]);
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      if (token) {
+        axios
+          .get<{ data: Book[] }>(
+            `https://i9a507.p.ssafy.io/api/books/recommend/${genre as string}`,
+            {
+              headers: {
+                'X-READED-ACCESSTOKEN': token,
+              },
+            },
+          )
+          .then(response => {
+            console.log(response.data.data);
+            setdata(response.data.data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     }
     setIsPageLoaded(false);
-  }, [isPageLoaded]);
+  }, [isPageLoaded, token, genre]);
 
   useEffect(() => {
     setTextLength(inputText.length);
@@ -123,26 +158,22 @@ function Genrebook() {
       <Info>· 별점을 남길 책을 선택해주세요 </Info>
       <BookCoverContainer>
         <Grid container alignItems="center">
-          {bookCovers.map(imageUrl => (
-            <Grid item xs={3.5} key={imageUrl}>
+          {data.map(book => (
+            <Grid item xs={3.5} key={book.bookId}>
               {' '}
-              <BookCover imageUrl={imageUrl} />
+              <BookCover
+                imageUrl={book.coverImage}
+                onClick={() => handleOpenModal(book)}
+                style={{ cursor: 'pointer' }}
+              />
+              {book.bookTitle.length > 7
+                ? `${book.bookTitle.slice(0, 7)}...`
+                : book.bookTitle}
             </Grid>
           ))}
         </Grid>
       </BookCoverContainer>
-      {/* 아래는 테스트코드 */}
-      <BookCoverContainer>
-        <Grid container alignItems="center">
-          {Array.from({ length: 100 }).map(() => (
-            <Grid item xs={4} key={Math.random()}>
-              <BookCoverTest onClick={() => handleOpenModal()}>
-                책표지
-              </BookCoverTest>
-            </Grid>
-          ))}
-        </Grid>
-      </BookCoverContainer>
+
       <Modal
         open={IsModalOpen}
         onClose={handleCloseModal}
@@ -150,17 +181,20 @@ function Genrebook() {
           display: 'flex',
           justifyContent: 'center',
         }}>
-        <div>
-          <Comments
-            onClose={handleCloseModal}
-            onSave={handleSaveButton}
-            handleRatingChange={handleRatingChange}
-            handleInputChange={handleInputChange}
-            textLength={textLength}
-            ratingValue={ratingValue}
-            inputText={inputText}
-            title="여기엔 책 제목을 넣어보자"
-          />
+        <div style={{ maxWidth: 'var(--screen-size-mobile)', width: '100%' }}>
+          {data.map(book => (
+            <Comments
+              key={book.bookId}
+              onClose={handleCloseModal}
+              onSave={handleSaveButton}
+              handleRatingChange={handleRatingChange}
+              handleInputChange={handleInputChange}
+              textLength={textLength}
+              ratingValue={ratingValue}
+              inputText={inputText}
+              title={selectedbook}
+            />
+          ))}
         </div>
       </Modal>
 

@@ -16,6 +16,7 @@ import ModeIcon from '@mui/icons-material/Mode';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -83,6 +84,10 @@ const AuthorsInfo = styled.div`
   display: grid;
 `;
 
+const CommentContainer = styled.div`
+  display: grid;
+`;
+
 const StyledTable = styled(Table)`
   border-collapse: separate;
   border-spacing: 0;
@@ -132,9 +137,19 @@ interface Book {
   };
 }
 
+interface Comment {
+  id: number;
+  memberNickname: string;
+  rating: number;
+  likeCount: number;
+  isLiked: boolean;
+  commentContent: string;
+}
+
 function BookDetail() {
   const { bookId } = useParams();
   const [data, setData] = useState<Book | null>(null);
+  const [commentdata, setCommentData] = useState<Comment[] | null>(null);
   const [ratingValue, setRatingValue] = useState<number>(0);
   const [ratingsValue, setRatingsValue] = useState<number>(0);
   const [IsModalOpen, setIsModalOpen] = useState(false);
@@ -302,7 +317,29 @@ function BookDetail() {
     }
     setIsModalOpen(false);
   };
-
+  const handleLike = (commentId: number, like: boolean) => {
+    if (token) {
+      if (like) {
+        axios
+          .delete(`https://i9a507.p.ssafy.io/api/comments/likes/${commentId}`, {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          })
+          .then(() => {})
+          .catch(() => {});
+      } else {
+        axios
+          .post(`https://i9a507.p.ssafy.io/api/comments/likes/${commentId}`, {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          })
+          .then(() => {})
+          .catch(() => {});
+      }
+    }
+  };
   const handleRatingChange = (
     event: React.SyntheticEvent<Element, Event>,
     newValue: number | null,
@@ -372,11 +409,23 @@ function BookDetail() {
         .then(response => {
           setData(response.data.data);
           setIsBookmarked(response.data.data.isBookmarkChecked);
+        })
+        .catch(() => {});
+
+      axios
+        .get<{ data: Comment[] }>(
+          `https://i9a507.p.ssafy.io/api/comments/books/${bookId as string}`,
+          {
+            headers: {
+              'X-READED-ACCESSTOKEN': token,
+            },
+          },
+        )
+        .then(response => {
+          setCommentData(response.data.data);
           console.log(response.data.data);
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(() => {});
     }
   }, [token, bookId]);
 
@@ -587,22 +636,38 @@ function BookDetail() {
       <Divider />
       <InfoContainer>
         <h3 style={{ marginBottom: '0.75rem' }}>저자 / 역자</h3>
-        <Authors>
-          <img
-            src={mainAuthor?.authorProfileImage}
-            alt="저자"
-            style={{
-              width: '4rem',
-              height: '4rem',
-              borderRadius: '0.5rem',
-              marginRight: '1rem',
-            }}
-          />
-          <AuthorsInfo>
-            <h5>저자</h5>
-            {mainAuthor?.authorName}
-          </AuthorsInfo>
-        </Authors>
+        {mainAuthor && (
+          <Authors>
+            {mainAuthor.authorProfileImage ? (
+              <img
+                src={mainAuthor?.authorProfileImage}
+                alt="저자"
+                style={{
+                  width: '4rem',
+                  height: '4rem',
+                  borderRadius: '0.5rem',
+                  marginRight: '1rem',
+                }}
+              />
+            ) : (
+              <img
+                src={non}
+                alt="저자"
+                style={{
+                  width: '4rem',
+                  height: '4rem',
+                  borderRadius: '0.5rem',
+                  marginRight: '1rem',
+                }}
+              />
+            )}
+
+            <AuthorsInfo>
+              <h5>저자</h5>
+              {mainAuthor?.authorName}
+            </AuthorsInfo>
+          </Authors>
+        )}
         {translator && (
           <Authors>
             {translator.authorProfileImage ? (
@@ -641,9 +706,27 @@ function BookDetail() {
       </InfoContainer>
       <Divider />
       <InfoContainer>
-        <h3>대충 댓글</h3>
+        <h3>코멘트 {commentdata ? commentdata.length : 0} </h3>
       </InfoContainer>
-
+      <CommentContainer>
+        {commentdata &&
+          commentdata.map((comment: Comment) => (
+            <Card key={comment.id} sx={{ display: 'grid', margin: '2%' }}>
+              <div>
+                {comment.memberNickname} {comment.rating}
+              </div>
+              <div style={{ height: '5rem' }}>{comment.commentContent}</div>
+              <div>
+                생성일
+                <Button
+                  variant="contained"
+                  onClick={() => handleLike(comment.id, comment.isLiked)}>
+                  <ThumbUpOffAltIcon /> &nbsp; {comment.likeCount}
+                </Button>
+              </div>
+            </Card>
+          ))}
+      </CommentContainer>
       <Modal open={IsModalOpen} onClose={handleCloseModal}>
         <div>
           <Comments

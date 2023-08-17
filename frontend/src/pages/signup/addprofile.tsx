@@ -113,7 +113,7 @@ function Addprofile() {
     signUpData.socialLoginType || 'DEFAULT',
   );
   const [ProfileImage, setprofileimage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>();
   const [nickname, setNickname] = useState<string>('');
   const [ProfileBio, setprofilebio] = useState<string>('');
   const [nicknameExists, setNicknameExists] = useState<boolean>(false);

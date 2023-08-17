@@ -34,6 +34,7 @@
   },
   "rules": {
     "no-console": "off",
+    "consistent-return": "off", // 메모리 누수 이슈로 추가
     "@typescript-eslint/default-param-last": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-props-no-spreading": "off",

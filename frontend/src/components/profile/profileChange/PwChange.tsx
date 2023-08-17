@@ -68,9 +68,9 @@ function PwChange() {
 
     if (token && password1 === password2) {
       axios
-        .patch('https://i9a507.p.ssafy.io/api/members/profile', formData, {
+        .patch('https://i9a507.p.ssafy.io/api/members', formData, {
           headers: {
-            'X-READED-ACCESSTOKEN': `${token}`,
+            'X-READED-ACCESSTOKEN': token,
           },
         })
         .then(() => {

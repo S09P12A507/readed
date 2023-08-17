@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-// import axios from 'axios';
 import GenreButton from '../../components/common/button/GenreButton';
 
 const Container = styled.section`
@@ -62,16 +61,16 @@ function Genre() {
       <Info>· 어떤 장르의 책이었나요? </Info>
       <br />
       <GenreButtonContainer>
-        <GenreButton genres={0} content="종교" />
-        <GenreButton genres={1} content="과학" />
-        <GenreButton genres={2} content="자기계발" />
-        <GenreButton genres={3} content="역사" />
-        <GenreButton genres={4} content="경제" />
-        <GenreButton genres={5} content="만화" />
-        <GenreButton genres={6} content="추리소설" />
-        <GenreButton genres={7} content="판타지" />
-        <GenreButton genres={8} content="문학" />
-        <GenreButton genres={9} content="에세이" />
+        <GenreButton genres={1} content="종교" />
+        <GenreButton genres={2} content="과학" />
+        <GenreButton genres={3} content="자기계발" />
+        <GenreButton genres={4} content="역사" />
+        <GenreButton genres={5} content="경제" />
+        <GenreButton genres={6} content="만화" />
+        <GenreButton genres={7} content="추리소설" />
+        <GenreButton genres={8} content="판타지" />
+        <GenreButton genres={9} content="문학" />
+        <GenreButton genres={10} content="에세이" />
       </GenreButtonContainer>
       <Start
         variant="contained"
