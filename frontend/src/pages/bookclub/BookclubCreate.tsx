@@ -188,6 +188,7 @@ function BookclubCreate() {
         isPublic,
         password: meetingpw,
       };
+      console.log(formData);
 
       if (token) {
         console.log(token);

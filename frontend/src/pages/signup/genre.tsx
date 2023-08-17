@@ -40,7 +40,7 @@ interface NameData {
 }
 
 function Genre() {
-  const storedData = localStorage.getItem('signupData');
+  const storedData = sessionStorage.getItem('signupData');
   const signUpData: NameData = storedData
     ? (JSON.parse(storedData) as NameData)
     : {
@@ -49,6 +49,7 @@ function Genre() {
   const [MemberName] = useState<string>(signUpData.MemberName || '');
 
   const handleSignUp = () => {
+    sessionStorage.removeItem('signupData');
     window.location.href = '/';
   };
 

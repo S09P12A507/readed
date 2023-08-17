@@ -451,7 +451,14 @@ function BookDetail() {
       <BackButton />
       <Container>
         <BookImage src={data.coverImage} alt={data.bookTitle} />
-        <h2>{data.bookTitle}</h2>
+        <h2
+          style={{
+            textAlign: 'center',
+            margin: '1rem',
+            wordBreak: 'keep-all',
+          }}>
+          {data.bookTitle}
+        </h2>
         <Authors>
           {mainAuthor && <h5>{mainAuthor?.authorName} 지음 |&nbsp; </h5>}
           {translator && <h5>{translator?.authorName} 옮김</h5>}
@@ -492,13 +499,21 @@ function BookDetail() {
           </Card>
         )}
         <br />
-        <StyledTable>
+        <StyledTable style={{}}>
           <TableBody>
             <TableRow>
-              <TableCell>읽고 싶어요</TableCell>
-              <TableCell>코멘트</TableCell>
-              <TableCell>독서록 쓰기</TableCell>
-              <TableCell>북클럽 보기</TableCell>
+              <TableCell style={{ wordBreak: 'keep-all', padding: '0.5rem' }}>
+                읽고 싶어요
+              </TableCell>
+              <TableCell style={{ wordBreak: 'keep-all', padding: '0.5rem' }}>
+                코멘트
+              </TableCell>
+              <TableCell style={{ wordBreak: 'keep-all', padding: '0.5rem' }}>
+                독서록 쓰기
+              </TableCell>
+              <TableCell style={{ wordBreak: 'keep-all', padding: '0.5rem' }}>
+                북클럽 보기
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell onClick={handleToggleFavorite}>

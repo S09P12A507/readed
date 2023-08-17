@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import Comments from '../../components/book/Comment';
 import BackButton from '../../components/common/button/BackButton';
 import { RootState } from '../../store/store';
-import ReadedFooter from '../../components/common/Footer';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -146,6 +145,7 @@ function Genrebook() {
   }, [inputText]);
 
   const handleSignUp = () => {
+    sessionStorage.removeItem('signupData');
     window.location.href = '/';
   };
 
@@ -213,7 +213,6 @@ function Genrebook() {
         }}>
         바로 시작하기
       </Start>
-      <ReadedFooter />
     </Container>
   );
 }

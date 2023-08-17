@@ -85,41 +85,60 @@ function BookClubDetail() {
 
   const handleSubmit = () => {
     if (token) {
-      axios
-        .get<{ data: BookClub }>(
-          `https://i9a507.p.ssafy.io/api/bookclubs/join/${
-            bookclubId as string
-          }`,
-          {
-            headers: {
-              'X-READED-ACCESSTOKEN': token,
+      if (remainingTime && remainingTime > 0) {
+        axios
+          .get<{ data: BookClub }>(
+            `https://i9a507.p.ssafy.io/api/bookclubs/join/${
+              bookclubId as string
+            }`,
+            {
+              headers: {
+                'X-READED-ACCESSTOKEN': token,
+              },
             },
-          },
-        )
-        .then(response => {
-          console.log(response.data.data);
-        })
-        .catch(() => {});
+          )
+          .then(() => {
+            window.location.reload();
+          })
+          .catch(() => {});
+      } else {
+        navigate(`/bookclub/waiting/${bookclubId as string}`);
+      }
     }
   };
+
   const handleunRegisterd = () => {
     if (token) {
-      axios
-        .delete(
-          `https://i9a507.p.ssafy.io/api/bookclubs/leave/${
-            bookclubId as string
-          }`,
-          {
+      if (remainingTime && remainingTime > 0) {
+        axios
+          .delete(
+            `https://i9a507.p.ssafy.io/api/bookclubs/leave/${
+              bookclubId as string
+            }`,
+            {
+              headers: {
+                'X-READED-ACCESSTOKEN': token,
+              },
+            },
+          )
+          .then(() => {
+            setRegisterd(false);
+            window.location.reload();
+          })
+          .catch(() => {});
+      } else {
+        axios
+          .post('https://i9a507.p.ssafy.io/api/bookclubs/start', {
             headers: {
               'X-READED-ACCESSTOKEN': token,
             },
-          },
-        )
-        .then(response => {
-          setRegisterd(false);
-          console.log(response.data);
-        })
-        .catch(() => {});
+          })
+          .then(response => {
+            console.log(response);
+            // navigate(`/bookclub/${bookclubId as string}`);
+          })
+          .catch(() => {});
+      }
     }
   };
   useEffect(() => {
@@ -136,7 +155,6 @@ function BookClubDetail() {
         .then(response => {
           setData(response.data.data);
           setRegisterd(response.data.data.isJoined);
-          console.log(response.data.data);
         })
         .catch(() => {});
     }
@@ -144,12 +162,16 @@ function BookClubDetail() {
 
   useEffect(() => {
     if (data) {
-      const endTime = new Date(data.endTime);
-      const intervalId = setInterval(() => {
+      const startTime = new Date(data.startTime);
+      const updateRemainingTime = () => {
         const currentTime = new Date();
-        const timeDiff = endTime.getTime() - currentTime.getTime();
+        const timeDiff = startTime.getTime() - currentTime.getTime();
         setRemainingTime(timeDiff);
-      }, 1000);
+      };
+
+      updateRemainingTime(); // 초기 호출
+
+      const intervalId = setInterval(updateRemainingTime, 1000); // 1초마다 업데이트
       return () => {
         clearInterval(intervalId);
       };
@@ -280,15 +302,16 @@ function BookClubDetail() {
             width: '100%',
             bottom: '0',
             left: '0',
-            background: '#FF6D75',
+            background:
+              remainingTime && remainingTime > 0 ? '#FF6D75' : '#156156',
             color: 'white',
           }}
           onClick={handleunRegisterd}>
-          {remainingTime !== null &&
-            remainingTime > 0 &&
-            `북클럽 참여 취소 (${formatTime(
-              Math.floor(remainingTime / 1000),
-            )} 남음)`}
+          {remainingTime && remainingTime > 0
+            ? `북클럽 참여 취소 (${formatTime(
+                Math.floor(remainingTime / 1000),
+              )} 남음)`
+            : '북클럽 입장하기'}
         </StartButtonContainer>
       ) : (
         <StartButtonContainer
@@ -302,8 +325,8 @@ function BookClubDetail() {
             background: '#4B8346',
             color: 'white',
           }}
-          onClick={handleSubmit}>
-          {remainingTime !== null && remainingTime > 0
+          onClick={() => handleSubmit()}>
+          {remainingTime && remainingTime > 0
             ? `북클럽 참여하기 (${formatTime(
                 Math.floor(remainingTime / 1000),
               )} 남음)`

@@ -78,7 +78,9 @@ interface BookClub {
   endTime: Date;
   duration: number;
   participantCount: number;
-  memberList: [];
+  memberList: {
+    memberNickName: string;
+  }[];
   is_public: boolean;
   meetingpw: string;
 }
@@ -105,8 +107,8 @@ function Bookclub() {
           },
         })
         .then(response => {
-          console.log(response.data.data);
           setData(response.data.data);
+          console.log(response.data.data);
         })
         .catch(() => {});
     }

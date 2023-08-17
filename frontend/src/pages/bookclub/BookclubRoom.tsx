@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import LeaveIcon from '../../components/bookclub/LeaveIcon';
 import VoiceIcon from '../../components/bookclub/VoiceIcon';
 import VideoIcon from '../../components/bookclub/VideoIcon';
@@ -32,6 +33,7 @@ function BookclubRoom() {
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
   const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
+  const { bookclubId } = useParams();
 
   const handleLocalMediaStream = (stream: MediaStream) => {
     if (localVideoRef.current) {
@@ -47,7 +49,7 @@ function BookclubRoom() {
   };
 
   const handlestart = () => {
-    window.location.href = '/bookclub/2';
+    window.location.href = `/bookclub/${bookclubId as string}`;
   };
 
   useEffect(() => {

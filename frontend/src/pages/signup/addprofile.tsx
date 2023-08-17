@@ -209,7 +209,6 @@ function Addprofile() {
   const handleAlertClose = () => {
     setShowAlert(false);
     if (message === '회원 가입에 성공했습니다.') {
-      sessionStorage.removeItem('signupData');
       window.location.href = '/genre';
     }
   };

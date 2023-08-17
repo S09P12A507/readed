@@ -40,7 +40,12 @@ function KaKaoLogin() {
               window.location.href = '/';
             } else {
               const userdata = (response.data as { data: User }).data;
-              sessionStorage.setItem('signupData', JSON.stringify(userdata));
+              const formData: User = {
+                name: userdata.name,
+                email: userdata.email,
+                socialLoginType: userdata.socialLoginType,
+              };
+              sessionStorage.setItem('signupData', JSON.stringify(formData));
               window.location.href = '/signup/addprofile';
             }
           })
