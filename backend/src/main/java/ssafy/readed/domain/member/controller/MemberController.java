@@ -48,8 +48,9 @@ public class MemberController {
 
     @PatchMapping("/profile")
     public ResponseEntity<?> updateProfile(@AuthenticationPrincipal Member member,
-            @RequestBody ModifyMemberProfileRequestDto requestDto) {
-        memberService.modifyProfile(member, requestDto);
+            @RequestPart ModifyMemberProfileRequestDto requestDto,
+            @RequestParam MultipartFile profileImage) {
+        memberService.modifyProfile(member, requestDto, profileImage);
         return JsonResponse.ok("멤버 프로필 변경 성공!");
     }
 

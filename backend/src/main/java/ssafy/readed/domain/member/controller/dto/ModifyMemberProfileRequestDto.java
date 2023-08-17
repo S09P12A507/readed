@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor
@@ -12,14 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class ModifyMemberProfileRequestDto {
 
     private String nickname;
-    private MultipartFile profileImage;
     private String profileBio;
 
     @Builder
-    public ModifyMemberProfileRequestDto(String nickname, MultipartFile profileImage,
-            String profileBio) {
+    public ModifyMemberProfileRequestDto(String nickname, String profileBio) {
         this.nickname = nickname;
-        this.profileImage = profileImage;
         this.profileBio = profileBio;
     }
 }

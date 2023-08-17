@@ -17,7 +17,8 @@ public interface MemberService {
 
     Member getMember(Long id);
 
-    void modifyProfile(Member member, ModifyMemberProfileRequestDto profileRequestDto);
+    void modifyProfile(Member member, ModifyMemberProfileRequestDto profileRequestDto,
+            MultipartFile profileImage);
 
     SelectMemberResponseDto selectMember(Long id);
 

@@ -92,14 +92,16 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void modifyProfile(Member member, ModifyMemberProfileRequestDto requestDto) {
+    public void modifyProfile(Member member, ModifyMemberProfileRequestDto requestDto,
+            MultipartFile profileImage) {
+
         checkNicknameRegexp(requestDto.getNickname());
 
         Member modifiedMember = getMember(member.getId());
 
-        if (!requestDto.getProfileImage().isEmpty()) {
+        if (!profileImage.isEmpty()) {
             try {
-                saveNewProfileFile(modifiedMember, requestDto.getProfileImage());
+                saveNewProfileFile(modifiedMember, profileImage);
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new GlobalRuntimeException("프로필 사진 저장 실패", HttpStatus.CONFLICT);

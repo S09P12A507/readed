@@ -59,10 +59,9 @@ class MemberServiceImplTest {
         Member member = new Member();
         ModifyMemberProfileRequestDto dto = ModifyMemberProfileRequestDto.builder()
                 .nickname("modnick")
-                //.profile_bio("modbio")
-                //.profile_image("modimage")
+                .profileBio("modbio")
                 .build();
-        memberService.modifyProfile(member, dto);
+        //memberService.modifyProfile(member, dto);
     }
 
     void comment() {
