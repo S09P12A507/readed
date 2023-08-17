@@ -33,7 +33,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         if (token == null) {
             //토큰 정보 없음
-            throw new GlobalRuntimeException("액세스토큰 요청 정보가 없습니다.", HttpStatus.BAD_REQUEST);
+            throw new GlobalRuntimeException(
+                     "액세스토큰 요청 정보가 없습니다.", HttpStatus.BAD_REQUEST);
         }
 
         if (!jwtTokenProvider.validateAccessToken(token)) {
