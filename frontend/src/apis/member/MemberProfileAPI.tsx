@@ -1,5 +1,3 @@
-// import { useSelector } from 'react-redux';
-// import { RootState } from '../../store/store';
 import { IUserProfileInfo } from '../../interfaces/user/IUserProfileInfo';
 /** 내 프로필만 조회
  * @author 박성준

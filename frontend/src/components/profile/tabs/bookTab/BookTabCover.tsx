@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 // components
+import { Button } from '@mui/material';
 import BookTabBottomSheet from './BookTabBottomSheet';
 // types
-import { IUserBookRead } from '../../../../interfaces/user/IUserBookRead';
+import { IComment } from '../../../../interfaces/comment/IComment';
 
 /**
  * 내 서재 - 읽은 책 탭의 책 요소
@@ -16,20 +17,22 @@ import { IUserBookRead } from '../../../../interfaces/user/IUserBookRead';
 // const primaryColor = 'var(--primary-main)';
 const noThumbnailColor = 'var(--divider)';
 
-const BookReadCover = styled.img<{ bookCover: string }>`
+const BookReadCover = styled(Button)<{ bookCover1: string }>`
   width: 100%;
   border-radius: 0.25rem;
   aspect-ratio: 6.5/9;
   /* 임시 컬러 지정 */
-  /* img를 가져와서 background-image로 넣을 것 */
+  /* 얘네들 작동 안하는 것 같음 */
   background-color: ${props =>
-    props.bookCover ? '#d9d9d9' : noThumbnailColor};
-  :hover {
+    props.bookCover1 === null ? '#d9d9d9' : noThumbnailColor};
+  background-image: ${props =>
+    props.bookCover1 !== null ? `url(${props.bookCover1})` : '#d9d9d9'};
+  /* :hover {
     cursor: pointer;
-  }
+  } */
 `;
 
-function BookTabCover({ bookRead }: { bookRead: IUserBookRead }) {
+function BookTabCover({ bookRead }: { bookRead: IComment }) {
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -39,7 +42,9 @@ function BookTabCover({ bookRead }: { bookRead: IUserBookRead }) {
   return (
     <>
       <BookReadCover
-        bookCover={bookRead.bookCover}
+        // variant="contained"
+        sx={{ bgcolor: '#d9d9d9' }} // 임시 컬러
+        bookCover1={bookRead.bookCover}
         onClick={toggleDrawer(true)}
       />
       <BookTabBottomSheet

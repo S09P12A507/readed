@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -6,8 +8,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import ReadedH2 from '../../../components/common/heading/ReadedH2';
 import BookmarkCover from '../../../components/profile/meatballMenu/BookmarkCover';
 import ReadedFooter from '../../../components/common/Footer';
-// types
-import { IUserBookRead } from '../../../interfaces/user/IUserBookRead';
+// hooks
+import { useAccessToken } from '../../../hooks/useAccessToken';
+// types & apis
+import {
+  IBookmarkResponse,
+  getBookmark,
+} from '../../../apis/bookmark/GetBookmarkAPI';
+import { IBookmark } from '../../../interfaces/bookmark/IBookmark';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -20,58 +28,6 @@ const TopWrapper = styled.div`
   margin-bottom: 2.5rem;
 `;
 
-const dummyBookData: IUserBookRead[] = [
-  {
-    bookId: '1',
-    bookTitle: 'title1',
-    bookCover: 'thumbnail1',
-    userRate: 3,
-    userComment: 'hello1',
-  },
-  {
-    bookId: '2',
-    bookTitle: 'title2',
-    bookCover: 'thumbnail2',
-    userRate: 2.5,
-    userComment: 'hello2',
-  },
-  {
-    bookId: '3',
-    bookTitle: 'title3',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '4',
-    bookTitle: 'title4',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '5',
-    bookTitle: 'title5',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '6',
-    bookTitle: 'title6',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '7',
-    bookTitle: 'title7',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-];
-
 const BookTabCoverList = styled.section`
   text-align: center;
   justify-content: space-between;
@@ -81,8 +37,23 @@ const BookTabCoverList = styled.section`
 `;
 
 function Bookmark() {
-  const bookData = dummyBookData;
+  // const bookData = dummyBookData;
   const navigate = useNavigate();
+  const accessToken = useAccessToken();
+
+  const [bookmark, setBookmark] = useState<IBookmark[]>([]);
+
+  const { data } = useQuery<IBookmarkResponse | null>(['memberReport'], () =>
+    getBookmark(accessToken),
+  );
+
+  useEffect(() => {
+    if (data !== null && data !== undefined) {
+      const bookmarkData = data.data.reverse();
+      setBookmark(bookmarkData);
+    }
+    console.log(data);
+  }, [data]);
   return (
     <Container>
       <TopWrapper>
@@ -92,8 +63,10 @@ function Bookmark() {
         </IconButton>
       </TopWrapper>
       <BookTabCoverList>
-        {bookData.map(bookRead => {
-          return <BookmarkCover key={bookRead.bookId} bookRead={bookRead} />;
+        {bookmark.map(bookmarkBook => {
+          return (
+            <BookmarkCover key={bookmarkBook.id} bookmarkBook={bookmarkBook} />
+          );
         })}
       </BookTabCoverList>
       <ReadedFooter />

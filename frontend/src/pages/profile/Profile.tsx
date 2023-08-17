@@ -56,7 +56,6 @@ function Profile() {
   useEffect(() => {
     if (data !== null && data !== undefined) {
       const profileInfo = data.data;
-      // console.log(profileInfo);
       setUserProfile(profileInfo);
     }
   }, [data]);

@@ -39,9 +39,9 @@ const BookAuthor = styled.span`
 `;
 
 function BookCard({ book, itemId }: { book: IMainBook; itemId: string }) {
-  const { author, coverImage, bookTitle } = book;
+  const { bookId, author, coverImage, bookTitle } = book;
   // 임시로 책 제목을 통해 책의 상세로 들어간다. 추후 책 isbn으로 넘어가도록 해야 할 듯.
-  const bookLink = `/book/${encodeURIComponent(bookTitle)}`;
+  const bookLink = `/book/${bookId}`;
   return (
     <Card
       id={itemId}
@@ -61,6 +61,7 @@ function BookCard({ book, itemId }: { book: IMainBook; itemId: string }) {
             image={coverImage}
             alt={bookTitle}
             sx={{
+              aspectRatio: '6.5/ 10',
               borderRadius: '0.25rem',
               boxShadow: '2',
             }}

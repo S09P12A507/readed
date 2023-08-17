@@ -52,7 +52,8 @@ const ReportContent = styled(Typography)`
 const WrittenDate = styled(Typography)``;
 
 function ReportTabCard({ report }: { report: IReport }) {
-  const { reportTitle, reportContent, isPublic, bookTitle } = report;
+  // console.log(report);
+  const { title, content, isPublic, bookTitle } = report;
   return (
     <Card
       sx={{
@@ -69,7 +70,7 @@ function ReportTabCard({ report }: { report: IReport }) {
             width: '33%',
             margin: '0.5rem',
             borderRadius: '0.25rem',
-            aspectRatio: '6.5/9',
+            aspectRatio: '6.5/10',
             backgroundColor: '#d9d9d9',
           }}
           image={report.bookCover ? report.bookCover : undefined}
@@ -86,12 +87,12 @@ function ReportTabCard({ report }: { report: IReport }) {
           }}>
           <TextContentTitleWrapper>
             <ReportTitle color="var(--text-primary)" fontWeight="700">
-              {reportTitle}
+              {title}
             </ReportTitle>
             <BookTitle color="var(--text-primary)">{bookTitle}</BookTitle>
           </TextContentTitleWrapper>
           <ReportContent color="var(--text-secondary)" fontSize="0.875rem">
-            {reportContent}
+            {content}
           </ReportContent>
           <TextContentBottomWrapper>
             <WrittenDate color="var(--text-secondary)" fontSize="0.875rem">

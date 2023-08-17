@@ -1,19 +1,9 @@
-// import { useSelector } from 'react-redux';
-// import { RootState } from '../../store/store';
 import { IUserProfileStatistics } from '../../interfaces/user/IUserProfileStatistics';
 /** 내 프로필만 조회
  * @author 박성준
  * @param
  * @returns profileInfo statistics
  */
-
-// export interface IProifle {
-//   bookId: number;
-//   bookTitle: string;
-//   coverImage: string;
-//   avgRating: number;
-//   author: string;
-// }
 
 export interface IUserProfileStatisticsResponse {
   data: IUserProfileStatistics;

@@ -13,4 +13,5 @@ export interface IUserProfileStatistics {
   star_4_count: number;
   star_4p5_count: number;
   star_5_count: number;
+  topPercentage: number;
 }

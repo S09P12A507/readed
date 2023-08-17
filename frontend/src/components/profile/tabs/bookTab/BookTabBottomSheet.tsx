@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { SwipeableDrawer, Typography, Rating, Button } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 // types
-import { IUserBookRead } from '../../../../interfaces/user/IUserBookRead';
+import { IComment } from '../../../../interfaces/comment/IComment';
 
 /**
  * 내 서재 - 읽은 책 탭의 책 요소
@@ -41,7 +41,7 @@ const noThumbnailColor = 'var(--divider)';
 
 const PrivateBookCommentCover = styled.img<{ bookCover: string }>`
   width: 6.5rem;
-  aspect-ratio: 6.5/9;
+  aspect-ratio: 6.5/10;
   /* 임시 컬러 지정 */
   /* img를 가져와서 background-image로 넣을 것 */
   background-color: ${props =>
@@ -51,11 +51,11 @@ const PrivateBookCommentCover = styled.img<{ bookCover: string }>`
 interface BottomSheetProps {
   open: boolean;
   onClose: () => void;
-  bookRead: IUserBookRead;
+  bookRead: IComment;
 }
 
 function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
-  const { bookTitle, bookCover, userRate, userComment } = bookRead;
+  const { bookId, bookTitle, bookCover, rating, commentContent } = bookRead;
 
   return (
     <SwipeableDrawer
@@ -86,7 +86,7 @@ function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
           {bookTitle}
         </Typography>
         <Link
-          to="/"
+          to={`/book/${bookId}`}
           style={{
             display: 'flex',
             flexFlow: 'column',
@@ -104,7 +104,7 @@ function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
           <DatumWrapper>
             <Typography>내 별점</Typography>
             <Rating
-              defaultValue={userRate}
+              defaultValue={rating}
               precision={0.5}
               readOnly
               size="large"
@@ -112,7 +112,7 @@ function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
           </DatumWrapper>
           <DatumWrapper>
             <Typography>내 코멘트</Typography>
-            <UserComment>{userComment}</UserComment>
+            <UserComment>{commentContent}</UserComment>
           </DatumWrapper>
         </DataWrapper>
       </BottomSheetContent>

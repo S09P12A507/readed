@@ -83,7 +83,10 @@ function countRatingAvg(ratings: number[]) {
 function StatisticsTabRatingChart({
   chartData,
 }: {
-  chartData: Omit<IUserProfileStatistics, 'id' | 'readCount' | 'pageCount'>;
+  chartData: Omit<
+    IUserProfileStatistics,
+    'id' | 'readCount' | 'pageCount' | 'topPercentage'
+  >;
 }) {
   const userRateData: number[] = [...Object.values(chartData)];
   const maxIndex = userRateData.indexOf(Math.max(...userRateData));

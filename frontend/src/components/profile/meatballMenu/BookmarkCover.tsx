@@ -4,7 +4,7 @@ import { Rating } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 // types
-import { IUserBookRead } from '../../../interfaces/user/IUserBookRead';
+import { IBookmark } from '../../../interfaces/bookmark/IBookmark';
 
 /**
  * 내 서재 - 읽은 책 탭의 책 요소
@@ -21,11 +21,13 @@ const BookmarkCover = styled.div<{ bookCover: string }>`
   position: relative;
   width: 100%;
   border-radius: 0.25rem;
-  aspect-ratio: 6.5/9;
+  aspect-ratio: 6.5/10;
   /* 임시 컬러 지정 */
   /* img를 가져와서 background-image로 넣을 것 */
   background-color: ${props =>
     props.bookCover ? '#d9d9d9' : noThumbnailColor};
+  background-image: ${props =>
+    props.bookCover ? `url${props.bookCover}` : noThumbnailColor};
 `;
 
 const HeartMark = styled(Rating)({
@@ -39,10 +41,10 @@ const HeartMark = styled(Rating)({
   },
 });
 
-function BookTabCover({ bookRead }: { bookRead: IUserBookRead }) {
+function BookTabCover({ bookmarkBook }: { bookmarkBook: IBookmark }) {
   return (
     <>
-      <BookmarkCover bookCover={bookRead.bookCover}>
+      <BookmarkCover bookCover={bookmarkBook.bookCover}>
         <HeartMark
           max={1}
           icon={<FavoriteIcon fontSize="inherit" />}

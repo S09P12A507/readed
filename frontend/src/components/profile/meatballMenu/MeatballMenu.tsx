@@ -11,7 +11,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 /**
  * @author 박성준
- * @todo 로그아웃
+ * @todo 로그아웃시 확인 모달 필요
  */
 
 const Container = styled.div`
@@ -38,6 +38,7 @@ function MeatballMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <Container>
       <Button

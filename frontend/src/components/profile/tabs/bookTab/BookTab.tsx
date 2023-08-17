@@ -1,10 +1,17 @@
+import { useState, useEffect } from 'react';
 // import axios, { AxiosResponse } from 'axios';
-// import { useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import BookTabCover from './BookTabCover';
 // hooks
+import { useAccessToken } from '../../../../hooks/useAccessToken';
+// apis
+import {
+  ICommentResponse,
+  getMemberComment,
+} from '../../../../apis/comment/CommentListByMember';
 // types
-import { IUserBookRead } from '../../../../interfaces/user/IUserBookRead';
+import { IComment } from '../../../../interfaces/comment/IComment';
 
 /**
  * 내 서재 - 읽은 책 탭
@@ -18,192 +25,6 @@ import { IUserBookRead } from '../../../../interfaces/user/IUserBookRead';
  *
  */
 
-// 책 더미 데이터
-const dummyBookData: IUserBookRead[] = [
-  {
-    bookId: '1',
-    bookTitle: 'title1',
-    bookCover: 'thumbnail1',
-    userRate: 3,
-    userComment: 'hello1',
-  },
-  {
-    bookId: '2',
-    bookTitle: 'title2',
-    bookCover: 'thumbnail2',
-    userRate: 2.5,
-    userComment: 'hello2',
-  },
-  {
-    bookId: '3',
-    bookTitle: 'title3',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '4',
-    bookTitle: 'title4',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '5',
-    bookTitle: 'title5',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '6',
-    bookTitle: 'title6',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '7',
-    bookTitle: 'title7',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '8',
-    bookTitle: 'title8',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '9',
-    bookTitle: 'title9',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '10',
-    bookTitle: 'title10',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '11',
-    bookTitle: 'title11',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '12',
-    bookTitle: 'title12',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '13',
-    bookTitle: 'title13',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '14',
-    bookTitle: 'title14',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '15',
-    bookTitle: 'title15',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '16',
-    bookTitle: 'title16',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '17',
-    bookTitle: 'title17',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '18',
-    bookTitle: 'title18',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '19',
-    bookTitle: 'title19',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '20',
-    bookTitle: 'title20',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '21',
-    bookTitle: 'title21',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '22',
-    bookTitle: 'title22',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '23',
-    bookTitle: 'title23',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '24',
-    bookTitle: 'title24',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '25',
-    bookTitle: 'title25',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-  {
-    bookId: '26',
-    bookTitle: 'title26',
-    bookCover: 'thumbnail3',
-    userRate: 4,
-    userComment: 'hello3',
-  },
-];
-
 const BookTabCoverList = styled.section`
   text-align: center;
   justify-content: space-between;
@@ -213,11 +34,24 @@ const BookTabCoverList = styled.section`
 `;
 
 function BookTab() {
-  const bookData = dummyBookData;
+  const accessToken = useAccessToken();
+
+  const [comment, setComment] = useState<IComment[]>([]);
+
+  const { data } = useQuery<ICommentResponse | null>(['memberComment'], () =>
+    getMemberComment(accessToken),
+  );
+
+  useEffect(() => {
+    if (data !== null && data !== undefined) {
+      const memberComment = data.data.reverse();
+      setComment(memberComment);
+    }
+  }, [data]);
 
   return (
     <BookTabCoverList>
-      {bookData.map(bookRead => {
+      {comment.map(bookRead => {
         return <BookTabCover key={bookRead.bookId} bookRead={bookRead} />;
       })}
     </BookTabCoverList>

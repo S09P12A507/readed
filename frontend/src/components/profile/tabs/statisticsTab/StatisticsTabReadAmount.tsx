@@ -43,7 +43,10 @@ const SloganContainer = styled.div`
 function StatisticsTabReadAmount({
   readAmount,
 }: {
-  readAmount: Pick<IUserProfileStatistics, 'readCount' | 'pageCount'>;
+  readAmount: Pick<
+    IUserProfileStatistics,
+    'readCount' | 'pageCount' | 'topPercentage'
+  >;
 }) {
   const handleNumberFormat = useCallback((value: number) => {
     const formattedNumber = new Intl.NumberFormat('en-US', {
@@ -91,14 +94,14 @@ function StatisticsTabReadAmount({
       <SloganContainer>
         <div>
           <ReadedSpan
-            text="store: 유저명 님은 "
+            text="유저명 님은 "
             fontSize="0.875rem"
             fontWeight="300"
             textAlign="center"
             lineHeight="1.8"
           />
           <ReadedSpan
-            text="상위 n%"
+            text={`상위 ${readAmount.topPercentage.toString()}%`}
             fontSize="0.875rem"
             fontWeight="500"
             fontColor="var(--primary-dark)"

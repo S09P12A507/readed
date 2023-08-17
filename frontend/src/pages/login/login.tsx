@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
+import { Link, IconButton, Typography, TextField, Button } from '@mui/material';
 import { setTokens } from '../../store/actions/authActions';
 import kakaologo from '../../assets/img/kakaologo.png';
 import AlertsModal from '../../components/common/alert/Alert';
@@ -11,36 +12,64 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: space-around;
+  height: 100%; */
   padding: 0 var(--padding-global);
 `;
 
-const LoginBox = styled.input`
-  width: 280px;
-  height: 40px;
-  margin-bottom: 10px;
+const LoginBox = styled(TextField)`
+  width: 100%;
+  height: 1.5rem;
+  margin: 2rem auto;
+`;
+
+const LoginButton = styled(Button)`
+  /* width: 290px;
+  height: 40px; */
+  height: 3rem;
+  background: #7aa874;
+  border-color: white;
+  color: white;
+`;
+
+const CenterText = styled.h3`
+  text-align: center;
+`;
+
+const LoginUtilsWrapper = styled.div`
+  /* width: 100%; */
+  display: flex;
+  margin: 1rem auto 3rem auto;
+`;
+
+const CircleContainerWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
 `;
 
 const CircleContainer = styled.div`
-  display: flex;
+  text-align: center;
+  margin: 0 1rem;
 `;
 
-const GoogleCircle = styled.button`
-  width: 50px;
-  height: 50px;
-  background-color: white;
+const GoogleCircle = styled(IconButton)`
+  width: 3rem;
+  height: 3rem;
+  /* background-color: white; */
   border-radius: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 30px;
   border: 1px solid gray;
+  background-image: url('https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg');
+  background-size: cover;
 `;
 
-const KakaoCircle = styled.button`
-  width: 50px;
-  height: 50px;
-  background-color: white;
+const KakaoCircle = styled(IconButton)`
+  width: 3rem;
+  height: 3rem;
+  /* background-color: white; */
   border-radius: 50px;
   display: flex;
   align-items: center;
@@ -49,19 +78,8 @@ const KakaoCircle = styled.button`
   font-size: 24px;
   margin-right: 10px;
   border: 1px solid gray;
-`;
-
-const LoginButton = styled.button`
-  width: 290px;
-  height: 40px;
-  margin-top: 10px;
-  background: #7aa874;
-  border-color: white;
-  color: white;
-`;
-
-const CenterText = styled.h3`
-  text-align: center;
+  background-image: url(${kakaologo});
+  background-size: cover;
 `;
 
 interface Tokens {
@@ -72,7 +90,7 @@ interface Tokens {
 function Login() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [remember, setRememberStatus] = useState<boolean>(false);
+  // const [remember, setRememberStatus] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
@@ -112,89 +130,131 @@ function Login() {
   };
   return (
     <Container>
-      <h1>리디드</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <LoginBox
-            type="text"
-            id="username"
-            value={username}
-            placeholder="이메일"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setUsername(e.target.value)
-            }
-            required
+      <Typography
+        variant="h1"
+        color="var(--primary-main)"
+        fontSize="3rem"
+        margin="2rem auto 4rem auto">
+        readed
+      </Typography>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: 'flex',
+          flexFlow: 'column',
+          justifyContent: 'space-between',
+          textAlign: 'center',
+          width: '80%',
+          height: '11rem',
+        }}>
+        <LoginBox
+          type="text"
+          id="username"
+          value={username}
+          label="이메일"
+          variant="filled"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setUsername(e.target.value)
+          }
+          required
+        />
+        <LoginBox
+          type="password"
+          id="password"
+          value={password}
+          label="비밀번호"
+          variant="filled"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPassword(e.target.value)
+          }
+          required
+        />
+        {/* <div>
+          <input
+            type="checkbox"
+            id="remember"
+            checked={remember}
+            style={{ textAlign: 'left' }}
+            onChange={e => setRememberStatus(e.target.checked)}
           />
-        </div>
-        <div>
-          <LoginBox
-            type="password"
-            id="password"
-            value={password}
-            placeholder="비밀번호"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
-            required
-          />
-          <div>
-            <input
-              type="checkbox"
-              id="remember"
-              checked={remember}
-              onChange={e => setRememberStatus(e.target.checked)}
-            />
-            로그인 유지
-          </div>
-          <div>
-            <LoginButton type="submit">로그인</LoginButton>
-          </div>
-        </div>
+          로그인 유지
+        </div> */}
+
+        <LoginButton
+          type="submit"
+          variant="contained"
+          sx={{ fontSize: '1rem' }}>
+          로그인
+        </LoginButton>
       </form>
-      <br />
-      <p>
-        <a href="htpp://local:8080"> 아이디 찾기</a> |
-        <a href="htpp://local:8080"> 비밀번호 찾기</a> |
-        <Link to="/signup"> 회원가입</Link>
-      </p>
-      <br />
+      <LoginUtilsWrapper>
+        <Link href="/login" underline="hover" color="var(--text-secondary)">
+          아이디 찾기
+        </Link>
+        <Typography margin="0 1rem" color="var(--text-secondary)">
+          |
+        </Typography>
+        <Link href="/login" underline="hover" color="var(--text-secondary)">
+          비밀번호 찾기
+        </Link>
+        <Typography margin="0 1rem" color="var(--text-secondary)">
+          |
+        </Typography>
+        <Link href="/signup" underline="hover" color="var(--primary-dark)">
+          회원가입
+        </Link>
+      </LoginUtilsWrapper>
       <div>
         <CenterText>간편 로그인</CenterText>
         <br />
-        <CircleContainer>
-          <div>
+        <CircleContainerWrapper>
+          <CircleContainer>
             <GoogleCircle
-              type="button"
               onClick={() =>
                 handleLogin(
                   `https://accounts.google.com/o/oauth2/auth?client_id=${GoogleclientId}&redirect_uri=${GoogleredirectUri}&response_type=code&scope=openid%20email%20profile`,
                 )
               }>
-              <img
+              {/* <img
                 src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                 alt="Google Logo"
                 style={{ width: '30px', height: '30px' }}
-              />
+              /> */}
             </GoogleCircle>
-            <p style={{ marginLeft: '9px' }}>구글</p>
-          </div>
-          <div>
+            <Typography
+              textAlign="center"
+              color="var(--text-secondary)"
+              fontSize="0.875rem"
+              marginTop="0.5rem">
+              구글 계정으로
+              <br />
+              로그인
+            </Typography>
+          </CircleContainer>
+          <CircleContainer>
             <KakaoCircle
-              type="button"
               onClick={() =>
                 handleLogin(
                   `https://kauth.kakao.com/oauth/authorize?client_id=${KakaoRestApi}&redirect_uri=${KakaoRedirect}&response_type=code`,
                 )
               }>
-              <img
+              {/* <img
                 src={kakaologo}
                 alt="Kakao Logo"
                 style={{ width: '30px', height: '30px' }}
-              />
+              /> */}
             </KakaoCircle>
-            <p style={{ marginLeft: '2px' }}>카카오</p>
-          </div>
-        </CircleContainer>
+            <Typography
+              textAlign="center"
+              color="var(--text-secondary)"
+              fontSize="0.875rem"
+              marginTop="0.5rem">
+              카카오 계정으로
+              <br />
+              로그인
+            </Typography>
+          </CircleContainer>
+        </CircleContainerWrapper>
       </div>
       <AlertsModal
         open={showAlert}

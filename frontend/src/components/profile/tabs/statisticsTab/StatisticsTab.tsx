@@ -24,23 +24,6 @@ import {
  * @todo 선호 장르 워드클라우드는?
  */
 
-// const dummyStatisticsData: IUserProfileStatistics = {
-//   id: 0,
-//   readCount: 154,
-//   pageCount: 67483,
-//   star0count: 3,
-//   star0p5count: 2,
-//   star1count: 4,
-//   star1p5count: 5,
-//   star2count: 6,
-//   star2p5count: 3,
-//   star3count: 4,
-//   star3p5count: 7,
-//   star4count: 9,
-//   star4p5count: 8,
-//   star5count: 5,
-// };
-
 function StatisticsTab() {
   const [userProfile, setUserProfile] = useState<IUserProfileStatistics>();
 
@@ -50,6 +33,7 @@ function StatisticsTab() {
     ['profileCardInfo'],
     () => getMemberProfileStatistics(accessToken),
   );
+
   useEffect(() => {
     if (data !== null && data !== undefined) {
       const profileInfo = data.data;
@@ -70,27 +54,11 @@ function StatisticsTab() {
   const star4count = userProfile?.star_4_count;
   const star4p5count = userProfile?.star_4p5_count;
   const star5count = userProfile?.star_5_count;
+  const topPercentage = userProfile?.topPercentage;
 
-  //   const {
-  //     readCount,
-  //     pageCount,
-  //   star_0_count,
-  //   star_0p5_count,
-  //   star_1_count,
-  //   star_1p5_count,
-  //   star_2_count,
-  //   star_2p5_count,
-  //   star_3_count,
-  //   star_3p5_count,
-  //   star_4_count,
-  //   star_4p5_count,
-  //   star_5_count;
-  // } = userProfile;
-
-  // const readAmount = { readCount, pageCount };
   const chartData: Omit<
     IUserProfileStatistics,
-    'id' | 'readCount' | 'pageCount'
+    'id' | 'readCount' | 'pageCount' | 'topPercentage'
   > = {
     star_0_count: star0count || 0,
     star_0p5_count: star0p5count || 0,
@@ -107,9 +75,13 @@ function StatisticsTab() {
   return (
     <Container sx={{ paddingTop: '0.25rem' }}>
       {/* <StatisticsTabReadAmount readAmount={readAmount} /> */}
-      {readCount !== undefined && pageCount !== undefined ? (
+      {readCount !== undefined &&
+      pageCount !== undefined &&
+      topPercentage !== undefined ? (
         <>
-          <StatisticsTabReadAmount readAmount={{ readCount, pageCount }} />
+          <StatisticsTabReadAmount
+            readAmount={{ readCount, pageCount, topPercentage }}
+          />
           <Divider sx={{ marginTop: '3rem', marginBottom: '3rem' }} />
         </>
       ) : null}

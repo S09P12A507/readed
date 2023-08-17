@@ -41,7 +41,7 @@ const Item = styled.div`
 function MainSliderItem1() {
   const navigate = useNavigate();
   return (
-    <Container onClick={() => navigate('/')}>
+    <Container onClick={() => navigate('/book/14145')}>
       <Typography
         variant="h5"
         position="absolute"
