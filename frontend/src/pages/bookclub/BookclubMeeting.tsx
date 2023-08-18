@@ -226,7 +226,7 @@ function BookclubMeeting() {
 
   return (
     <Container>
-      <h1>진행화면</h1>
+      <h1>북클럽 진행</h1>
       <>
         {!session && (
           <Form

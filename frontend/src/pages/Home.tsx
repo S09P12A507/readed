@@ -98,6 +98,13 @@ function Home() {
 
   return (
     <Container>
+      <Typography
+        variant="h4"
+        color="var(--primary-light)"
+        fontWeight="500"
+        padding="var(--padding-global)">
+        readed
+      </Typography>
       <MainSlider />
 
       {/* <Skeleton

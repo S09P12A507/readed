@@ -33,6 +33,7 @@ import miliLogo from '../../assets/img/millie.png';
 import non from '../../assets/img/Nan.png';
 import ReadedFooter from '../../components/common/Footer';
 
+// .
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -521,7 +522,7 @@ function BookDetail() {
         </h2>
         <Authors>
           {mainAuthor && <h5>{mainAuthor?.authorName} 지음 </h5>}
-          {translator && <h5>{translator?.authorName}|&nbsp; 옮김</h5>}
+          {translator && <h5> &nbsp;| {translator?.authorName} 옮김</h5>}
         </Authors>
         <br />
         <h6>읽은 책을 평가해주세요</h6>
