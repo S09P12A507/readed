@@ -13,6 +13,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(nativeQuery = true, value = "SELECT b.* FROM book b ORDER BY b.avg_rating * 10 + b.comment_count DESC LIMIT 10")
     List<Book> findReadedTop10();
 
-    @Query(nativeQuery = true, value = "SELECT b.* FROM book b JOIN category c ON b.category_id = c.category_id WHERE b.category_id IN (SELECT c.category_id FROM category c WHERE c.depth2 REGEXP (:keyword)) ORDER BY b.avg_rating * 10 + b.comment_count DESC LIMIT 100")
+    @Query(nativeQuery = true, value = "SELECT b.* FROM book b JOIN category c ON b.category_id = c.category_id WHERE b.category_id IN (SELECT c.category_id FROM category c WHERE c.depth2 REGEXP (:keyword)) ORDER BY b.avg_rating * 10 + b.comment_count DESC LIMIT 30")
     List<Book> findBooksByRecommendGenre(String keyword);
 }
