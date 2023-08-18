@@ -38,6 +38,7 @@ public class BookDetailResponseDto {
     private PublisherResponseDto publisher;
     private List<BookAuthorResponseDto> author;
     private Boolean isBookmarkChecked;
+    private Long commentId;
     private String commentContent;
     private Long commentRating;
 
@@ -93,6 +94,7 @@ public class BookDetailResponseDto {
                 .publisher(publisherDto)
                 .author(bookAuthorResponseDtoList)
                 .isBookmarkChecked(isBookmarkChecked)
+                .commentId(comment.getId())
                 .commentContent(comment.getCommentContent())
                 .commentRating(comment.getRating())
                 .build();
