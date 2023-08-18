@@ -34,6 +34,7 @@ const BookReadCover = styled(Button)<{ bookcover: string }>`
 `;
 
 function BookTabCover({ bookRead }: { bookRead: IComment }) {
+  // console.log(bookRead);
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -45,7 +46,7 @@ function BookTabCover({ bookRead }: { bookRead: IComment }) {
       <BookReadCover
         // variant="contained"
         sx={{ bgcolor: '#d9d9d9' }} // 임시 컬러
-        bookcover={bookRead.bookcover}
+        bookcover={bookRead.bookCover}
         onClick={toggleDrawer(true)}
       />
       <BookTabBottomSheet

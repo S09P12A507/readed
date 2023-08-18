@@ -53,7 +53,7 @@ function BottomNav() {
         <ReadedBottomNavigationAction
           label="홈"
           icon={<HomeIcon />}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/main')}
         />
         <ReadedBottomNavigationAction
           label="검색"

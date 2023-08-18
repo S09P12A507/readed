@@ -58,7 +58,7 @@ interface BottomSheetProps {
 }
 
 function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
-  const { bookId, bookTitle, bookcover, rating, commentContent } = bookRead;
+  const { bookId, bookTitle, bookCover, rating, commentContent } = bookRead;
   return (
     <SwipeableDrawer
       PaperProps={{
@@ -94,7 +94,7 @@ function BookTabBottomSheet({ open, onClose, bookRead }: BottomSheetProps) {
             flexFlow: 'column',
             textDecoration: 'none',
           }}>
-          <PrivateBookCommentCover bookcover={bookcover} />
+          <PrivateBookCommentCover bookcover={bookCover} />
           <Button
             size="small"
             endIcon={<ChevronRightIcon />}

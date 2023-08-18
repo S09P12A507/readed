@@ -169,7 +169,7 @@ function StatisticsTabRatingChart({
             textAlign="center"
           />
           <ReadedSpan
-            text={countRatingAvg(userRateData)}
+            text={`${countRatingAvg(userRateData)}`}
             fontSize="1.5rem"
             fontWeight="500"
             textAlign="center"
@@ -180,14 +180,14 @@ function StatisticsTabRatingChart({
         </div>
         <DatumContainer>
           <ReadedSpan
-            text="별점 개수"
+            text="별 개수"
             fontSize="0.875rem"
             fontWeight="300"
             fontColor="var(--text-secondary)"
             textAlign="center"
           />
           <ReadedSpan
-            text={countRatingVal(userRateData).toString()}
+            text={`${countRatingVal(userRateData).toString()}개`}
             fontSize="1.5rem"
             fontWeight="500"
             textAlign="center"
@@ -207,8 +207,8 @@ function StatisticsTabRatingChart({
           <ReadedSpan
             text={
               countRatingVal(userRateData)
-                ? (Math.round(maxIndex + 1) / 2).toString()
-                : '0'
+                ? `${(Math.round(maxIndex + 1) / 2).toString()}점`
+                : '0점'
             }
             fontSize="1.5rem"
             fontWeight="500"

@@ -27,7 +27,7 @@ export async function getBookmark(
     }
 
     fetchData = (await response.json()) as IBookmarkResponse;
-    console.log(fetchData);
+    // console.log(fetchData);
   }
   return fetchData;
 }
