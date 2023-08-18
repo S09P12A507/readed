@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import GenreButton from '../../components/common/button/GenreButton';
+import AlertsModal from '../../components/common/alert/Alert';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -47,10 +48,21 @@ function Genre() {
         MemberName: '',
       };
   const [MemberName] = useState<string>(signUpData.MemberName || '');
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleSignUp = () => {
     sessionStorage.removeItem('signupData');
-    window.location.href = '/';
+    setMessage('리디드의 서비스를 바로이용하러 가볼까요?');
+    setShowAlert(true);
+  };
+
+  const handleAlertClose = () => {
+    setShowAlert(false);
+
+    if (message === '리디드의 서비스를 바로이용하러 가볼까요?') {
+      window.location.href = '/main';
+    }
   };
 
   return (
@@ -88,6 +100,11 @@ function Genre() {
         endIcon={<ArrowForwardIosIcon />}>
         바로 시작하기
       </Start>
+      <AlertsModal
+        open={showAlert}
+        onClose={() => handleAlertClose()}
+        message={message}
+      />
     </Container>
   );
 }

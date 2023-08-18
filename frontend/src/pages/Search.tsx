@@ -175,7 +175,12 @@ function Search() {
               xs={4}
               key={item.bookId}
               onClick={() => handlebookDetail(item.bookId)}>
-              <img width={150} src={item.coverImage} alt={item.bookTitle} />
+              <img
+                width={150}
+                src={item.coverImage}
+                alt={item.bookTitle}
+                loading="lazy"
+              />
               <p>
                 {item.bookTitle.length > 14
                   ? `${item.bookTitle.slice(0, 14)}...`

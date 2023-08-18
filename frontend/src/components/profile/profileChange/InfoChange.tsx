@@ -72,7 +72,7 @@ function InfoChange() {
     setShowAlert(false);
 
     if (message === '회원 정보가 변경됐습니다!') {
-      window.location.href = '/';
+      window.location.href = '/main';
     }
   };
 

@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
 // styles
 import styled from 'styled-components';
 // components
@@ -28,15 +26,6 @@ import { useAccessToken } from '../hooks/useAccessToken';
 
 const Container = styled.section`
   /* padding: 0 var(--padding-global); */
-`;
-
-const HeaderTmpWrapper = styled.header`
-  padding: 0 var(--padding-global);
-
-  /* background-color: var(--primary-main); */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const HorizontalScrollSectionContainer = styled.article`
@@ -75,6 +64,9 @@ function Home() {
   const [bestSeller, setBestSeller] = useState<IMainBook[]>([]);
 
   useEffect(() => {
+    if (!accessToken) {
+      return;
+    }
     // 리디드만의 알고리즘으로 뽑은 topten
     getTopTen(accessToken)
       .then(response => {
@@ -106,21 +98,6 @@ function Home() {
 
   return (
     <Container>
-      {/* 메인페이지 헤더, 우측 임시 버튼은 다 구현되면 제거. */}
-      <HeaderTmpWrapper>
-        <Typography variant="h4" color="var(--primary-light)" fontWeight="500">
-          readed
-        </Typography>
-        <div>
-          <Link to="/login" style={{ color: 'var(--divider)' }}>
-            [login→]
-          </Link>
-          <Link to="/profilechange/:userId" style={{ color: 'var(--divider)' }}>
-            [profileChange→]
-          </Link>
-        </div>
-      </HeaderTmpWrapper>
-
       <MainSlider />
 
       {/* <Skeleton

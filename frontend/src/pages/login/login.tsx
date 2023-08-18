@@ -120,7 +120,7 @@ function Login() {
             dispatch(setTokens(AToken, RToken));
           }
         }
-        window.location.href = '/';
+        window.location.href = '/main';
       })
       .catch(() => {
         setMessage('아이디와 비밀번호를 확인해주세요.');

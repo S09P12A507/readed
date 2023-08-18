@@ -98,7 +98,7 @@ function App() {
         <MobileContainer maxWidth="md" disableGutters>
           <Router>
             <Routes>
-              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Login />} />
               <Route path="/signup/" element={<Signup />} />
               <Route path="/signup/emailcheck" element={<Emailcheck />} />
               <Route path="/signup/addprofile" element={<Addprofile />} />
@@ -125,7 +125,7 @@ function App() {
               />
               <Route path="/report/:bookId" element={<Report />} />
               <Route path="/" element={<BottomNav />}>
-                <Route path="" element={<Home />} />
+                <Route path="main" element={<Home />} />
                 <Route path="search" element={<Search />} />
                 <Route path="book/:bookId" element={<BookDetail />} />
                 <Route path="bookclub" element={<Bookclub />} />

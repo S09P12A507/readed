@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import Comments from '../../components/book/Comment';
 import BackButton from '../../components/common/button/BackButton';
 import { RootState } from '../../store/store';
+import AlertsModal from '../../components/common/alert/Alert';
+import ReadedFooter from '../../components/common/Footer';
 
 const Container = styled.section`
   padding: 0 var(--padding-global);
@@ -33,10 +35,6 @@ const Start = styled(Button)`
   height: 50px;
 `;
 
-interface NameData {
-  MemberName: string;
-}
-
 interface Book {
   bookId: string;
   coverImage: string;
@@ -49,14 +47,7 @@ function Genrebook() {
   );
   const { genre } = useParams();
 
-  const storedData = localStorage.getItem('signupData');
-  const signUpData: NameData = storedData
-    ? (JSON.parse(storedData) as NameData)
-    : {
-        MemberName: '',
-      };
   const [isPageLoaded, setIsPageLoaded] = useState(true);
-  const [MemberName] = useState<string>(signUpData.MemberName || '');
   const [data, setdata] = useState<Book[]>([]);
   const [IsModalOpen, setIsModalOpen] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -64,6 +55,8 @@ function Genrebook() {
   const [ratingValue, setRatingValue] = useState<number>(0);
   const [selectedbook, setSelecetedbook] = useState('');
   const [selectedbookId, setSelecetedbookId] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleOpenModal = (selectebook: Book) => {
     setSelecetedbook(selectebook.bookTitle);
@@ -77,6 +70,18 @@ function Genrebook() {
     setIsModalOpen(false);
     setInputText('');
     setRatingValue(0);
+  };
+
+  const handleAlertClose = () => {
+    setShowAlert(false);
+
+    if (
+      message ===
+        '코멘트가 등록되었어요!\n 리디드의 서비스를 이용하러 가볼까요?' ||
+      message === '리디드의 서비스를 바로이용하러 가볼까요?'
+    ) {
+      window.location.href = '/main';
+    }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,6 +112,9 @@ function Genrebook() {
       .catch(() => {});
 
     setIsModalOpen(false);
+    sessionStorage.removeItem('signupData');
+    setMessage('코멘트가 등록되었어요!\n 리디드의 서비스를 이용하러 가볼까요?');
+    setShowAlert(true);
   };
 
   const handleRatingChange = (
@@ -130,12 +138,9 @@ function Genrebook() {
             },
           )
           .then(response => {
-            // console.log(response.data.data);
             setdata(response.data.data);
           })
-          .catch(error => {
-            console.log(error);
-          });
+          .catch(() => {});
       }
     }
     setIsPageLoaded(false);
@@ -147,7 +152,8 @@ function Genrebook() {
 
   const handleSignUp = () => {
     sessionStorage.removeItem('signupData');
-    window.location.href = '/';
+    setMessage('리디드의 서비스를 바로이용하러 가볼까요?');
+    setShowAlert(true);
   };
 
   return (
@@ -155,7 +161,7 @@ function Genrebook() {
       <BackButton />
       <h1>읽은 책 기록하기</h1>
       <h3>
-        {MemberName} 님이 <br /> 재미있게 읽은 책들을 알려주세요!
+        아래의 책 중에서 <br /> 재미있게 읽은 책들을 알려주세요!
       </h3>
       <Info>· 별점을 남길 책을 선택해주세요 </Info>
       <BookCoverContainer>
@@ -214,6 +220,13 @@ function Genrebook() {
         }}>
         바로 시작하기
       </Start>
+
+      <AlertsModal
+        open={showAlert}
+        onClose={() => handleAlertClose()}
+        message={message}
+      />
+      <ReadedFooter />
     </Container>
   );
 }

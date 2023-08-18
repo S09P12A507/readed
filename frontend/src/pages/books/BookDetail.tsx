@@ -16,6 +16,7 @@ import ModeIcon from '@mui/icons-material/Mode';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import StarIcon from '@mui/icons-material/Star';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -136,6 +137,9 @@ interface Book {
       yes24Url: string | null;
     };
   };
+  commentContent: string | null;
+  commentRating: number | null;
+  commentId: number | null;
 }
 
 interface Comment {
@@ -145,12 +149,15 @@ interface Comment {
   likeCount: number;
   isLiked: boolean;
   commentContent: string;
+  profileImage: string;
+  createdAt: Date;
 }
 
 function BookDetail() {
   const { bookId } = useParams();
   const [data, setData] = useState<Book | null>(null);
   const [commentdata, setCommentData] = useState<Comment[] | null>(null);
+  const [mycommentdata, setMyCommentData] = useState<Comment | null>(null);
   const [ratingValue, setRatingValue] = useState<number>(0);
   const [ratingsValue, setRatingsValue] = useState<number>(0);
   const [IsModalOpen, setIsModalOpen] = useState(false);
@@ -159,6 +166,17 @@ function BookDetail() {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState('');
+  const [expandedComments, setExpandedComments] = useState<number[]>([]);
+
+  const handleReadMore = (commentId: number) => {
+    if (!expandedComments.includes(commentId)) {
+      setExpandedComments(prevExpanded => [...prevExpanded, commentId]);
+    } else {
+      setExpandedComments(prevExpanded =>
+        prevExpanded.filter(id => id !== commentId),
+      );
+    }
+  };
 
   const token: string | null = useSelector(
     (state: RootState) => state.auth.accessToken,
@@ -285,7 +303,6 @@ function BookDetail() {
             },
           )
           .then(() => {
-            console.log(token);
             setIsBookmarked(true);
           })
           .catch(() => {});
@@ -321,6 +338,19 @@ function BookDetail() {
   };
   const handleLike = (commentId: number, like: boolean) => {
     if (token) {
+      const updatedCommentData = commentdata?.map(comment => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            likeCount: like ? comment.likeCount - 1 : comment.likeCount + 1,
+            isLiked: !like,
+          };
+        }
+        return comment;
+      });
+
+      setCommentData(updatedCommentData as Comment[]);
+
       if (like) {
         axios
           .delete(`https://i9a507.p.ssafy.io/api/comments/likes/${commentId}`, {
@@ -401,6 +431,14 @@ function BookDetail() {
     }
   };
 
+  const handleAlertClose = () => {
+    setShowAlert(false);
+
+    if (message === '코멘트가 등록됐습니다.') {
+      window.location.reload();
+    }
+  };
+
   useEffect(() => {
     if (token) {
       axios
@@ -415,6 +453,24 @@ function BookDetail() {
         .then(response => {
           setData(response.data.data);
           setIsBookmarked(response.data.data.isBookmarkChecked);
+          if (response.data.data.commentRating) {
+            setRatingValue(response.data.data.commentRating / 2);
+          }
+          if (response.data.data.commentId) {
+            axios
+              .get<{ data: Comment }>(
+                `https://i9a507.p.ssafy.io/api/comments/${response.data.data.commentId}`,
+                {
+                  headers: {
+                    'X-READED-ACCESSTOKEN': token,
+                  },
+                },
+              )
+              .then(responses => {
+                setMyCommentData(responses.data.data);
+              })
+              .catch(() => {});
+          }
         })
         .catch(() => {});
 
@@ -429,11 +485,10 @@ function BookDetail() {
         )
         .then(response => {
           setCommentData(response.data.data);
-          console.log(response.data.data);
         })
         .catch(() => {});
     }
-  }, [token, bookId]);
+  }, [token, bookId, data?.commentId]);
 
   useEffect(() => {
     setTextLength(inputText.length);
@@ -465,8 +520,8 @@ function BookDetail() {
           {data.bookTitle}
         </h2>
         <Authors>
-          {mainAuthor && <h5>{mainAuthor?.authorName} 지음 |&nbsp; </h5>}
-          {translator && <h5>{translator?.authorName} 옮김</h5>}
+          {mainAuthor && <h5>{mainAuthor?.authorName} 지음 </h5>}
+          {translator && <h5>{translator?.authorName}|&nbsp; 옮김</h5>}
         </Authors>
         <br />
         <h6>읽은 책을 평가해주세요</h6>
@@ -479,7 +534,7 @@ function BookDetail() {
             onChange={handleRatingChange}
           />
         </Star>
-        {ratingValue > 0 && (
+        {ratingValue > 0 && !data.commentContent ? (
           <Card
             style={{
               display: 'grid',
@@ -502,6 +557,111 @@ function BookDetail() {
               코멘트 남기기
             </Button>
           </Card>
+        ) : (
+          mycommentdata && (
+            <Card style={{ width: '100%' }}>
+              <h3 style={{ display: 'flex', justifyContent: 'center' }}>
+                내가 작성한 댓글
+              </h3>
+              <div
+                style={{
+                  display: 'flex',
+                  position: 'relative',
+                  alignItems: 'center',
+                  margin: '0.3rem',
+                }}>
+                <img
+                  src={mycommentdata.profileImage}
+                  alt="프로필이미지"
+                  style={{
+                    height: '2rem',
+                    width: '2rem',
+                    borderRadius: '50%',
+                    marginRight: '1rem',
+                  }}
+                />
+                {mycommentdata.memberNickname}
+                <div
+                  style={{
+                    position: 'absolute',
+                    display: 'flex',
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                    backgroundColor: 'var(--primary-main)',
+                    borderRadius: '4rem',
+                    width: '3.5rem',
+                    right: '1.5rem',
+                  }}>
+                  <StarIcon style={{ color: 'yellow', fontSize: '1rem' }} />{' '}
+                  <p style={{ color: 'white' }}>{mycommentdata.rating / 2}</p>
+                </div>
+              </div>
+              {mycommentdata.commentContent && (
+                <div style={{ minHeight: '4rem', margin: '0.5rem' }}>
+                  {expandedComments.includes(mycommentdata.id) ? (
+                    mycommentdata.commentContent
+                  ) : (
+                    <div>
+                      {mycommentdata.commentContent.length > 120 ? (
+                        <>
+                          {mycommentdata.commentContent.slice(0, 120)}...
+                          <span
+                            role="button"
+                            tabIndex={0}
+                            style={{
+                              color: 'var(--primary-main)',
+                              cursor: 'pointer',
+                              marginLeft: '0.5rem',
+                            }}
+                            onClick={() => handleReadMore(mycommentdata.id)}>
+                            더 보기
+                          </span>
+                        </>
+                      ) : (
+                        mycommentdata.commentContent
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '1rem',
+                }}>
+                <p
+                  style={{
+                    color: 'var(--text-secondary)',
+                    margin: '0.5rem',
+                  }}>
+                  {new Date(mycommentdata.createdAt).toLocaleDateString(
+                    'ko-KR',
+                    {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                    },
+                  )}
+                </p>
+                <Button
+                  // variant="contained"
+                  style={{
+                    border: '1px solid var(--text-secondary)',
+                    height: '2rem',
+                    marginRight: '1.5rem',
+                  }}
+                  onClick={() =>
+                    handleLike(mycommentdata.id, mycommentdata.isLiked)
+                  }>
+                  <ThumbUpOffAltIcon fontSize="small" /> &nbsp;{' '}
+                  {mycommentdata.likeCount}
+                </Button>
+              </div>
+            </Card>
+          )
         )}
         <br />
         <StyledTable style={{}}>
@@ -529,10 +689,17 @@ function BookDetail() {
                 )}
               </TableCell>
               <TableCell>
-                <ModeIcon
-                  onClick={handleOpenModal}
-                  style={{ cursor: 'pointer' }}
-                />
+                {data.commentRating && data.commentContent ? (
+                  <ModeIcon
+                    onClick={handleOpenModal}
+                    style={{ cursor: 'pointer', color: 'var(--primary-main)' }}
+                  />
+                ) : (
+                  <ModeIcon
+                    onClick={handleOpenModal}
+                    style={{ cursor: 'pointer' }}
+                  />
+                )}
               </TableCell>
               <TableCell>
                 <MenuBookIcon
@@ -605,9 +772,7 @@ function BookDetail() {
             )}
           </LogoIcon>
         ) : (
-          <LogoIcon>
-            <h2>e북이 아직 없어요😥</h2>
-          </LogoIcon>
+          <LogoIcon />
         )}
         <h3> 구매처</h3>
         {hasBuybookLinks ? (
@@ -644,9 +809,7 @@ function BookDetail() {
             )}
           </LogoIcon>
         ) : (
-          <LogoIcon>
-            <h2>구매처가 없는 책이에요😥</h2>
-          </LogoIcon>
+          <LogoIcon />
         )}
       </InfoContainer>
       <Divider />
@@ -722,27 +885,105 @@ function BookDetail() {
         )}
       </InfoContainer>
       <Divider />
+
       <InfoContainer>
-        <h3>대충 통계 </h3>
-      </InfoContainer>
-      <Divider />
-      <InfoContainer>
-        <h3>코멘트 {commentdata ? commentdata.length : 0} </h3>
+        <h3>코멘트 {commentdata ? commentdata.length : ''} </h3>
       </InfoContainer>
       <CommentContainer>
         {commentdata &&
           commentdata.map((comment: Comment) => (
             <Card key={comment.id} sx={{ display: 'grid', margin: '2%' }}>
-              <div>
-                {comment.memberNickname} {comment.rating}
+              <div
+                style={{
+                  display: 'flex',
+                  position: 'relative',
+                  alignItems: 'center',
+                  margin: '0.3rem',
+                }}>
+                <img
+                  src={comment.profileImage}
+                  alt="프로필이미지"
+                  style={{
+                    height: '2rem',
+                    width: '2rem',
+                    borderRadius: '50%',
+                    marginRight: '1rem',
+                  }}
+                />
+                {comment.memberNickname}
+                <div
+                  style={{
+                    position: 'absolute',
+                    display: 'flex',
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                    backgroundColor: 'var(--primary-main)',
+                    borderRadius: '4rem',
+                    width: '3.5rem',
+                    right: '1.5rem',
+                  }}>
+                  <StarIcon style={{ color: 'yellow', fontSize: '1rem' }} />{' '}
+                  <p style={{ color: 'white' }}>{comment.rating / 2}</p>
+                </div>
               </div>
-              <div style={{ height: '5rem' }}>{comment.commentContent}</div>
-              <div>
-                생성일
+
+              {comment.commentContent && (
+                <div style={{ minHeight: '4rem', margin: '0.5rem' }}>
+                  {expandedComments.includes(comment.id) ? (
+                    comment.commentContent
+                  ) : (
+                    <div>
+                      {comment.commentContent.length > 120 ? (
+                        <>
+                          {comment.commentContent.slice(0, 120)}...
+                          <span
+                            role="button"
+                            tabIndex={0}
+                            style={{
+                              color: 'var(--primary-main)',
+                              cursor: 'pointer',
+                              marginLeft: '0.5rem',
+                            }}
+                            onClick={() => handleReadMore(comment.id)}>
+                            더 보기
+                          </span>
+                        </>
+                      ) : (
+                        comment.commentContent
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '1rem',
+                }}>
+                <p
+                  style={{
+                    color: 'var(--text-secondary)',
+                    margin: '0.5rem',
+                  }}>
+                  {new Date(comment.createdAt).toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })}
+                </p>
                 <Button
-                  variant="contained"
+                  // variant="contained"
+                  style={{
+                    border: '1px solid var(--text-secondary)',
+                    height: '2rem',
+                    marginRight: '1.5rem',
+                  }}
                   onClick={() => handleLike(comment.id, comment.isLiked)}>
-                  <ThumbUpOffAltIcon /> &nbsp; {comment.likeCount}
+                  <ThumbUpOffAltIcon fontSize="small" /> &nbsp;{' '}
+                  {comment.likeCount}
                 </Button>
               </div>
             </Card>
@@ -764,7 +1005,7 @@ function BookDetail() {
       </Modal>
       <AlertsModal
         open={showAlert}
-        onClose={() => setShowAlert(false)}
+        onClose={() => handleAlertClose()}
         message={message}
       />
       <ReadedFooter />
