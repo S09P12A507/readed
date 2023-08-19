@@ -1,0 +1,22 @@
+{
+  "name": "리디드 readed",
+  "icons": [
+    {
+      "src": "/public/appicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/public/appicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "display": "fullscreen",
+  "start_url": "/",
+  "description": "가치를 만드는 서재",
+  "background_color": "white",
+  "short_name": "readed",
+  "theme_color": "#7AA874",
+  "orientation": "portrait"
+}

@@ -27,12 +27,22 @@
   "plugins": ["prettier", "@typescript-eslint", "import"],
   "settings": {
     "import/resolver": {
-      "typescript": {}
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
     }
   },
   "rules": {
     "no-console": "off",
+    "consistent-return": "off", // 메모리 누수 이슈로 추가
+    "@typescript-eslint/default-param-last": "off",
     "react/react-in-jsx-scope": "off",
+    "react/jsx-props-no-spreading": "off",
+    "import/prefer-default-export": "off",
+    "no-underscore-dangle": "off",
+    // "@typescript-eslint/no-misused-promises": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
     "prettier/prettier": ["error", { "endOfLine": "auto" }]
   }
 }

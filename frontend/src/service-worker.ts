@@ -1,3 +1,4 @@
+/* eslint-disable */
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
