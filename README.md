@@ -17,7 +17,7 @@
     <img src="https://img.shields.io/badge/python-3776AB?&logo=python&logoColor=white">
     <img src="https://img.shields.io/badge/selenium-43B02A?&logo=selenium&logoColor=white">
     <img src="https://img.shields.io/badge/openvidu-5294E2?&logo=openvidu&logoColor=white">  
-    <img src="https://img.shields.io/badge/webrtc-333333?&logo=webrtc&logoColor=white">  
+	<img src="https://img.shields.io/badge/webrtc-333333?&logo=webrtc&logoColor=white">  
 </p>
 
 
