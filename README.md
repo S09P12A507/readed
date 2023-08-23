@@ -13,6 +13,7 @@
     <img src="https://img.shields.io/badge/mysql-4479A1?&logo=mysql&logoColor=white">
     <img src="https://img.shields.io/badge/redis-DC382D?&logo=redis&logoColor=white">
 <img src="https://img.shields.io/badge/h2-FF9900?&logo=h2&logoColor=white">
+<img src="https://img.shields.io/badge/swagger-85EA2D?&logo=swagger&logoColor=white">
     <br>
     <img src="https://img.shields.io/badge/python-3776AB?&logo=python&logoColor=white">
     <img src="https://img.shields.io/badge/selenium-43B02A?&logo=selenium&logoColor=white">
