@@ -55,7 +55,7 @@
       <img src="https://github.com/S09P12A507/readed/assets/65810091/daade3f4-0cbf-4c1e-a378-775c73c7797d" />
     </td>
     <td align="center">
-      <img src="https://github.com/S09P12A507/readed/assets/65810091/d0f7b34d-6208-44aa-b440-e1c162b70f89" />
+      <img src="https://github.com/S09P12A507/readed/assets/111677826/bdf4a7cd-51a9-462e-a4df-22ac74043225" />
     </td>
   </tr>
   <tr>
