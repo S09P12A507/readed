@@ -252,22 +252,22 @@
   </tr>
   <tr>
     <td align="center">
-      <span></span>
+      <span>Backend</span>
     </td>
     <td align="center">
-      <span></span>
+      <span>Backend</span>
     </td>
     <td align="center">
-      <span></span>
+      <span>Backend/Infra</span>
     </td>
     <td align="center">
-      <span></span>
+      <span>Backend/Infra</span>
     </td>
     <td align="center">
-      <span></span>
+      <span>Frontend</span>
     </td>
     <td align="center">
-      <span></span>
+      <span>Frontend</span>
     </td>
   </tr>
 </table>
