@@ -82,7 +82,7 @@
       <img src="https://github.com/S09P12A507/readed/assets/65810091/ebd06bf5-c4b2-459b-9668-ef2519fb416b" />
     </td>
     <td align="center">
-      <img src="https://github.com/S09P12A507/readed/assets/65810091/435d80b7-540e-49a4-9f86-3b2764f75168" />
+      <img src="https://github.com/S09P12A507/readed/assets/111677826/d15b41df-a610-4eea-a80c-3294ead9a809" />
     </td>
   </tr>
   <tr>
