@@ -26,8 +26,7 @@
       <img src="https://github.com/S09P12A507/readed/assets/65810091/a5436a38-d7ad-475f-9288-f65dda424cb2" />
     </td>
     <td align="center">
-    <td align="center">
-      <img src="" />
+      <img src="https://github.com/S09P12A507/readed/assets/65810091/b8aeec06-4483-4435-803f-e4e984b29c8a" />
     </td>
   </tr>
   <tr>
