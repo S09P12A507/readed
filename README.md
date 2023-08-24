@@ -10,6 +10,8 @@
         <br><br>
         가치를 만드는 서재, <b>리디드</b> 입니다.
     </p>
+    <a href="https://i9a507.p.ssafy.io/"><del>[ 리디드 서비스 바로가기 ]</del></a>
+    <br>
     <a href="https://github.com/S09P12A507/readed/wiki">[ 리디드 Wiki 바로가기 ]</a>
 </div>
 
@@ -123,7 +125,7 @@
 
 ## 기술 스택
 
-<h3 align="center">Back-end</h3>
+<h3 align="center">Backend</h3>
 <p align="center">
     <img src="https://img.shields.io/badge/Java-007396?&logo=java&logoColor=white">
     <img src="https://img.shields.io/badge/SpringBoot-6DB33F?&logo=springboot&logoColor=white">
@@ -143,7 +145,7 @@
     <img src="https://img.shields.io/badge/OpenVidu-5294E2?&logo=openvidu&logoColor=white">
 </p>
 
-<h3 align="center">Front-end</h3>
+<h3 align="center">Frontend</h3>
 <p align="center">
     <img src="https://img.shields.io/badge/Node.js-339933?&logo=nodedotjs&logoColor=white">
     <img src="https://img.shields.io/badge/React-61DAFB?&logo=react&logoColor=white">
@@ -187,32 +189,32 @@
 
 <table>
   <tr>
-    <td align="center">
+    <td align="center" width="200">
       <a href="https://github.com/sgkim6">
         <img src="https://github.com/sgkim6.png" alt="김승규" />
       </a>
     </td>
-     <td align="center">
+     <td align="center" width="200">
       <a href="https://github.com/yygs321">
         <img src="https://github.com/yygs321.png" alt="박소민" />
       </a>
     </td>
-    <td align="center">
+    <td align="center" width="200">
       <a href="https://github.com/ng-lee">
         <img src="https://github.com/ng-lee.png" alt="이남곤" />
       </a>
     </td>
-    <td align="center">
+    <td align="center" width="200">
       <a href="https://github.com/nutbrown">
         <img src="https://github.com/nutbrown.png" alt="전혜련" />
       </a>
     </td>
-    <td align="center">
+    <td align="center" width="200">
       <a href="https://github.com/edder773">
         <img src="https://github.com/edder773.png" alt="김보석" />
       </a>
     </td>
-    <td align="center">
+    <td align="center" width="200">
       <a href="https://github.com/serenecarp">
         <img src="https://github.com/serenecarp.png" alt="박성준" />
       </a>
