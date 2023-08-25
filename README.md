@@ -15,7 +15,14 @@
     <a href="https://github.com/S09P12A507/readed/wiki">[ 리디드 Wiki 바로가기 ]</a>
 </div>
 
-## 프로젝트 주요 기능
+## ⭐ 프로젝트 정보
+
+- 프로젝트 기간 : 2023/07/04 ~ 2023/08/18
+- 배포 기간 : 2023/07/24 ~ 2023/08/25
+> GitLab에서 프로젝트를 진행한 후, GitHub으로 옮겨왔습니다.
+
+
+## ⭐ 프로젝트 주요 기능
 
 ### 회원 기능
 
@@ -129,11 +136,11 @@
   </tr>
 </table>
 
-## 프로젝트 구조
+## ⭐ 프로젝트 구조
 
 <img src="https://github.com/S09P12A507/readed/assets/65810091/1ad73c44-6760-4818-bb75-1118b18b9d11">
 
-## 기술 스택
+## ⭐ 기술 스택
 
 <h3 align="center">Backend</h3>
 <p align="center">
@@ -195,7 +202,7 @@
     <img src="https://img.shields.io/badge/Mattermost-0058CC?&logo=Mattermost&logoColor=white">
 </p>
 
-## 멤버
+## ⭐ 멤버
 
 <table>
   <tr>
