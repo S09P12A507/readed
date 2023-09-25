@@ -94,11 +94,10 @@ function Login() {
   const [message, setMessage] = useState('');
   const dispatch = useDispatch();
 
-  const KakaoRestApi = 'e1496c3a1b0232c4d6f84d511cf90255';
-  const KakaoRedirect = 'https://i9a507.p.ssafy.io/oauth/kakao/callback';
-  const GoogleclientId =
-    '59438726779-mukgldfttu2qm0oikt8jeirkra7bliji.apps.googleusercontent.com';
-  const GoogleredirectUri = 'https://i9a507.p.ssafy.io/oauth/google/callback';
+  const KakaoRestApi = '';
+  const KakaoRedirect = '';
+  const GoogleclientId = '';
+  const GoogleredirectUri = '';
 
   const handleLogin = (url: string) => {
     window.location.href = url;
