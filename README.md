@@ -217,8 +217,8 @@
       </a>
     </td>
     <td align="center" width="200">
-      <a href="https://github.com/ng-lee">
-        <img src="https://github.com/ng-lee.png" alt="이남곤" />
+      <a href="https://github.com/modisfive">
+        <img src="https://github.com/modisfive.png" alt="이남곤" />
       </a>
     </td>
     <td align="center" width="200">
@@ -249,7 +249,7 @@
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/ng-lee">
+      <a href="https://github.com/modisfive">
         <b>이남곤</b>
       </a>
     </td>
